@@ -129,6 +129,8 @@ We follow **Git Flow** for better collaboration:
 
 To create a new feature branch:
 ```bash
+git checkout develop
+git pull origin develop
 git checkout -b feature/your-feature
 ```
 
@@ -180,17 +182,25 @@ git checkout -b feature/your-feature
   git push origin feature/your-feature
   ```
 
-- Open a pull request (PR) on GitHub to merge the feature branch into `development`.
+- Open a pull request (PR) on GitHub to merge the feature branch into `develop`. 
 
-- Wait for reviews and approvals before merging.
+### Code Review and Merging
+  - Wait for at least one approval before merging your PR.
+  - Once approved, **merge your PR** into `develop` on [GitHub](https://github.com/aryahassibi/TEAM07.git). Avoid merging directly from your local machine.
 
+### Updating Local Branches
+- **Sync frequently** by pulling the latest changes from `develop`:
+  ```bash
+  git checkout develop
+  git pull origin develop
+  ```
 ### Merge Conflicts
 
 - If there are conflicts during merge:
   - Fetch the latest changes:
     ```bash
     git fetch
-    git merge origin/development
+    git merge origin/develop
     ```
   - Resolve conflicts in your editor and commit.
 
