@@ -1,6 +1,12 @@
 # Project Setup and Development Guide
 
 ## Table of Contents
+0. [Workflow Overview](#workflow-overview)
+   - [Set Up Your Development Environment](#1-set-up-your-development-environment)
+    - [Start Services with Docker](#2-start-services-with-docker)
+    - [Choose Your Task and Branch](#3-choose-your-task-and-branch)
+    - [Code, Test, and Push](#4-code-test-and-push)
+    - [Open a Pull Request (PR)](#5-open-a-pull-request-pr)
 1. [Project Initialization](#project-initialization)
    - [Backend Setup (Node.js)](#backend-setup-nodejs)
    - [Frontend Setup (React)](#frontend-setup-react)
@@ -16,6 +22,76 @@
    - [Windows and Mac Setup](#windows-and-mac-setup)
 5. [Best Practices](#best-practices)
 6. [Troubleshooting and FAQs](#troubleshooting-and-faqs)
+
+---
+
+## Workflow Overview
+
+If you’re ready to dive into your task, here’s a quick roadmap to get you set up and moving forward effectively.
+
+If you need more detailed instructions, refer to the sections below.
+
+### 1. Set Up Your Development Environment
+
+   - **Install Prerequisites**: Make sure you have **Node.js**, **MySQL**, and **Docker** installed.
+   - **Clone the Project Repository**:  
+     ```bash
+     git clone https://github.com/aryahassibi/TEAM07.git
+     cd TEAM07
+     ```
+   - **Create Environment Variables**: Add a `.env` file in the project root to manage sensitive data:
+     ```
+     PORT=5000
+     DB_HOST=db
+     DB_USER=root
+     DB_PASS=your_password
+     DB_NAME=online_store
+     ```
+
+### 2. Start Services with Docker
+
+   - **Run the Project in Docker**: Start all services (backend, frontend, database) with:
+     ```bash
+     docker-compose up --build
+     ```
+   - **Access Services**:
+     - **Frontend**: [http://localhost:3000](http://localhost:3000)
+     - **Backend**: [http://localhost:5000](http://localhost:5000)
+     - **Database**: MySQL on `localhost:3306`
+
+### 3. Choose Your Task and Branch
+
+   - **Sync the Latest Code**:
+     ```bash
+     git pull origin develop
+     ```
+   - **Create a Feature Branch** for your task (replace `your-feature` with your task name):
+     ```bash
+     git checkout -b feature/your-feature
+     ```
+
+### 4. Code, Test, and Push
+
+   - **Develop**: Write your code and run the backend and frontend locally to test. Make sure API calls (from React) to the backend work smoothly.
+   - **Commit Changes** using the format: `type(scope): message`
+     ```bash
+     # stage the changes you want to commit
+     git add <file1> <file2>
+     # OR stage all changes
+     git add .
+     ```
+     ```bash
+     git commit -m "type(scope): message"
+     ```
+   - **Push Your Branch**:
+     ```bash
+     git push origin feature/your-feature
+     ```
+
+### 5. Open a Pull Request (PR)
+
+   - On [GitHub](https://github.com/aryahassibi/TEAM07.git), submit a **Pull Request to the `develop` branch** and request a review. 
+   - Once approved by a few of your teammates, you’re ready to merge.
 
 ---
 
