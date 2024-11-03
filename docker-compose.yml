@@ -4,23 +4,33 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
+      - MYSQL_ALLOW_EMPTY_PASSWORD="yes"  # Allows MySQL to run without a password
+      - MYSQL_DATABASE=${DB_NAME}
+      - TZ=Europe/Istanbul
     ports:
-      - "3306:3306"
+      - "3307:3306"  # Map port 3306 in the container to 3307 on your host to avoid conflicts
     volumes:
-      - ./db_data:/var/lib/mysql
+      - ./database/ecommerce_db.sql:/docker-entrypoint-initdb.d/ecommerce_db.sql # Initialize with the SQL file
+      - ./database/sample_data.sql:/docker-entrypoint-initdb.d/sample_data.sql # Add sample data to the database
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./backend
     ports:
-      - "5000:5000"
+      - "5001:5000"  # Map port 5000 in the container to 5001 on your host to avoid conflicts
     volumes:
       - ./backend:/usr/src/app
+      - /usr/src/app/node_modules  # Prevents overwriting node_modules
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DB_HOST=db
+      - PORT=${PORT}
+      - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
@@ -31,3 +41,4 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules  # Prevents overwriting node_modules

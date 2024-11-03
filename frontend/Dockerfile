@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+RUN npm install --save-dev @babel/plugin-proposal-private-property-in-object
 
 # Copy the rest of the frontend code
 COPY . .
