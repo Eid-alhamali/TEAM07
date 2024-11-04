@@ -10,7 +10,7 @@ services:
     ports:
       - "3307:3306"  # Map port 3306 in the container to 3307 on your host to avoid conflicts
     volumes:
-      - ./database/ecommerce_db.sql:/docker-entrypoint-initdb.d/ecommerce_db.sql # Initialize with the SQL file
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql # Initialize with the SQL file
       - ./database/sample_data.sql:/docker-entrypoint-initdb.d/sample_data.sql # Add sample data to the database
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
