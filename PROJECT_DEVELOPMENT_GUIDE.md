@@ -44,9 +44,10 @@ If you need more detailed instructions, refer to the sections below.
      PORT=5000
      DB_HOST=db
      DB_USER=root
-     DB_PASS=your_password
-     DB_NAME=online_store
+     DB_PASS=
+     DB_NAME=ecommerce_db
      ```
+     The `DB_PASS` field should be left empty since for now during the development phase, the database is modified to accepts empty passwords.
 
 ### 2. Start Services with Docker
 
@@ -337,9 +338,10 @@ To ensure consistency and eliminate environment-related issues across all team m
      PORT=5000
      DB_HOST=db
      DB_USER=root
-     DB_PASS=your_password
-     DB_NAME=online_store
+     DB_PASS=
+     DB_NAME=ecommerce_db
      ```
+  The `DB_PASS` field should be left empty since for now during the development phase, the database is modified to accepts empty passwords.
 
 4. **Setup Docker with `docker-compose`:**
    - In the project root directory, create a `docker-compose.yml` file to define the services (backend, frontend, and MySQL database):
