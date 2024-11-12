@@ -214,3 +214,6 @@ CREATE TABLE IF NOT EXISTS ShoppingCartItems (
     FOREIGN KEY (cart_id) REFERENCES ShoppingCart(cart_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
+
+GRANT ALL PRIVILEGES ON ecommerce_db.* TO 'root'@'%';
+FLUSH PRIVILEGES;

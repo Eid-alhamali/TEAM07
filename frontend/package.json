@@ -12,6 +12,9 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "@babel/preset-react": "^7.25.9"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -22,6 +25,12 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/src/App.test.js"
     ]
   },
   "browserslist": {
