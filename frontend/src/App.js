@@ -1,41 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react'; // Import useState and useEffect
 import axios from 'axios';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainPage from './components/MainPage';
+import Mnovo from './components/Mnovo';
+import Card from './components/Card';
+import ProductsPage from './components/ProductsPage';
+import { CartProvider } from './CartContext'; // Import CartProvider
 
 function App() {
-  const [products, setProducts] = useState([]);
-
+  const [products, setProducts] = useState([]); // Correctly define products and setProducts
   useEffect(() => {
     // Fetch data from the backend API
     axios.get('http://localhost:5000/api/products')
-      .then(response => setProducts(response.data))
+      .then(response => setProducts(response.data)) // Use setProducts here
       .catch(error => console.error('Error fetching products:', error));
   }, []);
 
+  // Use the products state, for example by passing it to a component
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Product List</h1>
-        <ul>
-          {products.map(product => (
-            <li key={product.id}>{product.name}</li>
-          ))}
-        </ul>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CartProvider> {/* Wrap the app with CartProvider */}
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/mnovo" element={<Mnovo />} />
+          <Route path="/card" element={<Card />} />
+          <Route path="/products" element={<ProductsPage products={products} />} /> 
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

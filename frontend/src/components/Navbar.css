@@ -1,0 +1,64 @@
+/* src/components/Navbar.css */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.25); /* White with 50% transparency */
+  padding: 1rem 2rem;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Gupter', serif;
+}
+
+.navbar-logo {
+  width: 20vw;            /* 10% of the viewport width */
+  height: auto;           /* Maintain aspect ratio */
+  max-width: 200px;       /* Cap the size so it doesn’t get too large */
+  min-width: 100px;        /* Ensure it doesn’t get too small */
+  margin-right: auto;     /* Keep logo on the left */
+}
+
+.navbar-center {
+  position: absolute;
+  left: 46.5%;
+  transform: translateX(-50%); /* Center the navbar links horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem; /* Space between links */
+  text-decoration: none;
+}
+
+.navbar-links a {
+  color: #bfb7a4; /* White color for contrast */
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-family: 'Gupter', serif;
+}
+
+.navbar-links a:hover {
+  color: #3b2400; /* Optional hover color */
+  text-decoration: none;  
+}
+
+.shop-icon {
+  width: 35px;
+  height: auto;
+  cursor: pointer;
+  margin-right: 50px;
+}
+
+.user-icon {
+  width: 29px;
+  height: auto;
+  cursor: pointer;
+  margin-right: 10px;
+}
+

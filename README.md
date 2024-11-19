@@ -139,3 +139,14 @@ Here’s a quick roadmap to get you set up and moving forward effectively.
 
 
 
+For detailed instructions on setting up the project, initializing the tech stack, and managing version control, please refer to the [Project Setup Guide](./PROJECT_SETUP_GUIDE.md).
+
+
+## Group Members
+
+- Arya Hassibi
+- Beste Bayhan
+- Mustafa Topcu
+- Orhun Ege Ozpay
+- Eid Alhamali
+- Ecem Akın
