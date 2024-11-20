@@ -1,1 +1,0 @@
-// Catches errors across the application and provides a structured error response.
