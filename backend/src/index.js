@@ -3,6 +3,8 @@ const mysql = require('mysql2');
 
 const cors = require('cors');
 const app = express();
+const cartRoutes = require('./routes/cartRoutes');
+
 const port = process.env.PORT;
 
 
@@ -14,6 +16,9 @@ const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 app.use(cors());
+
+// integrate cart routes
+app.use('/api/cart', cartRoutes);
 
 // Database connection
 const db = mysql.createConnection({
@@ -263,8 +268,6 @@ app.get('/api/users', (req, res) => {
     res.json(results);
   });
 });
-
-
 
 
 app.get('/', (req, res) => {
