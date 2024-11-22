@@ -29,11 +29,11 @@ VALUES
 (3, 'Overnight Shipping', 19.99, 'Next business day delivery.');
 
 -- Insert sample data into Products
-INSERT INTO Products (product_id, name, origin, roast_level, bean_type, grind_type, flavor_profile, processing_method, caffeine_content, category_id, description, price, warranty_status, distributor_info)
+INSERT INTO Products (product_id, name, origin, roast_level, bean_type, grind_type, flavor_profile, processing_method, caffeine_content, category_id, description, warranty_status, distributor_info)
 VALUES
-(1, 'Colombian Single Origin', 'Colombia', 'Medium', 'Arabica', 'Whole Bean', 'Notes of chocolate and caramel', 'Washed', 'High', 2, 'A smooth and balanced coffee from Colombia.', 14.99, FALSE, 'Distributed by CoffeeCorp'),
-(2, 'Italian Espresso Blend', 'Multiple Origins', 'Espresso', 'Blend', 'Ground', 'Rich and bold with a dark chocolate finish', 'Natural', 'High', 1, 'A traditional Italian espresso blend.', 12.99, FALSE, 'Imported by Espresso Imports'),
-(3, 'Ethiopian Decaf', 'Ethiopia', 'Light', 'Arabica', 'Whole Bean', 'Floral and citrus notes', 'Honey-processed', 'Decaf', 3, 'A delightful decaf coffee with vibrant flavors.', 15.99, FALSE, 'Organic Coffee Ltd.');
+(1, 'Colombian Single Origin', 'Colombia', 'Medium', 'Arabica', 'Whole Bean', 'Notes of chocolate and caramel', 'Washed', 'High', 2, 'A smooth and balanced coffee from Colombia.', FALSE, 'Distributed by CoffeeCorp'),
+(2, 'Italian Espresso Blend', 'Multiple Origins', 'Espresso', 'Blend', 'Ground', 'Rich and bold with a dark chocolate finish', 'Natural', 'High', 1, 'A traditional Italian espresso blend.', FALSE, 'Imported by Espresso Imports'),
+(3, 'Ethiopian Decaf', 'Ethiopia', 'Light', 'Arabica', 'Whole Bean', 'Floral and citrus notes', 'Honey-processed', 'Decaf', 3, 'A delightful decaf coffee with vibrant flavors.', FALSE, 'Organic Coffee Ltd.');
 
 -- Insert sample data into Product_Variant
 INSERT INTO Product_Variant (variant_id, product_id, weight_grams, price, stock, sku)
@@ -64,15 +64,15 @@ INSERT INTO ShoppingCart (cart_id, user_id, session_id)
 VALUES
 (1, 1, 'session_abc123'),
 (2, 2, 'session_def456'),
-(3, 3, 'session_ghi789');
+(3, NULL, 'session_guest789'); -- Guest user
 
 -- Insert sample data into ShoppingCartItems
-INSERT INTO ShoppingCartItems (cart_item_id, cart_id, product_id, quantity)
+INSERT INTO ShoppingCartItems (cart_item_id, cart_id, variant_id, quantity)
 VALUES
-(1, 1, 1, 2),
-(2, 1, 2, 1),
-(3, 2, 3, 1),
-(4, 3, 2, 3);
+(1, 1, 1, 2), -- John has 2x 250g Colombian
+(2, 1, 3, 1), -- John has 1x 250g Espresso
+(3, 2, 5, 3), -- Jane has 3x 250g Ethiopian Decaf
+(4, 3, 2, 4); -- Guest has 4x 500g Colombians
 
 -- Insert sample data into Comments
 INSERT INTO Comments (comment_id, product_id, user_id, rating, content, approved)

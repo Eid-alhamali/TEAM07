@@ -42,8 +42,7 @@ CREATE TABLE IF NOT EXISTS Products (
     caffeine_content ENUM('High', 'Decaf', 'Half-Caf') DEFAULT 'High',
     category_id INT,
     description TEXT,
-    price DECIMAL(10, 2) NOT NULL,
-    warranty_status BOOLEAN DEFAULT FALSE,    
+    warranty_status BOOLEAN DEFAULT FALSE,
     distributor_info TEXT,
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 );
@@ -208,11 +207,11 @@ CREATE TABLE IF NOT EXISTS ShoppingCart (
 CREATE TABLE IF NOT EXISTS ShoppingCartItems (
     cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
     cart_id INT NOT NULL,
-    product_id INT NOT NULL,
+    variant_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cart_id) REFERENCES ShoppingCart(cart_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE CASCADE
 );
 
 GRANT ALL PRIVILEGES ON ecommerce_db.* TO 'root'@'%';

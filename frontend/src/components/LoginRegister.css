@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.loginregister-body {
+    padding-top: 80px;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background:  #202020;
+    flex-direction: column;
+    margin: 0;
+    /* background: url('../assets/placeholder.png') no-repeat;
+    background-size: cover;
+    background-position: center; */
+}
+
+.loginregister-wrapper {
+    position: relative;
+    width: 420px;
+    height: 450px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .1);
+    backdrop-filter: blur(30px);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    color: black;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: height .2s ease;
+    background: white;
+}
+
+.loginregister-wrapper.alternate {
+    height: 580px;
+}
+
+.loginregister-wrapper .loginregister-form-box {
+    width:  100%;
+    padding: 40px;
+}
+
+.loginregister-wrapper .loginregister-form-box.login {
+    transition: translate .18s ease;
+    translate: 0;
+}
+
+.loginregister-wrapper.alternate .loginregister-form-box.login {
+    transition: none;
+    translate: -400px;
+}
+
+.loginregister-wrapper .loginregister-form-box.register {
+    position: absolute;
+    transition: none;
+    translate: 400px;
+}
+
+.loginregister-wrapper.alternate .loginregister-form-box.register {
+    transition: translate .18s ease;
+    translate: 0;
+}
+
+.loginregister-form h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.loginregister-form .loginregister-input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 30px;
+}
+
+.loginregister-form .loginregister-remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.loginregister-error-message {
+    color: red;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: -25px;
+    margin-bottom: 15px;
+    padding-left: 20px;
+}  
+
+.loginregister-form button {
+    width: 100%;
+    height: 45px;
+    background: white;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.loginregister-form .loginregister-register-link {
+    font-size: 14.5px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.loginregister-input-box input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 40px;
+    font-size: 16px;
+    color: black;
+    padding: 20px 45px 20px 20px;
+}
+
+.loginregister-input-box input::placeholder {
+    color: black;
+}
+
+.loginregister-input-box .loginregister-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    translate: 0 -50%;
+    font-size: 16px;
+}
+
+.loginregister-remember-forgot label input {
+    accent-color: rgb(70, 70, 70);
+    margin-right: 4px;
+}
+
+.loginregister-remember-forgot a {
+    color: rgb(70, 70, 70);
+    text-decoration: none;
+    /* font-weight: 600; */
+}
+
+.loginregister-remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.loginregister-register-link a {
+    margin-left: 15px;
+}
+
+.loginregister-register-link p a {
+    color: rgb(70, 70, 70);
+    text-decoration: none;
+    /* font-weight: 600; */
+}
+
+.loginregister-register-link p a:hover {
+    text-decoration: underline;
+}

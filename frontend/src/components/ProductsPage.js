@@ -1,3 +1,5 @@
+//src/components/ProductsPage.js
+
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
@@ -25,8 +27,6 @@ const ProductsPage = () => {
       try {
         const response = await fetch('http://localhost:5001/api/products');
         const data = await response.json();
-        console.log(data);
-        
         setCoffees(data);
       } catch (error) {
         console.error('Error fetching coffee data:', error);
@@ -93,7 +93,7 @@ const ProductsPage = () => {
       {/* Filtered Coffee List */}
       <div className="coffee-list">
         {filteredCoffees.map((coffee) => (
-          <CoffeeCard key={coffee.id} coffee={coffee} addToCart={addToCart} />
+          <CoffeeCard key={coffee.product_id} coffee={coffee} addToCart={addToCart} />
         ))}
       </div>
     </div>
@@ -107,36 +107,40 @@ const CoffeeCard = ({ coffee, addToCart }) => {
   const handleDecrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
-    addToCart(coffee.name, quantity, coffee.price);
-    alert(`${quantity} item(s) of ${coffee.name} added to cart.`);
+    if (quantity > coffee.stock) {
+      alert('Not enough stock available!');
+      return;
+    }
+    addToCart(coffee.name, coffee.variant_id, quantity, coffee.price, coffee.weight_grams); // Pass weight_grams here
+    alert(`${quantity} item(s) of ${coffee.name} (Weight: ${coffee.weight_grams}g) added to cart.`);
   };
 
   return (
     <div className="coffee-card">
       <div className="image-placeholder"></div>
       <h3>{coffee.name}</h3>
+      <p>Weight: {coffee.weight_grams}g</p>
       <p>Price: ${coffee.price}</p>
+      <p>Stock Available: {coffee.stock}</p>
       <div className="cart-controls">
         <button onClick={handleDecrement}>-</button>
         <span>{quantity}</span>
         <button onClick={handleIncrement}>+</button>
-        <button onClick={handleAddToCart} className="add-to-cart-button">Add to Cart</button>
+        <button onClick={handleAddToCart} className="add-to-cart-button">
+          Add to Cart
+        </button>
       </div>
     </div>
   );
 };
 
-// PropTypes for CoffeeCard
 CoffeeCard.propTypes = {
   coffee: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    weight_grams: PropTypes.number.isRequired,
     price: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-    region: PropTypes.string.isRequired,
-    stature: PropTypes.string.isRequired,
-    beanSize: PropTypes.string.isRequired,
-    optimalAltitude: PropTypes.string.isRequired,
-    leafTipColor: PropTypes.string.isRequired,
+    stock: PropTypes.number.isRequired, // Add stock here
+    variant_id: PropTypes.number.isRequired,
   }).isRequired,
   addToCart: PropTypes.func.isRequired,
 };
