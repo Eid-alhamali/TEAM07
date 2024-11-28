@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
+.product-detail {
+  min-height: 100vh; /* Ensure the background covers the entire viewport */
+  background-image: url('../img/details_background.png'); /* Path to the background image */
+  background-size: cover; /* Scale the image to cover the entire area */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  display: flex; /* Flex layout for dividing the page */
+  align-items: center; /* Vertically center items */
+  justify-content: space-between; /* Divide space evenly between left and right */
+  color: #fff; /* Set text color to white */
+  padding: 0 10%; /* Add padding for responsiveness */
+}
+
+.left-section,
+.right-section {
+  width: 50%; /* Divide the page into two equal parts */
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+}
+
+.left-section img {
+  max-width: 80%; /* Ensure the image doesn't overflow the container */
+  height: auto;
+}
+
+.right-section .product-detail-container {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.6); /* Add a semi-transparent background */
+  text-align: left;
+  color: #fff; /* Ensure text stands out */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+.product-name {
+  font-family: 'Fredericka the Great', cursive, sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
