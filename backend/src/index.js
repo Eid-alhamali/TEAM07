@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
 const cartRoutes = require('./routes/cartRoutes');
+const searchRoutes = require('./routes/searchRoutes');
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -16,6 +17,9 @@ app.use(cors());
 
 // integrate cart routes
 app.use('/api/cart', cartRoutes);
+
+// integrate search routes
+app.use('/api/search', searchRoutes);
 
 // Database connection
 const db = mysql.createConnection({
