@@ -1,4 +1,3 @@
-import Navbar from './Navbar';
 import './MainPage.css';
 import mainCoffee from '../assets/images/featured/main_page_banner.jpg';
 
@@ -38,7 +37,6 @@ const coffeeOptions = [
 const MainPage = () => {
   return (
     <div className="main-page">
-      <Navbar />
       <img src={mainCoffee} alt="Main Coffee" className="main-page-image" />
       <div className="main-page-content">
         <p>Your one-stop solution for efficient and effective compression services.</p>

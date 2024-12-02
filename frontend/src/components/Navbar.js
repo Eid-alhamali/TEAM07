@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import compressoLogo from '../assets/images/icons/logo-light.svg';
-import shopIcon from '../assets/images/icons/shop.png';
-import userIcon from '../assets/images/icons/user.png';
+import compressoLogo from '../assets/images/icons/logo-dark.svg';
+import shopIcon from '../assets/images/icons/cart-dark.svg';
+import userIcon from '../assets/images/icons/user-dark.svg';
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);

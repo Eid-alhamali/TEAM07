@@ -18,6 +18,8 @@ app.use('/api/cart', cartRoutes);
 
 // integrate search routes
 app.use('/api/search', searchRoutes);
+app.use('/assets', express.static('src/assets'));
+
 
 // Database connection
 const db = mysql.createConnection({
@@ -111,6 +113,47 @@ app.get('/api/products', (req, res) => {
     });
 });
 
+// GET endpoint to fetch all variants for a specific product
+app.get('/api/products/:product_id/variants', (req, res) => {
+    const { product_id } = req.params;
+
+    const query = `
+        SELECT 
+            variant_id, 
+            product_id, 
+            weight_grams, 
+            price, 
+            stock, 
+            sku
+        FROM 
+            Product_Variant
+        WHERE 
+            product_id = ?
+    `;
+
+    db.query(query, [product_id], (error, results) => {
+        if (error) {
+            console.error('Error retrieving variants:', error.message);
+            return res.status(500).json({ 
+                error: 'Failed to retrieve variants. Please try again later.',
+                details: error.message 
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ 
+                error: 'No variants found for the specified product.'
+            });
+        }
+
+        res.json({
+            product_id,
+            variants: results,
+        });
+    });
+});
+
+
 
 // GET endpoint to retrieve a single product by ID
 app.get('/api/products/:id', (req, res) => {
@@ -195,21 +238,39 @@ app.put('/api/products/:id', (req, res) => {
 });
 
 // GET endpoint to retrieve product details by variant_id
-app.get('/api/product/:variant_id', (req, res) => {
+app.get('/api/product/variants/:variant_id', (req, res) => {
     const variantId = req.params.variant_id;
 
-    const query = `
+    const productQuery = `
         SELECT 
-            p.name, pv.variant_id, pv.weight_grams, pv.price, pv.stock, pv.sku, p.description
+            p.product_id,
+            p.name, 
+            p.origin, 
+            p.roast_level, 
+            p.bean_type, 
+            p.grind_type, 
+            p.flavor_profile, 
+            p.processing_method, 
+            p.caffeine_content, 
+            p.description, 
+            pv.variant_id, 
+            pv.weight_grams, 
+            pv.price, 
+            pv.stock, 
+            pv.sku 
         FROM 
-            Products p
+            Products p 
         JOIN 
-            Product_Variant pv ON p.product_id = pv.product_id
+            Product_Variant pv ON p.product_id = pv.product_id 
         WHERE 
             pv.variant_id = ?;
     `;
 
-    db.query(query, [variantId], (error, results) => {
+    const imagesQuery = `
+        SELECT image_url, alt_text FROM Product_Images WHERE product_id = ?;
+    `;
+
+    db.query(productQuery, [variantId], (error, results) => {
         if (error) {
             console.error('Error retrieving product details:', error);
             return res.status(500).json({ error: 'Internal server error' });
@@ -217,9 +278,22 @@ app.get('/api/product/:variant_id', (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({ error: 'Product not found' });
         }
-        res.json(results[0]);
+        const product = results[0];
+
+        db.query(imagesQuery, [product.product_id], (imgError, imgResults) => {
+            if (imgError) {
+                console.error('Error retrieving product images:', imgError);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+            product.images = imgResults.map(img => ({
+                url: img.image_url,
+                alt: img.alt_text
+            }));
+            res.json(product);
+        });
     });
 });
+
 
 // POST endpoint to add items to the cart
 app.post('/api/cart', (req, res) => {

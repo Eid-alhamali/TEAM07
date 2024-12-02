@@ -2,30 +2,30 @@
 .cart-page {
   min-height: 100vh;
   background-color: var(--background);
-  color: var(--neutral-white);
+  color: var(--neutral-black);
   padding: 2rem;
 }
 
 /* Cart Items List */
-ul {
+.cart-page ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-li {
+.cart-page li {
   border-bottom: 1px solid var(--neutral-dark-gray);
   padding: 1rem 0;
 }
 
 /* Product Name */
-h3 {
+.cart-page h3 {
   margin: 0 0 0.5rem;
   font-size: var(--font-size-lg);
 }
 
 /* Product Details */
-p {
+.cart-page p {
   margin: 0.5rem 0;
   font-size: var(--font-size-base);
 }

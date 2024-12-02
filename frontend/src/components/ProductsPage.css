@@ -1,26 +1,43 @@
 
 .products-page {
   background-color: var(--background);
-  color: var(--neutral-white);
+  color: var(--neutral-black);
   min-height: 100vh;
+  padding: 2rem;
   padding: 2rem;
 }
 
 /* Coffee List */
+/* Coffee List */
 .coffee-list {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   flex-wrap: wrap;
   gap: 1.5rem;
   justify-content: center;
 }
 
 /* Coffee Card */
+/* Coffee Card */
 .coffee-card {
+  background-color: var(--secondary-dark);
+  color: var(--neutral-white);
+  padding: 1rem;
   background-color: var(--secondary-dark);
   color: var(--neutral-white);
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coffee-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -38,14 +55,19 @@
   background-color: var(--neutral-light-gray);
   margin-bottom: 1rem;
   border-radius: 4px;
+  background-color: var(--neutral-light-gray);
+  margin-bottom: 1rem;
+  border-radius: 4px;
 }
 
+/* Cart Controls */
 /* Cart Controls */
 .cart-controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   justify-content: center;
+  margin-top: 1rem;
   margin-top: 1rem;
 }
 
@@ -55,6 +77,9 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--neutral-white);
+  transition: background-color 0.3s ease;
   font-size: var(--font-size-sm);
   color: var(--neutral-white);
   transition: background-color 0.3s ease;
@@ -68,7 +93,7 @@
 .breadcrumb {
   margin-bottom: 2rem;
   font-size: var(--font-size-base);
-  color: var(--neutral-light-gray);
+  color: var(--neutral-dark-gray);
 }
 
 .breadcrumb a {
@@ -83,16 +108,21 @@
 }
 
 .breadcrumb span {
-  color: var(--neutral-light-gray);
+  color: var(--neutral-dark-gray);
 }
 
+/* Filter Panel */
 /* Filter Panel */
 .filter-panel {
   position: fixed;
   top: 0;
   left: 0;
+  left: 0;
   width: 300px;
   height: 100%;
+  background-color: var(--neutral-white);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
   background-color: var(--neutral-white);
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
   padding: 2rem;
@@ -100,19 +130,27 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  gap: 1rem;
 }
 
 .filter-panel .close-icon {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
+  font-size: 1.5rem;
+  color: var(--neutral-black);
   font-size: 1.5rem;
   color: var(--neutral-black);
   cursor: pointer;
 }
 
+.filter-panel button {
+  padding: 0.8rem;
+  font-size: var(--font-size-sm);
 .filter-panel button {
   padding: 0.8rem;
   font-size: var(--font-size-sm);
@@ -124,9 +162,40 @@
 
 .apply-filters-button {
   background-color: var(--success-color);
+  color: var(--neutral-white);
+  transition: background-color 0.3s ease;
+}
+
+.apply-filters-button {
+  background-color: var(--success-color);
 }
 
 .clear-filters-button {
+  background-color: var(--error-color);
+}
+
+button.apply-filters-button:hover {
+  background-color: var(--primary-dark);
+}
+
+button.clear-filters-button:hover {
+  background-color: var(--error-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .coffee-card {
+    width: 90%;
+  }
+
+  .filter-panel {
+    width: 100%;
+    height: auto;
+    top: auto;
+    bottom: 0;
+  }
+}
+
   background-color: var(--error-color);
 }
 

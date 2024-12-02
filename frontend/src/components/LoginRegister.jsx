@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import './LoginRegister.css'
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa"; // npm install react-icons
 import validator from 'validator'; // npm install validator
-import Navbar from './Navbar'; 
 
 const LoginRegister = () => {
     
@@ -117,7 +116,6 @@ const LoginRegister = () => {
 
     return (
     <div className="loginregister-page">
-        <Navbar />
         <div className={`loginregister-wrapper${action}`}>
             {/*login form*/}
             <div className="loginregister-form-box login">

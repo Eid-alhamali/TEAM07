@@ -21,7 +21,7 @@
 /* Logo */
 .navbar-logo {
   max-width: 200px;
-  width: 20vw;
+  width: 10vw;
   min-width: 100px;
   /* height: auto; */
 }
@@ -46,7 +46,7 @@
 .navbar-links a {
   color: var(--neutral-black);
   text-decoration: none;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   transition: color 0.5s ease;
 }
 
@@ -82,6 +82,8 @@
 }
 
 .dropdown-column h4 {
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--neutral-light-gray);
   font-size: var(--font-size-sm);
   margin-bottom: 10px;
   color: var(--primary-dark);
@@ -110,11 +112,12 @@
 /* Icons */
 .shop-icon,
 .user-icon {
-  width: 35px;
+  width: 30px;
   height: auto;
   cursor: pointer;
   margin-right: 10px;
   transition: transform 0.3s ease;
+  fill: var(--neutral-black);
 }
 
 .shop-icon:hover,

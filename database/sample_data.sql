@@ -47,10 +47,10 @@ VALUES
 -- Insert sample data into Product_Images
 INSERT INTO Product_Images (image_id, product_id, image_url, alt_text)
 VALUES
-(1, 1, 'http://example.com/images/colombian_250g.jpg', '250g package of Colombian Single Origin'),
-(2, 1, 'http://example.com/images/colombian_500g.jpg', '500g package of Colombian Single Origin'),
-(3, 2, 'http://example.com/images/italian_espresso.jpg', 'Italian Espresso Blend package'),
-(4, 3, 'http://example.com/images/ethiopian_decaf.jpg', 'Ethiopian Decaf package');
+(1, 1, '/assets/images/products/product1.png', '250g package of Colombian Single Origin'),
+(2, 1, '/assets/images/products/product1.png', '500g package of Colombian Single Origin'),
+(3, 2, '/assets/images/products/product2.png', 'Italian Espresso Blend package'),
+(4, 3, '/assets/images/products/product3.png', 'Ethiopian Decaf package');
 
 -- Insert sample data into Address
 INSERT INTO Address (address_id, user_id, address_line, city, state, postal_code, country)

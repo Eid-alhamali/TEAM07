@@ -2,7 +2,6 @@
 
 import './Cart.css';
 import { useContext } from 'react';
-import Navbar from './Navbar';
 import { CartContext } from '../CartContext';
 
 const Cart = () => {
@@ -15,7 +14,6 @@ const Cart = () => {
 
   return (
     <div className='cart-page'>
-      <Navbar />
       <div style={{ padding: '20px' }}>
         <h1>Your Cart</h1>
         {cartItems.length > 0 ? (

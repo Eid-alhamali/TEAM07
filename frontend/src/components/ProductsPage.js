@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import Navbar from './Navbar';
 import { CartContext } from '../CartContext';
 import FilterPanel from './FilterPanel';
 import { useLocation, Link } from 'react-router-dom'; // Import Link
@@ -99,7 +98,6 @@ const ProductsPage = () => {
 
   return (
     <div className="products-page">
-      <Navbar />
       <h1>Our Coffee Products</h1>
 
       {/* Breadcrumb Navigation */}

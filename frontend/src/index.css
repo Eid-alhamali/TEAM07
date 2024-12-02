@@ -5,8 +5,8 @@
   
   /* Primary Colors */
   --primary-color: #97c9ff;    /* Basic Blue */
-  --primary-light: #cce5ff;    /* Light Blue */
-  --primary-dark: #0e2640;     /* Dark Blue */
+  --primary-light: #89b5e6;    /* Light Blue */
+  --primary-dark: #6b89aa;     /* Dark Blue */
 
   /* Secondary Colors */
   --secondary-color: #ffd595;  /* Basic Orange */
@@ -15,7 +15,7 @@
 
   /* Neutral Colors */
   --neutral-black: #202124;    /* Near Black */
-  --neutral-dark-gray: #5f6368; /* Dark Gray */
+  --neutral-dark-gray: #292a2b; /* Dark Gray */
   --neutral-light-gray: #dadce0; /* Light Gray */
   --neutral-white: #ffffff;     /* White */
 
@@ -26,7 +26,7 @@
   --info-color: #4285f4;       /* Blue (Reused) */
 
   /* Backgrounds */
-  --background: #303134;  /* Dark Background */  
+  --background: #f5f3f0;  /* Dark Background */  
 
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -62,6 +62,8 @@ body {
   margin: 0;
   font-family: var(--font-body);
   background-color: var(--background);
+  font-family: var(--font-body);
+  background-color: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -78,8 +80,181 @@ body {
 .main-content p {
   font-size: var(--font-size-base);
 }
+.main-content {
+  padding-top: 66px; /*Match navbar height */
+  background-color: var(--background);
+  margin: 0;
+}
+
+.main-content h2 {
+  font-size: var(--font-size-lg);
+}
+
+.main-content p {
+  font-size: var(--font-size-base);
+}
 
 code {
+  font-family: var(--font-code);
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+/* Responsive Font Sizes */
+@media (min-width: 1200px) {
+  html {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+
+  .button {
+    font-size: var(--font-size-sm);
+  }
+}
+
+
+/* Utility Classes */
+.text-left {
+  text-align: left;
+}
+
+/* Margins */
+.margin-0 {
+  margin: 0;
+}
+
+.margin-sm {
+  margin: 4px;
+}
+
+.margin-md {
+  margin: 8px;
+}
+
+.margin-lg {
+  margin: 16px;
+}
+
+/* Padding */
+.padding-0 {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: 4px;
+}
+
+.padding-md {
+  padding: 8px;
+}
+
+.padding-lg {
+  padding: 16px;
+}
+
+
+/* Button Styles */
+
+.button:focus {
+  outline: 2px dashed var(--primary-light);
+  outline-offset: 2px;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  text-transform: uppercase;
+  color: var(--neutral-white);
+}
+
+/* Button Variants */
+.button-primary {
+  background-color: var(--primary-color);
+}
+
+.button-primary:hover {
+  background-color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.button-success {
+  background-color: var(--success-color);
+}
+
+.button-success:hover {
+  background-color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.button-danger {
+  background-color: var(--error-color);
+}
+
+.button-danger:hover {
+  background-color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.button-secondary {
+  background-color: var(--neutral-dark-gray);
+}
+
+.button-secondary:hover {
+  background-color: var(--neutral-black);
+  transform: scale(1.05);
+}
+
+/* Remove Button */
+.remove-button {
+  font-size: var(--font-size-sm);
+  background: none;
+  border: none;
+  color: var(--error-color);
+  cursor: pointer;
+  transition: color 0.3s ease, text-decoration 0.2s ease;
+}
+
+.remove-button:hover {
+  color: var(--error-color);
+  text-decoration: underline;
+}
+
+
+
+/* Add grid utilities */
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
   font-family: var(--font-code);
 }
 

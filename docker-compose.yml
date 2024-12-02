@@ -26,6 +26,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules  # Prevents overwriting node_modules
+      - ./backend/src/assets:/usr/src/app/src/assets  # Mount static assets directory for images
     depends_on:
       db:
         condition: service_healthy
