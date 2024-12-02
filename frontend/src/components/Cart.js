@@ -1,11 +1,11 @@
-//src/components/Card.js
+//src/components/Cart.js
 
-import './Card.css';
+import './Cart.css';
 import { useContext } from 'react';
 import Navbar from './Navbar';
 import { CartContext } from '../CartContext';
 
-const Card = () => {
+const Cart = () => {
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useContext(CartContext);
 
   // Calculate total price for all items in the cart
@@ -14,10 +14,10 @@ const Card = () => {
   }, 0);
 
   return (
-    <div className='card-page'>
+    <div className='cart-page'>
       <Navbar />
       <div style={{ padding: '20px' }}>
-        <h2>Your Cart</h2>
+        <h1>Your Cart</h1>
         {cartItems.length > 0 ? (
           <ul>
             <div>
@@ -34,15 +34,12 @@ const Card = () => {
                   <p>Price per item: ${item.price}</p>
                   <p>Weight: {item.weight_grams}g</p> {/* Display weight */}
                   <div>
-                    <button onClick={() => decreaseQuantity(item.variantId)}>-</button>
-                    <span style={{ margin: '0 10px' }}>Quantity: {item.quantity}</span>
-                    <button onClick={() => increaseQuantity(item.variantId)}>+</button>
+                    <button className="button button-primary" onClick={() => decreaseQuantity(item.variantId)}>-</button>
+                    <span className="cart-item-quantity">Quantity: {item.quantity}</span>
+                    <button className="button button-primary" onClick={() => increaseQuantity(item.variantId)}>+</button>
                   </div>
                   <p>Total price for this item: ${(item.price * item.quantity).toFixed(2)}</p>
-                  <button
-                    onClick={() => removeFromCart(item.variantId)}
-                    style={{ color: 'red' }}
-                  >
+                  <button className="button button-danger remove-button" onClick={() => removeFromCart(item.variantId)}>
                     Remove from Cart
                   </button>
                 </div>
@@ -63,4 +60,4 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default Cart;

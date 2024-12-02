@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import compressoLogo from '../img/COMPRESSO.png'; 
-import shopIcon from '../img/shop.png'; 
-import userIcon from '../img/user.png';
+import compressoLogo from '../assets/images/icons/logo-light.svg';
+import shopIcon from '../assets/images/icons/shop.png';
+import userIcon from '../assets/images/icons/user.png';
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -59,14 +59,13 @@ const Navbar = () => {
               </div>
             )}
           </li>
-          <li><Link to="/mnovo">BEANS</Link></li>
           <li><a href="#about">ABOUT</a></li>
           <li><a href="#contact">CONTACT</a></li>
         </ul>
       </div>
       <div>
         <Link to="/loginregister"><img src={userIcon} alt="User Icon" className="user-icon" /></Link>
-        <Link to="/card"><img src={shopIcon} alt="Shop Icon" className="shop-icon" /></Link>
+        <Link to="/cart"><img src={shopIcon} alt="Shop Icon" className="shop-icon" /></Link>
       </div>
     </nav>
   );

@@ -1,53 +1,44 @@
 /* src/components/MainPage.css */
 
+@import '../index.css'; /* Use global styles and variables */
+
+/* Main Page Styles */
 .main-page {
-  background-color: black;
-  color: white;
+  background-color: var(--background);
+  color: var(--neutral-white);
   min-height: 100vh;
-  padding-top: 60px; 
+  padding-top: var(--spacing-lg);
 }
 
-.main-image {
+
+.main-page-image {
   width: 100%;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
-.main-content {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.main-content h2 {
-  font-size: 2rem;
-  color: #333;
-}
-
-.main-content p {
-  font-size: 1.2rem;
-  color: #666;
-}
-
-.scrollable-container {
+/* Scrollable Coffee Section */
+.main-page-scrollable-container {
   display: flex;
-  gap: 1rem;
-  overflow-x: scroll;
-  padding: 1rem 0;
-  margin-top: 2rem;
-  background-color: #6f625b70; 
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  padding: var(--spacing-md) 0;
+  margin-top: var(--spacing-lg);
+  background-color: var(--primary-light);
   align-items: center;
 }
 
-.scrollable-container::-webkit-scrollbar {
+.main-page-scrollable-container::-webkit-scrollbar {
   height: 8px;
 }
 
-.scrollable-container::-webkit-scrollbar-thumb {
-  background-color: #aaa;
+.main-page-scrollable-container::-webkit-scrollbar-thumb {
+  background-color: var(--primary-dark);
   border-radius: 10px;
 }
 
-.coffee-option {
+/* Coffee Card Styles */
+.main-page-coffee-option {
   flex: 0 0 auto;
   width: 150px;
   text-align: center;
@@ -56,28 +47,26 @@
   align-items: center;
 }
 
-/* Image Container */
-.image-container {
-  width: 130px; /* Fixed width for all images */
-  height: 100px; /* Fixed height for all images */
-  background-color: #1e1005; /* Brown background color */
+.main-page-image-container {
+  width: 130px;
+  height: 100px;
+  background-color: var(--primary-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px; /* Optional rounding for rectangle */
-  border: 2px solid #1e1005; /* Border for the container */
-  padding: 5px; /* Optional padding for extra spacing around images */
+  border-radius: var(--spacing-xs);
+  border: 2px solid var(--primary-dark);
+  padding: var(--spacing-xs);
 }
 
-/* Coffee Image */
-.coffee-image {
+.main-page-coffee-image {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain; /* Ensure the image is fully contained within the rectangle without cropping */
+  object-fit: contain;
 }
 
-.coffee-label {
-  color: #ddd;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+.main-page-coffee-label {
+  color: var(--primary-dark);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-sm);
 }

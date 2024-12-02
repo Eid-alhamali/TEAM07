@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import { CartContext } from '../CartContext'; // Import CartContext
 import './ProductDetail.css';
-import whitePackage from '../img/whitepackage.png';
+import whitePackage from '../assets/images/products/whitepackage.png';
 
 const ProductDetail = () => {
     const { variant_id } = useParams(); // Get variant_id from the URL

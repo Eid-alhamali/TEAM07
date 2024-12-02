@@ -1,24 +1,22 @@
-// src/components/MainPage.js
-
 import Navbar from './Navbar';
 import './MainPage.css';
-import mainCoffee from '../img/main_coffee.png';
+import mainCoffee from '../assets/images/featured/main_page_banner.jpg';
 
-// Import images directly from the src/img folder
-import colombia from '../img/colombia.png';
-import honduras from '../img/honduras.png';
-import DominicanRepublic from '../img/DominicanRepublic.png';
-import Nicaragua from '../img/Nicaragua.png';
-import mexico from '../img/mexico.png';
-import guatemala from '../img/guetamala.png';
-import elsalvador from '../img/elsalvador.png';
-import kenya from '../img/kenya.png';
-import vietnam from '../img/vietnam.png';
-import yemen from '../img/yemen.png';
-import peru from '../img/peru.png';
-import indonesia from '../img/indonesia.png';
-import panama from '../img/panama.png';
-import Rwanda from '../img/Rwanda.png';
+// Import images directly from the src/assets/images/origins folder
+import colombia from '../assets/images/origins/colombia.png';
+import honduras from '../assets/images/origins/honduras.png';
+import DominicanRepublic from '../assets/images/origins/DominicanRepublic.png';
+import Nicaragua from '../assets/images/origins/nicaragua.png';
+import mexico from '../assets/images/origins/mexico.png';
+import guatemala from '../assets/images/origins/guatemala.png';
+import elsalvador from '../assets/images/origins/elsalvador.png';
+import kenya from '../assets/images/origins/kenya.png';
+import vietnam from '../assets/images/origins/vietnam.png';
+import yemen from '../assets/images/origins/yemen.png';
+import peru from '../assets/images/origins/peru.png';
+import indonesia from '../assets/images/origins/indonesia.png';
+import panama from '../assets/images/origins/panama.png';
+import Rwanda from '../assets/images/origins/rwanda.png';
 
 const coffeeOptions = [
   { src: colombia, label: 'Colombia Coffee' },
@@ -41,23 +39,23 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <Navbar />
-      <img src={mainCoffee} alt="Main Coffee" className="main-image" />
-      <div className="main-content">
+      <img src={mainCoffee} alt="Main Coffee" className="main-page-image" />
+      <div className="main-page-content">
         <p>Your one-stop solution for efficient and effective compression services.</p>
       </div>
 
       {/* Horizontal scrollable section */}
-      <div className="scrollable-container">
+      <div className="main-page-scrollable-container">
         {coffeeOptions.map((option, index) => (
-          <div key={index} className="coffee-option">
-            <div className="image-container">
+          <div key={index} className="main-page-coffee-option">
+            <div className="main-page-image-container">
               <img
                 src={option.src}
                 alt={option.label}
-                className="coffee-image"
+                className="main-page-coffee-image"
               />
             </div>
-            <p className="coffee-label">{option.label}</p>
+            <p className="main-page-coffee-label">{option.label}</p>
           </div>
         ))}
       </div>
