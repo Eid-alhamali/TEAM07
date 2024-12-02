@@ -6,20 +6,17 @@
     box-sizing: border-box;
 }
 
-body.loginregister-body {
+.loginregister-page{
     padding-top: 80px;
     font-family: "Poppins", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background:  #202020;
     flex-direction: column;
     margin: 0;
-    /* background: url('../assets/placeholder.png') no-repeat;
-    background-size: cover;
-    background-position: center; */
 }
+
 
 .loginregister-wrapper {
     position: relative;

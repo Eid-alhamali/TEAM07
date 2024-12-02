@@ -107,3 +107,25 @@
   cursor: pointer;
   flex: 1; 
 }
+
+
+.breadcrumb {
+  margin: 20px 0;
+  font-size: 1rem;
+  color: #723d24;
+}
+
+.breadcrumb a {
+  color: #c59565;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+
+.breadcrumb span {
+  color: #dac9ad;
+
+}

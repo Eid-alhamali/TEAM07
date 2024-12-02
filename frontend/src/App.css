@@ -1,11 +1,4 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -13,20 +6,30 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+.main-content {
+  margin-top: 0;
+  background-color: black;
+  padding-top: 70px; /* Adjust this value based on the actual height of your navbar */
+  /* Alternatively, you can set a background image */
+  /* background: url('path/to/your/background-image.jpg') no-repeat center center fixed; */
+  /* background-size: cover; */
+  min-height: 5vh; /* Ensure the main content area takes up the full height of the viewport */
 }
+
+/* Ensure that the main-content class does not center its children */
+.main-content > * {
+  margin: 0;
+  padding: 0;
+  text-align: left; /* Ensure text is left-aligned */
+}
+
+
 
 @keyframes App-logo-spin {
   from {

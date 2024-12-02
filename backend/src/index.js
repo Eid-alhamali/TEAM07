@@ -9,8 +9,6 @@ const port = process.env.PORT;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
-
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
@@ -34,26 +32,86 @@ db.connect(err => {
     console.log('MySQL connected');
 });
 
-// GET endpoint to list all products and their variants
+// GET endpoint to list all products and their variants with category filtering
 app.get('/api/products', (req, res) => {
-    const query = `
+    const { category_id, roast_level, bean_type, grind_type, caffeine_content, origin } = req.query;
+
+    let query = `
         SELECT 
-            p.product_id, p.name, pv.variant_id, pv.weight_grams, pv.price, pv.stock, pv.sku
+            p.product_id, 
+            p.name, 
+            p.category_id,
+            p.roast_level, 
+            p.bean_type, 
+            p.grind_type, 
+            p.caffeine_content, 
+            p.origin, 
+            pv.variant_id, 
+            pv.weight_grams, 
+            pv.price, 
+            pv.stock, 
+            pv.sku
         FROM 
             Products p
         JOIN 
-            Product_Variant pv ON p.product_id = pv.product_id;
+            Product_Variant pv ON p.product_id = pv.product_id
     `;
-    db.query(query, (error, results) => {
+
+    // Array to store dynamic conditions
+    let conditions = [];
+    let params = [];
+
+    // Add conditions based on query parameters
+    if (category_id) {
+        conditions.push(`p.category_id = ?`);
+        params.push(category_id);
+    }
+    if (roast_level) {
+        conditions.push(`p.roast_level = ?`);
+        params.push(roast_level);
+    }
+    if (bean_type) {
+        conditions.push(`p.bean_type = ?`);
+        params.push(bean_type);
+    }
+    if (grind_type) {
+        conditions.push(`p.  = ?`);
+        params.push(grind_type);
+    }
+    if (caffeine_content) {
+        conditions.push(`p.caffeine_content = ?`);
+        params.push(caffeine_content);
+    }
+    if (origin) {
+        conditions.push(`p.origin = ?`);
+        params.push(origin);
+    }
+
+    // Append conditions to the query if any
+    if (conditions.length > 0) {
+        query += ` WHERE ` + conditions.join(' AND ');
+    }
+
+    db.query(query, params, (error, results) => {
         if (error) {
-            console.error('Error retrieving products:', error);
-            return res.status(500).json({ error: 'Internal server error' });
+            console.error('Error retrieving products:', error.message); // Log message only
+            return res.status(500).json({ 
+                error: 'Failed to retrieve products. Please try again later.',
+                details: error.message // Optional, can be removed for user-facing API
+            });
         }
+
+        if (results.length === 0) {
+            return res.status(404).json({ 
+                error: 'No products found matching the criteria.'
+            });
+        }
+
         res.json(results);
     });
 });
 
-//-----------------------------
+
 // GET endpoint to retrieve a single product by ID
 app.get('/api/products/:id', (req, res) => {
     const productId = req.params.id;
@@ -86,6 +144,21 @@ app.get('/api/products/:id', (req, res) => {
         res.json(results[0]);
     });
 });
+
+// POST endpoint to create a new product
+app.post('/api/products', (req, res) => {
+    const productData = req.body;
+    const query = 'INSERT INTO Products SET ?';
+    db.query(query, productData, (error, results) => {
+      if (error) {
+        console.error('Error creating product:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+      res
+        .status(201)
+        .json({ message: 'Product created', productId: results.insertId });
+    });
+  });
 
 
 // DELETE endpoint to delete a product

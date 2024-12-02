@@ -2,15 +2,14 @@
 
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.25); /* White with 50% transparency */
+  background-color: rgba(255, 255, 255, 0.6); /* Slightly opaque white */
   padding: 1rem 2rem;
-  position: absolute;
-  top: 50px; /* 50px from the top of the nearest positioned ancestor */
-  right: 1px;
-  left: 1px;
-  width: 100%; /* Ensure the navbar spans the full width */
+  position: fixed; /* Fixed to top */
   top: 0;
+  right: 0;
+  left: 0;
   z-index: 1000;
   font-family: 'Gupter', serif;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
@@ -41,19 +40,73 @@
   list-style: none;
   display: flex;
   gap: 2rem; /* Space between links */
-  text-decoration: none;
+  /* margin: 0;
+  padding: 0; */
+}
+
+.navbar-links li {
+  position: relative;
 }
 
 .navbar-links a {
-  color: #bfb7a4; /* White color for contrast */
+  color: #3b2400; /* Darker text color for readability */
   text-decoration: none;
-  font-size: 1.3rem;
-  font-family: 'Gupter', serif;
+  font-size: 1.2rem;
+  transition: color 0.5s ease;
 }
 
 .navbar-links a:hover {
-  color: #3b2400; /* Optional hover color */
-  text-decoration: none;  
+  color: #6a4f29; /* Slightly darker color on hover */
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 100%; /* Below the navbar */
+  left: 0;
+  background-color: #fffffff5;
+  color: #000000; 
+  list-style: none;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  gap: 2rem; /* Space between dropdown columns */
+  min-width: 400px;
+}
+
+.dropdown-column {
+  flex: 1;
+  min-width: 150px; /* Ensure each column has enough space */
+}
+
+.dropdown-column h4 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #6a4f29; /* Accent color */
+}
+
+.dropdown-column ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-column ul li {
+  margin-bottom: 8px;
+}
+
+.dropdown-column ul li a {
+  color: #3b2400;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.dropdown-column ul li a:hover {
+  color: #6a4f29;
 }
 
 .shop-icon {
@@ -62,11 +115,16 @@
   cursor: pointer;
   margin-right: 50px;
 }
-
 .user-icon {
-  width: 29px;
+  width: 30px;
   height: auto;
   cursor: pointer;
   margin-right: 10px;
 }
 
+.shop-icon:hover,
+.user-icon:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+  transition: transform 0.3s ease;
+
+}

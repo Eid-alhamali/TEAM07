@@ -11,6 +11,8 @@ import LoginRegister from './components/LoginRegister';
 import ProductDetail from './components/ProductDetail'; // Import ProductDetail
 import { CartProvider } from './CartContext'; // Import CartProvider
 
+import './App.css'; 
+
 function App() {
   const [products, setProducts] = useState([]); // Correctly define products and setProducts
   
@@ -25,14 +27,16 @@ function App() {
   return (
     <CartProvider> {/* Wrap the app with CartProvider */}
       <Router>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/mnovo" element={<Mnovo />} />
-          <Route path="/card" element={<Card />} />
-          <Route path="/products" element={<ProductsPage products={products} />} /> 
-          <Route path="/product/:variant_id" element={<ProductDetail />} />
-          <Route path="/loginregister" element={<LoginRegister />} />
-        </Routes>
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/mnovo" element={<Mnovo />} />
+            <Route path="/card" element={<Card />} />
+            <Route path="/products" element={<ProductsPage products={products} />} /> 
+            <Route path="/product/:variant_id" element={<ProductDetail />} />
+            <Route path="/loginregister" element={<LoginRegister/>} />
+          </Routes>
+        </div>
       </Router>
     </CartProvider>
   );

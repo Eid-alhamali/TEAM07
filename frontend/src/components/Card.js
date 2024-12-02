@@ -14,7 +14,7 @@ const Card = () => {
   }, 0);
 
   return (
-    <div>
+    <div className='card-page'>
       <Navbar />
       <div style={{ padding: '20px' }}>
         <h2>Your Cart</h2>

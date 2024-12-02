@@ -116,7 +116,7 @@ const LoginRegister = () => {
     };
 
     return (
-    <>
+    <div className="loginregister-page">
         <Navbar />
         <div className={`loginregister-wrapper${action}`}>
             {/*login form*/}
@@ -215,7 +215,7 @@ const LoginRegister = () => {
                 </form>
             </div>
         </div>
-    </>
+    </div>
     )
 }
 

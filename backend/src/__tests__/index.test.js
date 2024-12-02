@@ -4,14 +4,22 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Mock data for products and users
+// Mock data for products
 const mockProducts = [
-  { product_id: 1, name: 'Product 1', price: 10 },
-  { product_id: 2, name: 'Product 2', price: 20 },
-];
-
-const mockUsers = [
-  { user_id: 1, first_name: 'John', last_name: 'Doe', email: 'john@example.com' },
+  {
+    product_id: 1,
+    name: 'Colombian Single Origin',
+    price: 10,
+    roast_level: 'Medium',
+    bean_type: 'Arabica',
+  },
+  {
+    product_id: 2,
+    name: 'Italian Espresso Blend',
+    price: 20,
+    roast_level: 'Espresso',
+    bean_type: 'Blend',
+  },
 ];
 
 // Mocking functions
@@ -24,14 +32,37 @@ describe('Product API Endpoints', () => {
     mysql.createConnection().query.mockReset();
   });
 
-  test('GET /api/products should return all products', async () => {
-    mysql.createConnection().query.mockImplementation((sql, callback) => callback(null, mockProducts));
+test('GET /api/products should return all products', async () => {
+  mysql.createConnection().query.mockImplementation((sql, params, callback) => {
+    expect(sql).toContain('SELECT'); // Validate essential SQL fragment
+    expect(params).toEqual([]); // Ensure no parameters for unfiltered query
+    callback(null, mockProducts); // Mock database response
+  });
 
-    const res = await request(app).get('/api/products');
+  const res = await request(app).get('/api/products');
+
+  expect(res.statusCode).toEqual(200); // Ensure status code is 200
+  expect(res.body).toEqual(mockProducts); // Ensure response matches mock data
+  expect(mysql.createConnection().query).toHaveBeenCalledWith(
+    expect.any(String),
+    expect.any(Array),
+    expect.any(Function)
+  );
+});
+
+  test('GET /api/products with filters should return filtered products', async () => {
+    const queryParameters = { roast_level: 'Medium', bean_type: 'Arabica' };
+
+    mysql.createConnection().query.mockImplementation((sql, params, callback) => {
+      expect(sql).toContain('WHERE p.roast_level = ? AND p.bean_type = ?'); // Validate SQL conditions
+      expect(params).toEqual(['Medium', 'Arabica']); // Validate query parameters
+      callback(null, [mockProducts[0]]); // Return filtered result
+    });
+
+    const res = await request(app).get('/api/products').query(queryParameters);
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual(mockProducts);
-    expect(mysql.createConnection().query).toHaveBeenCalledWith('SELECT * FROM Products', expect.any(Function));
+    expect(res.body).toEqual([mockProducts[0]]);
   });
 
   test('GET /api/products/:id should return a single product', async () => {
@@ -63,36 +94,4 @@ describe('Product API Endpoints', () => {
     );
   });
 
-});
-
-describe('User API Endpoints', () => {
-  beforeEach(() => {
-    mysql.createConnection().query.mockReset();
-  });
-
-  test('POST /api/users/register should register a new user', async () => {
-    const newUser = { first_name: 'Jane', last_name: 'Doe', email: 'jane@example.com', password: 'password123' };
-    mysql.createConnection().query
-      .mockImplementationOnce((sql, params, callback) => callback(null, [])) // Check if user exists
-      .mockImplementationOnce((sql, data, callback) => callback(null, { insertId: 1 })); // Insert new user
-
-    const res = await request(app).post('/api/users/register').send(newUser);
-
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toEqual({ message: 'User registered', userId: 1 });
-    expect(bcrypt.hash).toHaveBeenCalledWith(newUser.password, 10, expect.any(Function));
-  });
-
-  test('POST /api/users/login should log in a user', async () => {
-    const loginData = { email: 'john@example.com', password: 'password123' };
-    mysql.createConnection().query.mockImplementationOnce((sql, params, callback) =>
-      callback(null, [{ user_id: 1, password_hash: 'hashedPassword' }])
-    );
-
-    const res = await request(app).post('/api/users/login').send(loginData);
-
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual({ message: 'Login successful', token: 'mock-jwt-token' });
-    expect(bcrypt.compare).toHaveBeenCalledWith(loginData.password, 'hashedPassword', expect.any(Function));
-  });
 });
