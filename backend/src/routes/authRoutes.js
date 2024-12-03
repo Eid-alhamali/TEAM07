@@ -1,39 +1,116 @@
 const express = require('express');
 const UsersController = require('../controllers/userController');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const mysql = require("mysql2");
+
+// Database connection
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+});
+
+db.connect((err) => {
+    if (err) throw err;
+    console.log("MySQL connected");
+});
+
+
+
 
 const router = express.Router();
-const usersController = new UsersController(); // Instantiate UsersController
+const usersController = new UsersController(); 
 
 // Middleware for validating user input
-const validateUserInput = (req, res, next) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required" });
-    }
-    next();
-};
+
 
 // Registration Endpoint
 router.post('/register', async (req, res) => {
+    const { first_name, last_name, email, password, phone_number } = req.body;
+  
+  
     try {
-        const user = req.body; // Get user details from the request body
-        const result = await usersController.register(user); // Call register method
-        res.status(201).json(result);
+    
+      db.query(
+        'SELECT * FROM Users WHERE email = ? OR phone_number = ?',
+        [email, phone_number],
+        async (err, results) => {
+          if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+          }
+  
+          if (results.length > 0) {
+            return res.status(400).json({ error: 'Email or Phone number already exists' });
+          }
+  
+          const passwordString = String(password);
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(passwordString, salt);
+  
+          
+          db.query(
+            'INSERT INTO Users (first_name, last_name, email, phone_number, password_hash) VALUES (?, ?, ?, ?, ?)',
+            [first_name, last_name, email, phone_number, hashedPassword],
+            (insertErr, result) => {
+              if (insertErr) {
+                console.error('Insert error:', insertErr);
+                return res.status(500).json({ error: 'Failed to register user' });
+              }
+  
+              
+              res.status(201).json({ message: 'User registered successfully', userId: result.insertId });
+            }
+          );
+        }
+      );
     } catch (err) {
-        res.status(400).json({ error: err.message });
+      console.error('Error:', err);
+      res.status(500).json({ error: 'Server error' });
     }
-});
+  });
+
 
 // Login Endpoint
-router.post('/login', validateUserInput, async (req, res) => {
-    try {
-        const { email, password } = req.body; // Get email and password from the request body
-        const userDetails = await usersController.login(email, password); // Call login method
-        res.status(200).json(userDetails);
-    } catch (err) {
-        res.status(401).json({ error: err.message }); // Unauthorized
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
     }
+    
+    
+    const query = "SELECT user_id, password_hash FROM Users WHERE email = ?";
+    db.query(query, [email], async (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({ error: "Invalid email or password" });
+        }
+
+        const user = results[0];
+       
+        const passwordString = String(password);
+        
+        const match = await bcrypt.compare(passwordString, user.password_hash);
+        if (!match) {
+            return res.status(401).json({ error: "Invalid email or password" });
+        }
+
+        
+        const token = jwt.sign({ user_id: user.user_id }, "abcd12d", {
+            expiresIn: "12h"
+        });
+
+        res.json({ token });
+    });
 });
+
 
 // Get all users
 router.get('/', async (req, res) => {

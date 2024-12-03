@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Users (
     email VARCHAR(100) UNIQUE NOT NULL,
     phone_number VARCHAR(15) UNIQUE NOT NULL,
     tax_id VARCHAR(20),
-    password_hash VARBINARY(256) NOT NULL,
+    password_hash VARCHAR(256) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -216,3 +216,4 @@ CREATE TABLE IF NOT EXISTS ShoppingCartItems (
 
 GRANT ALL PRIVILEGES ON ecommerce_db.* TO 'root'@'%';
 FLUSH PRIVILEGES;
+

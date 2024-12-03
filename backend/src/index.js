@@ -5,7 +5,7 @@ const app = express();
 const cartRoutes = require('./routes/cartRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const productRoutes = require("./routes/productRoutes");
-
+const authRoutes = require('./routes/authRoutes');
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -21,6 +21,7 @@ app.use('/api/cart', cartRoutes);
 // integrate search routes
 app.use('/api/search', searchRoutes);
 app.use('/assets', express.static('src/assets'));
+app.use('/auth',authRoutes)
 
 // integrate prodcuts routes
 app.use("/api", productRoutes);

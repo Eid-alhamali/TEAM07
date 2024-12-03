@@ -13,6 +13,7 @@ db.connect((err) => {
     console.log("MySQL connected");
 });
 
+
 // GET endpoint to fetch cart items
 exports.getCartItems = (req, res) => {
     const { user_id } = req.params;
