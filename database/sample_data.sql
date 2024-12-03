@@ -3,15 +3,15 @@ USE ecommerce_db;
 -- Insert sample data into Users
 INSERT INTO Users (user_id, first_name, last_name, email, phone_number, tax_id, password_hash)
 VALUES
-(1, 'John', 'Doe', 'johndoe@example.com', '+1234567890', '123456789', UNHEX(SHA2('password',256))),
-(2, 'Jane', 'Smith', 'janesmith@example.com', '+0987654321', '987654321', UNHEX(SHA2('password',256))),
-(3, 'Alice', 'Johnson', 'alicej@example.com', '+1122334455', '555555555', UNHEX(SHA2('password',256)));
+(1, 'John', 'Doe', 'johndoe@example.com', '+1234567890', '123456789', SHA2('password',256)),
+(2, 'Jane', 'Smith', 'janesmith@example.com', '+0987654321', '987654321', SHA2('password',256)),
+(3, 'Alice', 'Johnson', 'alicej@example.com', '+1122334455', '555555555', SHA2('password',256));
 
 -- Insert sample data into Managers
 INSERT INTO Managers (manager_id, first_name, last_name, email, password_hash, role)
 VALUES
-(1, 'Michael', 'Brown', 'michaelb@example.com', UNHEX(SHA2('password',256)), 'sales_manager'),
-(2, 'Laura', 'Wilson', 'lauraw@example.com', UNHEX(SHA2('password',256)), 'product_manager');
+(1, 'Michael', 'Brown', 'michaelb@example.com', SHA2('password',256), 'sales_manager'),
+(2, 'Laura', 'Wilson', 'lauraw@example.com', SHA2('password',256), 'product_manager');
 
 -- Insert sample data into Categories
 INSERT INTO Categories (category_id, name, description)
