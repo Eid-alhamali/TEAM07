@@ -1,0 +1,22 @@
+.admin-about-description {
+    color: black;
+    font-size: 1rem; /* Adjust the size as needed */
+    line-height: 1.6; /* Improve readability */
+    margin-bottom: 1rem; /* Add spacing between paragraphs */
+    margin-left: 2rem; /* Add space to the left */
+    margin-right: 2rem; /* Add space to the right */
+  }
+  
+  .admin-about-title {
+    color: darkgrey;
+    font-size: 2.5rem; /* Adjust the size as needed */
+    font-weight: bold;
+    margin-top: 1.5rem; /* Add some spacing below the title */
+    margin-bottom: 1.5rem; /* Add some spacing below the title */
+    margin-left: 2rem; /* Add space to the left */
+    margin-right: 2rem; /* Add space to the right */
+  }
+  
+  .admin-about-container {
+    padding: 2rem; /* Add some padding for the container */
+  }

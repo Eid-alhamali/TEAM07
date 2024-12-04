@@ -1,0 +1,100 @@
+/* Root container styling */
+.write-review-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Header styling */
+.write-review-container h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Form group styling */
+.write-review-container .form-group {
+    margin-bottom: 20px;
+}
+
+.write-review-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+/* Star rating styling */
+.star-rating {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.star {
+    font-size: 30px;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.star:hover {
+    color: #f39c12;
+    transform: scale(1.2);
+}
+
+.star.selected {
+    color: #f39c12;
+}
+
+/* Textarea styling */
+.write-review-container textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin-top: 8px;
+    resize: none;
+    background-color: #f7f7f7;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.write-review-container textarea:focus {
+    border: 1px solid #3498db;
+}
+
+/* Submit button styling */
+.write-review-container .submit-review-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.write-review-container .submit-review-button:hover {
+    background-color: #2980b9;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Error message styling */
+.write-review-container p {
+    font-size: 16px;
+    text-align: center;
+    color: #e74c3c;
+}

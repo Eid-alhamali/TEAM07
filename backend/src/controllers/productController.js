@@ -197,6 +197,30 @@ exports.allVariantsOfProductId = (req, res) => {
     });
 };
 
+exports.getProductDetails = (req, res) => {
+    const { product_id } = req.params;
+
+    const query = `
+        SELECT p.*, COALESCE(p.average_rating, 0) AS average_rating
+        FROM Products p
+        WHERE p.product_id = ?
+    `;
+
+    db.query(query, [product_id], (err, results) => {
+        if (err) {
+            console.error("Error fetching product details:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+
+        res.status(200).json(results[0]);
+    });
+};
+
+
 // Retrieve product details by variant ID
 exports.getProductByVariantId = (req, res) => {
     const variantId = req.params.variant_id;

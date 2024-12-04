@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS Products (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 );
 
+ALTER TABLE Products ADD COLUMN average_rating DECIMAL(3, 2) DEFAULT 0.00;
+
 CREATE TABLE IF NOT EXISTS DeliveryOptions (
     delivery_option_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

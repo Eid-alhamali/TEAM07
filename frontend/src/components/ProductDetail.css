@@ -153,6 +153,27 @@
   cursor: not-allowed;
 }
 
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 24px;
+  color: lightgray; /* Base color for empty stars */
+}
+
+.star-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: gold; /* Color for filled stars */
+  overflow: hidden; /* Ensures partial fill works */
+  width: 0%;
+}
+
+.star-empty {
+  display: inline-block;
+}
+
+
 @media (max-width: 768px) {
   .product-detail-container {
     flex-direction: column;
