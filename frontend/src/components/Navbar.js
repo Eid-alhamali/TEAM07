@@ -1,13 +1,29 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import compressoLogo from '../assets/images/icons/logo-dark.svg';
 import shopIcon from '../assets/images/icons/cart-dark.svg';
 import userIcon from '../assets/images/icons/user-dark.svg';
+import searchIcon from '../assets/images/icons/icons8-search.svg';
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const navigate = useNavigate(); // React Router hook for navigation
 
+  // Handle search input changes
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Handle search form submission
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (searchQuery.trim()) {
+      // Changed 'query' to 'search' here
+      navigate(`/search?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   return (
     <nav className="navbar">
@@ -15,7 +31,11 @@ const Navbar = () => {
       <div className="navbar-center">
         <ul className="navbar-links">
           <li><Link to="/">HOME</Link></li>
-          <li className="dropdown" onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
+          <li 
+            className="dropdown" 
+            onMouseEnter={() => setDropdownOpen(true)} 
+            onMouseLeave={() => setDropdownOpen(false)}
+          >
             <Link to="/products" className="dropdown-toggle">PRODUCTS</Link>
             {dropdownOpen && (
               <div className="dropdown-menu">
@@ -63,7 +83,19 @@ const Navbar = () => {
           <li><a href="#contact">CONTACT</a></li>
         </ul>
       </div>
-      <div>
+      <div className="navbar-right">
+        <form className="search-bar" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+          <button type="submit" className="search-button">
+            <img src={searchIcon} alt="Search" className="search-icon" />
+          </button>
+        </form>
         <Link to="/login"><img src={userIcon} alt="User Icon" className="user-icon" /></Link>
         <Link to="/cart"><img src={shopIcon} alt="Shop Icon" className="shop-icon" /></Link>
       </div>

@@ -1,8 +1,8 @@
 /* Navbar Container */
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background-color: rgba(255, 255, 255, 0.6);
   padding: 1rem 2rem;
   position: fixed;
@@ -23,12 +23,12 @@
   max-width: 200px;
   width: 10vw;
   min-width: 100px;
-  /* height: auto; */
 }
 
 /* Centered Links */
 .navbar-center {
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
 }
@@ -52,6 +52,69 @@
 
 .navbar-links a:hover {
   color: var(--primary-dark);
+}
+
+/* Navbar Right */
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--neutral-light-gray);
+  border-radius: 50px; /* Rounded corners for the search bar */
+  background-color: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  padding: 5px 10px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-base);
+  padding: 8px 12px;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: var(--neutral-gray);
+}
+
+.search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  /* filter: brightness(0) saturate(100%) invert(55%) sepia(47%) saturate(588%)
+    hue-rotate(357deg) brightness(95%) contrast(90%); */
+}
+
+
+/* Icons */
+.shop-icon,
+.user-icon {
+  width: 30px;
+  height: auto;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.shop-icon:hover,
+.user-icon:hover{
+  transform: scale(1.1);
 }
 
 /* Dropdown Menu */
@@ -109,22 +172,6 @@
   color: var(--primary-dark);
 }
 
-/* Icons */
-.shop-icon,
-.user-icon {
-  width: 30px;
-  height: auto;
-  cursor: pointer;
-  margin-right: 10px;
-  transition: transform 0.3s ease;
-  fill: var(--neutral-black);
-}
-
-.shop-icon:hover,
-.user-icon:hover {
-  transform: scale(1.1);
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .navbar {
@@ -151,5 +198,9 @@
   .user-icon {
     margin-right: 0;
     margin-left: 10px;
+  }
+
+  .navbar-right {
+    margin-top: 10px;
   }
 }

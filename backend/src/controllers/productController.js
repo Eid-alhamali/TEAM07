@@ -3,9 +3,35 @@ const mysql = require("mysql2");
 // Database connection
 const db = require('../config/db');
 
-// List all products with filtering and pagination
+// List all products with filtering and sorting
 exports.listProducts = (req, res) => {
-    const { category_id, roast_level, bean_type, grind_type, caffeine_content, origin } = req.query;
+    const {
+        category_id,
+        roast_level,
+        bean_type,
+        grind_type,
+        caffeine_content,
+        origin,
+        sort_by = 'price', // Default sort_by
+        sort_order = 'asc', // Default sort_order
+    } = req.query;
+
+    // Validate sorting parameters
+    const validSortBy = ['price']; // Allowed fields to sort by
+    const validSortOrder = ['asc', 'desc'];
+
+    if (!validSortBy.includes(sort_by)) {
+        return res.status(400).json({ error: 'Invalid sort_by parameter.' });
+    }
+
+    if (!validSortOrder.includes(sort_order.toLowerCase())) {
+        return res.status(400).json({ error: 'Invalid sort_order parameter.' });
+    }
+
+    // Map sort_by to actual database column
+    const sortByColumn = {
+        price: 'pv.price',
+    };
 
     let query = `
         SELECT 
@@ -60,16 +86,16 @@ exports.listProducts = (req, res) => {
         query += ` WHERE ` + conditions.join(' AND ');
     }
 
+    // Add ORDER BY clause
+    query += ` ORDER BY ${sortByColumn[sort_by]} ${sort_order.toUpperCase()}`;
+
     db.query(query, params, (error, results) => {
         if (error) {
             console.error('Error retrieving products:', error.message);
             return res.status(500).json({ error: 'Failed to retrieve products.' });
         }
 
-        if (!results.length) {
-            return res.status(404).json({ error: 'No products found matching the criteria.' });
-        }
-
+        // Instead of returning 404 for no results, return an empty array
         res.json(results);
     });
 };

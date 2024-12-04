@@ -207,6 +207,21 @@ button.clear-filters-button:hover {
   background-color: var(--error-color);
 }
 
+/* Sorting Container */
+.sorting-container {
+  margin: 10px 0;
+}
+
+.sorting-container label {
+  margin-right: 5px;
+}
+
+.sorting-container select {
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .coffee-card {
