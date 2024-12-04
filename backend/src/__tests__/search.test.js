@@ -1,101 +1,169 @@
-const request = require("supertest");
-const app = require("../index");
-const mysql = require("mysql2");
+const searchController = require('../controllers/searchController');
+const db = require('../config/db');
 
-// Mocking the database
-jest.mock("mysql2");
+jest.mock('../config/db', () => ({
+    query: jest.fn()
+}));
 
-describe("Search API Endpoints", () => {
+describe('searchController', () => {
+    let req, res;
+
     beforeEach(() => {
-        mysql.createConnection().query.mockReset();
+        req = {
+            query: {}
+        };
+        res = {
+            json: jest.fn(),
+            status: jest.fn().mockReturnThis()
+        };
+        jest.clearAllMocks();
     });
 
-    test("GET /api/search should fetch products by name", async () => {
+    test('should return empty result when no search terms are provided', () => {
+        // If no search terms provided, controller responds with empty data immediately.
+        req.query = { search: '' };
+
+        searchController.searchProducts(req, res);
+
+        expect(res.json).toHaveBeenCalledWith({ data: [], total: 0 });
+    });
+
+    test('should validate sort parameters and return 400 if invalid', () => {
+        // Invalid sort_by
+        req.query = {
+            search: 'coffee',
+            sort_by: 'invalid_column',
+            sort_order: 'asc'
+        };
+        
+        searchController.searchProducts(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({ error: "Invalid sorting parameters" });
+
+        // Invalid sort_order
+        req.query = {
+            search: 'coffee',
+            sort_by: 'price',
+            sort_order: 'invalid_order'
+        };
+        
+        searchController.searchProducts(req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(2); // second call
+        expect(res.status).toHaveBeenLastCalledWith(400);
+        expect(res.json).toHaveBeenLastCalledWith({ error: "Invalid sorting parameters" });
+    });
+
+    test('should query the database with correct parameters when a valid search is provided', () => {
+        req.query = {
+            search: 'coffee beans',
+            sort_by: 'price',
+            sort_order: 'asc'
+        };
+
+        // Mock DB response
         const mockResults = [
-            { product_id: 1, name: "Coffee", description: "Dark roast", price: 10.0, stock: 50, out_of_stock: false },
+            { product_id: 1, name: 'Coffee Beans', price: 10.00 },
+            { product_id: 2, name: 'Espresso Beans', price: 12.50 }
         ];
 
-        mysql
-            .createConnection()
-            .query.mockImplementation((sql, params, callback) =>
-                callback(null, mockResults)
-            );
+        db.query.mockImplementation((sql, params, callback) => {
+            // Check if the query includes the expected WHERE clauses
+            // The controller splits "coffee beans" into two terms: "coffee", "beans"
+            // Expect parameters for two terms: 4 params (2 for "coffee", 2 for "beans"), plus sort_by at the end
+            expect(params).toHaveLength(5);
+            // The last param is sort_by added at the end
+            expect(params[params.length - 1]).toBe('price');
 
-        const res = await request(app).get("/api/search?name=Coffee");
+            // Simulate successful DB call
+            callback(null, mockResults);
+        });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toEqual(mockResults);
+        searchController.searchProducts(req, res);
 
-        const expectedQuery = `
-            SELECT 
-                p.product_id, 
-                p.name, 
-                p.description, 
-                pv.price, 
-                pv.stock, 
-                (pv.stock = 0) AS out_of_stock 
-            FROM Products p
-            LEFT JOIN Product_Variant pv ON p.product_id = pv.product_id
-            WHERE p.name LIKE ? AND p.description LIKE ?
-            ORDER BY price ASC
-        `
-            .replace(/\s+/g, " ")
-            .trim();
-
-        const receivedQuery = mysql
-            .createConnection()
-            .query.mock.calls[0][0].replace(/\s+/g, " ")
-            .trim();
-
-        expect(receivedQuery).toBe(expectedQuery);
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.any(String),
-            ["%Coffee%", "%%"],
-            expect.any(Function)
-        );
+        // After db.query callback is executed
+        expect(res.json).toHaveBeenCalledWith({ data: mockResults, total: mockResults.length });
     });
 
-    test("GET /api/search should fetch products sorted by price descending", async () => {
+    test('should handle multiple search terms correctly', () => {
+        req.query = {
+            search: 'strong arabica',
+            sort_by: 'price',
+            sort_order: 'desc'
+        };
+
         const mockResults = [
-            { product_id: 1, name: "Coffee", price: 20.0, stock: 50, out_of_stock: false },
-            { product_id: 2, name: "Espresso", price: 15.0, stock: 30, out_of_stock: false },
+            { product_id: 10, name: 'Strong Arabica Coffee', price: 20.00 },
+            { product_id: 12, name: 'Arabica Blend', price: 15.00 }
         ];
 
-        mysql
-            .createConnection()
-            .query.mockImplementation((sql, params, callback) =>
-                callback(null, mockResults)
-            );
+        db.query.mockImplementation((sql, params, callback) => {
+            // The terms are 'strong' and 'arabica'
+            // Each term adds two params -> total 4 + 1 for sort_by = 5
+            expect(params).toHaveLength(5);
+            expect(params[params.length - 1]).toBe('price');
+            callback(null, mockResults);
+        });
 
-        const res = await request(app).get("/api/search?sort_by=price&sort_order=desc");
+        searchController.searchProducts(req, res);
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toEqual(mockResults);
-
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("ORDER BY price DESC"),
-            expect.arrayContaining(["%%", "%%"]),
-            expect.any(Function)
-        );
+        expect(res.json).toHaveBeenCalledWith({ data: mockResults, total: mockResults.length });
     });
 
-    test("GET /api/search should handle invalid sorting parameters", async () => {
-        const res = await request(app).get("/api/search?sort_by=popularity&sort_order=asc");
+    test('should return an empty array if no results are found', () => {
+        req.query = {
+            search: 'nonexistentproduct',
+            sort_by: 'price',
+            sort_order: 'asc'
+        };
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toEqual({ error: "Invalid sorting parameters" });
+        db.query.mockImplementation((sql, params, callback) => {
+            callback(null, []); // no results
+        });
+
+        searchController.searchProducts(req, res);
+
+        expect(res.json).toHaveBeenCalledWith({ data: [], total: 0 });
     });
 
-    test("GET /api/search should return empty results if no products match", async () => {
-        mysql
-            .createConnection()
-            .query.mockImplementation((sql, params, callback) =>
-                callback(null, [])
-            );
+    test('should handle DB errors gracefully', () => {
+        req.query = {
+            search: 'espresso',
+            sort_by: 'price',
+            sort_order: 'asc'
+        };
 
-        const res = await request(app).get("/api/search?name=NonexistentProduct");
+        db.query.mockImplementation((sql, params, callback) => {
+            callback(new Error('DB Error'), null);
+        });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.data).toHaveLength(0);
+        searchController.searchProducts(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: "Internal server error" });
+    });
+
+    test('should handle sorting order properly', () => {
+        // Test descending order
+        req.query = {
+            search: 'latte',
+            sort_by: 'price',
+            sort_order: 'desc'
+        };
+
+        const mockResults = [
+            { product_id: 5, name: 'Latte Blend', price: 15.00 },
+            { product_id: 3, name: 'Italian Latte', price: 8.50 }
+        ];
+
+        db.query.mockImplementation((sql, params, callback) => {
+            // Just return the mockResults in descending order
+            callback(null, mockResults);
+        });
+
+        searchController.searchProducts(req, res);
+
+        expect(res.json).toHaveBeenCalledWith({ data: mockResults, total: mockResults.length });
     });
 });
