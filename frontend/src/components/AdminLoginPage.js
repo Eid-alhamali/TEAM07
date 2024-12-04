@@ -53,7 +53,7 @@ const AdminLoginPage = () => {
     
 
     return (
-        <div className="page">
+        <div className="admin-login-page">
             <div className="container">
                 <div className="left">
                     <div className="login">Login</div>
