@@ -2,7 +2,7 @@
 
 Welcome to the Compresso Coffee Store! This is the official GitHub repository for Team 07’s project in CS 308 - Software Engineering at Sabanci University. We’re a team of six working to build a functional, secure, and visually appealing online store for our unique coffee brand, **Compresso**.
 
-## Key Features
+## 📍 Key Features
 
 - **Browse and Purchase:** Users can explore coffee products, check availability, add items to their cart, and place orders.
 - **User Authentication:** Customers can register, log in, and securely manage their accounts.
@@ -11,7 +11,7 @@ Welcome to the Compresso Coffee Store! This is the official GitHub repository fo
 - **Search and Filter:** Users can search by product name and sort by price or popularity.
 - **Admin Interface:** A dedicated section for managers to handle inventory, manage discounts, and view analytics.
 
-### Tech Stack
+## 📍 Tech Stack
 
 - **Frontend:** React, Axios
 - **Backend:** Node.js, Express
@@ -19,7 +19,7 @@ Welcome to the Compresso Coffee Store! This is the official GitHub repository fo
 - **Containerization:** Docker
 - **Version Control:** Git, GitHub
 
-## Team Members
+## 📍 Team Members
 
 - Arya Hassibi
 - Beste Bayhan
@@ -28,7 +28,7 @@ Welcome to the Compresso Coffee Store! This is the official GitHub repository fo
 - Eid Alhamali
 - Ecem Akın
 
-## Development Roadmap
+## 📍 Development Roadmap
 
 ### Project SCRUM Schedule
 We follow a SCRUM approach with two-week sprints, culminating in bi-weekly demos as outlined below:
@@ -41,7 +41,7 @@ We follow a SCRUM approach with two-week sprints, culminating in bi-weekly demos
 
 Jira is used to manage tasks and track progress. Each sprint begins with a planning meeting to assign tasks and ends with a sprint review to showcase completed features.
 
-## Git and GitHub Guidelines
+## 📍 Git and GitHub Guidelines
 
 To keep our project organized:
 
@@ -51,7 +51,7 @@ To keep our project organized:
 
 Checkout our [Git Guide](docs/Git_Guide.md) for mor info about our system and useful commands.
 
-## Workflow Overview
+## 📍 Workflow Overview
 
 Here’s a quick roadmap to get you set up and moving forward effectively.
 
@@ -70,6 +70,7 @@ Here’s a quick roadmap to get you set up and moving forward effectively.
     DB_USER=root
     DB_PASS=
     DB_NAME=ecommerce_db
+    JWT_SECRET=JWTSECRET
     ```
     The `DB_PASS` field should be left empty since for now during the development phase, the database is modified to accept empty passwords.
 
@@ -141,12 +142,3 @@ Here’s a quick roadmap to get you set up and moving forward effectively.
 
 For detailed instructions on setting up the project, initializing the tech stack, and managing version control, please refer to the [Project Setup Guide](./PROJECT_SETUP_GUIDE.md).
 
-
-## Group Members
-
-- Arya Hassibi
-- Beste Bayhan
-- Mustafa Topcu
-- Orhun Ege Ozpay
-- Eid Alhamali
-- Ecem Akın

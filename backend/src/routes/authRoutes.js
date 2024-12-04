@@ -3,6 +3,7 @@ const UsersController = require('../controllers/userController');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const mysql = require("mysql2");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Database connection
 const db = require('../config/db');
@@ -90,7 +91,7 @@ router.post("/login", async (req, res) => {
         }
 
         
-        const token = jwt.sign({ user_id: user.user_id }, "abcd12d", {
+        const token = jwt.sign({ user_id: user.user_id }, JWT_SECRET, {
             expiresIn: "12h"
         });
 
