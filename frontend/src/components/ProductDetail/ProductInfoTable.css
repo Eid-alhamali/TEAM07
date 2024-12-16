@@ -1,0 +1,28 @@
+.product-info-section {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.product-info-section .product-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-info-section .product-info-table td {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.product-info-section .product-info-table tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .product-info-section{
+        width: 100%;
+    }
+}

@@ -3,7 +3,7 @@ const mysql = require("mysql2");
 // Database connection
 const db = require('../config/db');
 
-// List all products with filtering and sorting
+// List all products variants with filtering, sorting, images, and discounts
 exports.listProducts = (req, res) => {
     const {
         category_id,
@@ -99,6 +99,8 @@ exports.listProducts = (req, res) => {
         res.json(results);
     });
 };
+
+
 
 // Retrieve a single product by ID
 exports.getProductById = (req, res) => {
@@ -248,7 +250,8 @@ exports.getProductDetails = (req, res) => {
 
 
 // Retrieve product details by variant ID
-exports.getProductByVariantId = (req, res) => {
+// Retrieve product details by variant ID
+exports.getProductDetailsByVariant = (req, res) => {
     const variantId = req.params.variant_id;
 
     const productQuery = `
@@ -263,7 +266,10 @@ exports.getProductByVariantId = (req, res) => {
             p.processing_method, 
             p.caffeine_content, 
             p.description, 
+            p.warranty_status,
+            p.distributor_info,
             pv.variant_id, 
+            pv.serial_number,
             pv.weight_grams, 
             pv.price, 
             pv.stock, 
@@ -277,7 +283,9 @@ exports.getProductByVariantId = (req, res) => {
     `;
 
     const imagesQuery = `
-        SELECT image_url, alt_text FROM Product_Images WHERE product_id = ?;
+        SELECT image_url, alt_text 
+        FROM Product_Images 
+        WHERE variant_id = ?;
     `;
 
     db.query(productQuery, [variantId], (error, results) => {
@@ -290,7 +298,7 @@ exports.getProductByVariantId = (req, res) => {
         }
         const product = results[0];
 
-        db.query(imagesQuery, [product.product_id], (imgError, imgResults) => {
+        db.query(imagesQuery, [variantId], (imgError, imgResults) => {
             if (imgError) {
                 console.error('Error retrieving product images:', imgError);
                 return res.status(500).json({ error: 'Internal server error' });
@@ -302,4 +310,102 @@ exports.getProductByVariantId = (req, res) => {
             res.json(product);
         });
     });
+};
+
+
+exports.getImagesForVariant = (req, res) => {
+    const { variantId } = req.params;
+
+    db.query(
+        'SELECT image_id, variant_id, image_url, alt_text FROM Product_Images WHERE variant_id = ?',
+        [variantId],
+        (error, rows) => {
+            if (error) {
+                console.error('Error fetching product variant images:', error);
+                return res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+
+            return res.json({
+                success: true,
+                data: rows
+            });
+        }
+    );
+};
+
+
+exports.getDiscountForVariant = (req, res) => {
+    const { variantId } = req.params;
+
+    // Fetch variant price
+    db.query(
+        'SELECT price FROM Product_Variant WHERE variant_id = ?',
+        [variantId],
+        (error, variantRows) => {
+            if (error) {
+                console.error('Error fetching variant price:', error);
+                return res.status(500).json({ success: false, error: 'Internal Server Error' });
+            }
+
+            if (variantRows.length === 0) {
+                return res.status(404).json({ success: false, error: 'Variant not found' });
+            }
+
+            const basePrice = parseFloat(variantRows[0].price);
+
+            // Fetch any active discount for this variant
+            db.query(
+                `SELECT discount_id, discount_type, value, start_date, end_date, active 
+                 FROM Discounts 
+                 WHERE variant_id = ? 
+                 AND active = TRUE
+                 AND (start_date IS NULL OR start_date <= CURDATE())
+                 AND (end_date IS NULL OR end_date >= CURDATE())
+                 LIMIT 1`,
+                [variantId],
+                (discountError, discountRows) => {
+                    if (discountError) {
+                        console.error('Error fetching discount:', discountError);
+                        return res.status(500).json({ success: false, error: 'Internal Server Error' });
+                    }
+
+                    if (discountRows.length === 0) {
+                        // No active discount
+                        return res.json({
+                            success: true,
+                            discount: null,
+                            discounted_price: basePrice
+                        });
+                    }
+
+                    const discount = discountRows[0];
+                    let discountedPrice = basePrice;
+
+                    if (discount.discount_type === 'percentage') {
+                        discountedPrice = basePrice * (1 - (parseFloat(discount.value) / 100));
+                    } else if (discount.discount_type === 'fixed') {
+                        discountedPrice = basePrice - parseFloat(discount.value);
+                        if (discountedPrice < 0) discountedPrice = 0; // Ensure not negative
+                    }
+
+                    return res.json({
+                        success: true,
+                        discount: {
+                            discount_id: discount.discount_id,
+                            discount_type: discount.discount_type,
+                            value: discount.value,
+                            start_date: discount.start_date,
+                            end_date: discount.end_date,
+                            active: discount.active
+                        },
+                        base_price: basePrice,
+                        discounted_price: discountedPrice
+                    });
+                }
+            );
+        }
+    );
 };

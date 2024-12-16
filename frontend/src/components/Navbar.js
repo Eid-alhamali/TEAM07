@@ -8,8 +8,8 @@ import searchIcon from '../assets/images/icons/icons8-search.svg';
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
-  const navigate = useNavigate(); // React Router hook for navigation
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   // Handle search input changes
   const handleSearchChange = (event) => {
@@ -20,7 +20,6 @@ const Navbar = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     if (searchQuery.trim()) {
-      // Changed 'query' to 'search' here
       navigate(`/search?search=${encodeURIComponent(searchQuery)}`);
     }
   };
@@ -40,25 +39,39 @@ const Navbar = () => {
             {dropdownOpen && (
               <div className="dropdown-menu">
                 <div className="dropdown-column">
-                  <h4>Roast Level</h4>
+                  <h4>Roast Levels</h4>
                   <ul>
                     <li><Link to="/products?roast_level=Light">Light</Link></li>
                     <li><Link to="/products?roast_level=Medium">Medium</Link></li>
+                    <li><Link to="/products?roast_level=Dark">Dark</Link></li>
+                    <li><Link to="/products?roast_level=French">French</Link></li>
                     <li><Link to="/products?roast_level=Espresso">Espresso</Link></li>
                   </ul>
                 </div>
                 <div className="dropdown-column">
-                  <h4>Bean Type</h4>
+                  <h4>Bean Types</h4>
                   <ul>
                     <li><Link to="/products?bean_type=Arabica">Arabica</Link></li>
+                    <li><Link to="/products?bean_type=Robusta">Robusta</Link></li>
+                    <li><Link to="/products?bean_type=Liberica">Liberica</Link></li>
                     <li><Link to="/products?bean_type=Blend">Blend</Link></li>
                   </ul>
                 </div>
                 <div className="dropdown-column">
-                  <h4>Grind Type</h4>
+                  <h4>Grind Types</h4>
                   <ul>
                     <li><Link to="/products?grind_type=Whole%20Bean">Whole Bean</Link></li>
                     <li><Link to="/products?grind_type=Ground">Ground</Link></li>
+                    <li><Link to="/products?grind_type=Other">Other</Link></li>
+                  </ul>
+                </div>
+                <div className="dropdown-column">
+                  <h4>Processing Methods</h4>
+                  <ul>
+                    <li><Link to="/products?processing_method=Washed">Washed</Link></li>
+                    <li><Link to="/products?processing_method=Natural">Natural</Link></li>
+                    <li><Link to="/products?processing_method=Honey-processed">Honey-processed</Link></li>
+                    <li><Link to="/products?processing_method=Other">Other</Link></li>
                   </ul>
                 </div>
                 <div className="dropdown-column">
@@ -66,14 +79,7 @@ const Navbar = () => {
                   <ul>
                     <li><Link to="/products?caffeine_content=High">High</Link></li>
                     <li><Link to="/products?caffeine_content=Decaf">Decaf</Link></li>
-                  </ul>
-                </div>
-                <div className="dropdown-column">
-                  <h4>Origin</h4>
-                  <ul>
-                    <li><Link to="/products?origin=Colombia">Colombia</Link></li>
-                    <li><Link to="/products?origin=Ethiopia">Ethiopia</Link></li>
-                    <li><Link to="/products?origin=Multiple%20Origins">Blends</Link></li>
+                    <li><Link to="/products?caffeine_content=Half-Caf">Half-Caf</Link></li>
                   </ul>
                 </div>
               </div>

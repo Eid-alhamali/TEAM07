@@ -1,0 +1,61 @@
+:root {
+    --star-size: 24px;
+    --star-color: #e0e0e0; /* Base color for empty stars */
+    --star-color-active: rgb(255, 202, 67); /* Filled star color */
+}
+
+.star {
+    position: relative;
+    display: inline-block;
+    font-size: var(--star-size);
+    color: #e0e0e0; /* Base color for empty stars */
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.star.filled {
+    color: var(--star-color-active);
+    animation: pop 0.5s ease-in-out;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.star-filled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--star-color-active);
+    overflow: hidden; /* Ensures partial fill works */
+    width: 0%;
+}
+
+.star-empty {
+    display: inline-block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

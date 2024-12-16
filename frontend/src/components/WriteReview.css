@@ -32,25 +32,13 @@
 }
 
 /* Star rating styling */
-.star-rating {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
 
-.star {
-    font-size: 30px;
-    color: #e0e0e0;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.star:hover {
+.write-review-container .star:hover {
     color: #f39c12;
     transform: scale(1.2);
 }
 
-.star.selected {
+.write-review-container .star.selected {
     color: #f39c12;
 }
 

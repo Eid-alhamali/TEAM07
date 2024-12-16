@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Gupter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito+Sans:opsz,wght@6..12,200&family=Parkinsans:wght@300..800&display=swap');
+@import './components/StarRating.css';
 
 /* Global CSS Variables */
 :root {
   
   /* Primary Colors */
-  --primary-color: #97c9ff;    /* Basic Blue */
-  --primary-light: #89b5e6;    /* Light Blue */
-  --primary-dark: #6b89aa;     /* Dark Blue */
+  --primary-color: #1b10e4;    /* Basic Blue */
+  --primary-light: #e9edfc;    /* Light Blue */
+  --primary-dark: #111747;     /* Dark Blue */
 
   /* Secondary Colors */
   --secondary-color: #ffd595;  /* Basic Orange */
@@ -28,8 +29,8 @@
   /* Backgrounds */
   --background: #f5f3f0;  /* Dark Background */  
 
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  /* --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; */
   --font-code: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
   --font-size-base: 16px;
   --font-size-lg: 1.25rem;
@@ -49,6 +50,8 @@
   --line-height-lg: 1.8;
 
   --transition-speed: 0.3s;
+
+  --box-border-radius: 4px;
 }
 
 /* Reset Styles */
@@ -56,6 +59,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 body {
@@ -73,21 +79,27 @@ body {
   margin: 0;
 }
 
-.main-content h2 {
-  font-size: var(--font-size-lg);
-}
-
-.main-content p {
-  font-size: var(--font-size-base);
-}
 .main-content {
   padding-top: 66px; /*Match navbar height */
   background-color: var(--background);
   margin: 0;
 }
 
+.main-content h1 {
+  font-size: 3.5rem;
+  text-transform: uppercase;
+}
+
 .main-content h2 {
-  font-size: var(--font-size-lg);
+  font-size: 2rem;
+  padding-bottom: 0.2em;
+  text-transform: uppercase;
+}
+
+.main-content h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .main-content p {
@@ -241,8 +253,6 @@ html {
   text-decoration: underline;
 }
 
-
-
 /* Add grid utilities */
 .grid {
   display: grid;
@@ -256,165 +266,6 @@ html {
 .grid-cols-3 {
   grid-template-columns: repeat(3, 1fr);
   font-family: var(--font-code);
-}
-
-html {
-  font-size: var(--font-size-base);
-}
-
-/* Responsive Font Sizes */
-@media (min-width: 1200px) {
-  html {
-    font-size: var(--font-size-base);
-  }
-}
-
-@media (max-width: 768px) {
-  html {
-    font-size: 14px;
-  }
-
-  .button {
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-}
-
-@media (max-width: 480px) {
-  html {
-    font-size: 12px;
-  }
-
-  .button {
-    font-size: var(--font-size-sm);
-  }
-}
-
-
-/* Utility Classes */
-.text-left {
-  text-align: left;
-}
-
-/* Margins */
-.margin-0 {
-  margin: 0;
-}
-
-.margin-sm {
-  margin: 4px;
-}
-
-.margin-md {
-  margin: 8px;
-}
-
-.margin-lg {
-  margin: 16px;
-}
-
-/* Padding */
-.padding-0 {
-  padding: 0;
-}
-
-.padding-sm {
-  padding: 4px;
-}
-
-.padding-md {
-  padding: 8px;
-}
-
-.padding-lg {
-  padding: 16px;
-}
-
-
-/* Button Styles */
-
-.button:focus {
-  outline: 2px dashed var(--primary-light);
-  outline-offset: 2px;
-}
-
-.button {
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  font-weight: bold;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
-  text-transform: uppercase;
-  color: var(--neutral-white);
-}
-
-/* Button Variants */
-.button-primary {
-  background-color: var(--primary-color);
-}
-
-.button-primary:hover {
-  background-color: var(--primary-dark);
-  transform: scale(1.05);
-}
-
-.button-success {
-  background-color: var(--success-color);
-}
-
-.button-success:hover {
-  background-color: var(--primary-dark);
-  transform: scale(1.05);
-}
-
-.button-danger {
-  background-color: var(--error-color);
-}
-
-.button-danger:hover {
-  background-color: var(--primary-dark);
-  transform: scale(1.05);
-}
-
-.button-secondary {
-  background-color: var(--neutral-dark-gray);
-}
-
-.button-secondary:hover {
-  background-color: var(--neutral-black);
-  transform: scale(1.05);
-}
-
-/* Remove Button */
-.remove-button {
-  font-size: var(--font-size-sm);
-  background: none;
-  border: none;
-  color: var(--error-color);
-  cursor: pointer;
-  transition: color 0.3s ease, text-decoration 0.2s ease;
-}
-
-.remove-button:hover {
-  color: var(--error-color);
-  text-decoration: underline;
-}
-
-
-
-/* Add grid utilities */
-.grid {
-  display: grid;
-  gap: var(--spacing-md);
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, 1fr);
 }
 
 /* Utility classes for flex layouts */

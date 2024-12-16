@@ -18,20 +18,6 @@ body {
     background-position: center; */
 }
 
-.star {
-    color: gray;
-}
-
-.star.filled {
-    color: gold;
-}
-
-.star-rating {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
 textarea {
     width: 100%;
     height: 100px;

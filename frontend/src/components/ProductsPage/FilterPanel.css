@@ -1,0 +1,110 @@
+/* Filter Panel */
+.filter-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #ffffff; /* Neutral white */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .filter-panel .filter-panel.hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  
+  /* Close Icon */
+  .filter-panel .close-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333; /* Neutral black */
+    cursor: pointer;
+  }
+  
+  .filter-panel .close-icon:hover {
+    color: #555; /* Slightly lighter black */
+  }
+  
+  /* Filter Dropdowns */
+  .filter-panel select {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc; /* Neutral border */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Light gray background */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px;
+
+  }
+  
+  .filter-panel select:focus {
+    border-color: #007bff; /* Primary color for focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+  
+  /* Buttons */
+  .filter-panel .filter-buttons button {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px;
+
+  }
+  
+  .filter-panel .apply-filters-button {
+    background-color: #28a745; /* Success green */
+    color: #fff;
+  }
+  
+  .filter-panel .apply-filters-button:hover {
+    background-color: #218838; /* Darker green */
+  }
+  
+  .filter-panel .clear-filters-button {
+    background-color: #dc3545; /* Error red */
+    color: #fff;
+  }
+  
+  .filter-panel .clear-filters-button:hover {
+    background-color: #c82333; /* Darker red */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .filter-panel {
+      width: 100%;
+      height: auto;
+      top: auto;
+      bottom: 0;
+      padding: 1.5rem;
+    }
+  
+    .filter-panel .close-icon {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+  
+  /* Utility Classes */
+  .filter-panel .hidden {
+    display: none !important;
+  }
+  

@@ -1,0 +1,29 @@
+/* Container Styling */
+.product-detail-container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  padding-top: calc(var(--spacing-lg) * 2); /* Adjusted for 80px */
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: var(--spacing-lg);
+}
+
+/* Top Section Styling */
+.product-detail-container  .top-section {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-lg);
+}
+
+/* Responsive Styling */
+@media (max-width: 950px) {
+  .product-detail-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .top-section {
+    flex-direction: column;
+  }
+}

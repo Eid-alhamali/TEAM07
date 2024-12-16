@@ -36,10 +36,11 @@ CREATE TABLE IF NOT EXISTS Products (
     origin VARCHAR(100),
     roast_level ENUM('Light', 'Medium', 'Dark', 'French', 'Espresso') NOT NULL,
     bean_type ENUM('Arabica', 'Robusta', 'Liberica', 'Blend') NOT NULL,
-    grind_type ENUM('Whole Bean', 'Ground', 'Pods', 'Other') DEFAULT 'Whole Bean',
+    grind_type ENUM('Whole Bean', 'Ground', 'Other') DEFAULT 'Whole Bean',
     flavor_profile VARCHAR(255),
     processing_method ENUM('Washed', 'Natural', 'Honey-processed', 'Other') DEFAULT 'Other',
     caffeine_content ENUM('High', 'Decaf', 'Half-Caf') DEFAULT 'High',
+    average_rating DECIMAL(3, 2) DEFAULT 0.00,
     category_id INT,
     description TEXT,
     warranty_status BOOLEAN DEFAULT FALSE,
@@ -47,7 +48,24 @@ CREATE TABLE IF NOT EXISTS Products (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 );
 
-ALTER TABLE Products ADD COLUMN average_rating DECIMAL(3, 2) DEFAULT 0.00;
+CREATE TABLE IF NOT EXISTS Product_Variant (
+    variant_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    weight_grams INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    sku VARCHAR(50) UNIQUE,
+    serial_number VARCHAR(100) UNIQUE,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Product_Images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    variant_id INT NOT NULL,
+    image_url VARCHAR(500),
+    alt_text VARCHAR(255),
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS DeliveryOptions (
     delivery_option_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,53 +130,32 @@ CREATE TABLE IF NOT EXISTS Invoices (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Product_Variant (
-    variant_id INT PRIMARY KEY AUTO_INCREMENT,
-    product_id INT NOT NULL,
-    weight_grams INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock INT NOT NULL DEFAULT 0,
-    sku VARCHAR(50) UNIQUE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS Product_Images (
-    image_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT,
-    image_url VARCHAR(500),
-    alt_text VARCHAR(255),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS Discounts (
     discount_id INT AUTO_INCREMENT PRIMARY KEY,
     discount_type ENUM('percentage', 'fixed') NOT NULL,
     value DECIMAL(10, 2) NOT NULL,  
     start_date DATE,                
     end_date DATE,                 
-    product_id INT,                 
-    category_id INT,                
+    variant_id INT,              
     active BOOLEAN DEFAULT TRUE,  
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE SET NULL,
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE SET NULL
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Wishlist (
     wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    product_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS WishlistItems (
     wishlist_item_id INT AUTO_INCREMENT PRIMARY KEY,
     wishlist_id INT NOT NULL,
-    product_id INT NOT NULL,
+    variant_id INT NOT NULL, -- Linked to Product_Variant
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (wishlist_id) REFERENCES Wishlist(wishlist_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE CASCADE,
+    UNIQUE(wishlist_id, variant_id) -- Prevent duplicate variants in a single wishlist
 );
 
 CREATE TABLE IF NOT EXISTS Payments (

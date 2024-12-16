@@ -1,0 +1,200 @@
+/* Product Info Panel Styling */
+.key-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    border-radius: 6px;
+    padding-top: 0;
+    padding-right: 0;
+}
+
+/* Product Info Styling */
+.key-info .product-name {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--neutral-black);
+}
+
+.key-info .product-description {
+    font-size: 1.1rem;
+    color: var(--neutral-black);
+    line-height: var(--line-height-md);
+}
+
+/* Price Section */
+.key-info .product-price-section {
+    margin-top: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+.key-info .product-price {
+    font-size: 4rem;
+    font-weight: 100;
+    color: var(--neutral-black);
+    margin: 0;
+}
+
+/* Price Details (Discount Label and Base Price) */
+.key-info .price-details {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 1.5rem;
+    color: var(--error-color);
+}
+
+.key-info .discount-label {
+    font-weight: 400;
+}
+
+.key-info .dot {
+    margin: 0 20px;
+    font-size: 1.2rem;
+}
+
+.key-info .product-base-price {
+    text-decoration: line-through;
+    font-weight: 200;
+    color: var(--error-color); /* Red color */
+}
+.key-info .variant-buttons .base-price {
+    text-decoration: line-through;
+    color: var(--error-color);
+    margin-left: 5px;
+}
+
+
+/* Variant Selection Styling */
+.key-info .variant-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: calc(var(--spacing-md) * 2);
+    margin-top: auto; /* Push to the bottom */
+}
+
+.key-info .variant-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    text-align: left; /* Align label to the left */
+    align-self: flex-start; /* Align header to the left */
+}
+
+.key-info .variant-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-self: flex-start; /* Align buttons to the left */
+}
+
+/* Variant Button Styling */
+.key-info .variant-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--neutral-light-gray);
+    border-radius: var(--box-border-radius);
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color var(--transition-speed),
+        color var(--transition-speed);
+}
+
+.key-info .variant-button.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.key-info .variant-button.out-of-stock {
+    background-color: #e0e0e0;
+    color: #888;
+    border-color: var(--neutral-light-gray);
+}
+
+.key-info .variant-button.selected.out-of-stock {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+    color: #888;
+}
+
+/* Actions Section */
+.key-info .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    height: 50px; /* Set a fixed height for all elements */
+}
+
+/* Stock Info Styling */
+.key-info .stock-info {
+    padding: var(--spacing-sm);
+    border: 2px solid var(--neutral-black); /* Black border */
+    border-radius: var(--box-border-radius);
+    font-size: 1rem;
+    color: var(--neutral-black); /* Black text */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between "Stock:" and number */
+    width: 110px; /* Fixed width */
+    background-color: transparent; /* Transparent background */
+    transition: background-color var(--transition-speed),
+        border-color var(--transition-speed);
+    height: 100%; /* Match height with other action buttons */
+    text-align: center; /* Center text */
+}
+
+.key-info .stock-info.out-of-stock {
+    border-color: var(--error-color);
+    background-color: transparent;
+    color: var(--error-color);
+}
+
+/* Add to Cart Button */
+.key-info .add-to-cart-button {
+    flex: 1;
+    background-color: var(--neutral-black); /* Black button */
+    color: var(--neutral-white);
+    border: none;
+    border-radius: var(--box-border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color var(--transition-speed);
+    height: 100%; /* Match height with stock info and wishlist */
+}
+
+.key-info .add-to-cart-button:hover {
+    background-color: #333;
+}
+
+.key-info .add-to-cart-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+/* Wishlist Button */
+.key-info .wishlist-button {
+    background-color: transparent; /* Transparent background */
+    width: 50px; /* Square shape */
+    height: 100%; /* Match height with stock info and add to cart */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--neutral-black); /* Black border */
+    border-radius: var(--box-border-radius);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.key-info .wishlist-button img {
+    width: 20px; /* Adjust icon size */
+    height: 20px;
+}
+
+.key-info .wishlist-button:active {
+    transform: scale(0.9);
+}
