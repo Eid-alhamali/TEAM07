@@ -6,6 +6,7 @@ import "./ProductCard.css";
 import cartIcon from "../../assets/images/icons/cart-dark.svg";
 import wishlistIcon from "../../assets/images/icons/wishlist/wishlist-dark.svg";
 import wishlistIconFilled from "../../assets/images/icons/wishlist/wishlist-dark-filled.svg";
+import starIcon from "../../assets/images/icons/star.svg"; // Import star icon
 
 const ProductCard = ({ product, onAddToCart }) => {
     const {
@@ -14,6 +15,7 @@ const ProductCard = ({ product, onAddToCart }) => {
         stock,
         variant_id,
         weight_grams,
+        average_rating,
     } = product;
 
     const defaultImage = {
@@ -93,6 +95,10 @@ const ProductCard = ({ product, onAddToCart }) => {
             <div className="product-card">
                 <div className="product-image-wrapper">
                     <div className="product-weight">{weight_grams}g</div>
+                    <div className="product-rating">
+                        <img src={starIcon} alt="Star" className="star-icon" />
+                        {average_rating}
+                    </div>
                     <img
                         src={`http://localhost:5001${images[0]?.image_url}`}
                         alt={images[0]?.alt_text || name}
@@ -166,6 +172,8 @@ ProductCard.propTypes = {
         variant_id: PropTypes.number.isRequired,
         stock: PropTypes.number.isRequired,
         weight_grams: PropTypes.number.isRequired,
+        average_rating: PropTypes.number.isRequired,
+
     }).isRequired,
     onAddToCart: PropTypes.func.isRequired,
 };
