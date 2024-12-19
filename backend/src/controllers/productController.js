@@ -37,7 +37,7 @@ exports.listProducts = (req, res) => {
     let query = `
         SELECT 
             p.product_id, 
-            p.name,
+            p.name, 
             p.average_rating,
             p.category_id,
             p.roast_level, 

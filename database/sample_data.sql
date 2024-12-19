@@ -124,7 +124,7 @@ VALUES
 -- Product 1 Variants
 (1, 1, 250, 500.00, 100, "ETH-YIR-250"),
 (2, 1, 500, 950.00, 1, "ETH-YIR-500"),          -- Only 1 left in stock
-(3, 1, 1000, 1800.00, 1, "ETH-YIR-1000"),       -- Only 1 left in stock
+(3, 1, 1000, 1800.00, 4, "ETH-YIR-1000"),       -- Only 1 left in stock
 
 -- Product 2 Variants
 (4, 2, 250, 450.00, 200, "COL-SUP-250"),
@@ -202,6 +202,7 @@ VALUES
 (1, 1, "/assets/images/products/product1.png", "Sunrise Over the Serengeti 250g"),
 (2, 2, "/assets/images/products/product1.png", "Sunrise Over the Serengeti 500g"),
 (3, 3, "/assets/images/products/product1.png", "Sunrise Over the Serengeti 1000g"),
+
 
 (4, 4, "/assets/images/products/product2.png", "Bolivian Echoes 250g"),
 (5, 5, "/assets/images/products/product2.png", "Bolivian Echoes 500g"),
@@ -342,40 +343,6 @@ VALUES
 -- Orders for User 8
 (9, 8, 900.00, "processing", 3, "2024-12-06 17:25:00", "2024-12-06 17:25:00");
 
-INSERT INTO OrderItems (order_item_id, order_id, product_id, quantity, price_at_purchase)
-VALUES
--- Order 1
-(1, 1, 1, 2, 500.00),
-(2, 1, 2, 1, 450.00),
-
--- Order 2
-(3, 2, 3, 1, 600.00),
-(4, 2, 4, 1, 550.00),
-
--- Order 3
-(5, 3, 5, 3, 580.00),
-
--- Order 4
-(6, 4, 6, 2, 520.00),
-
--- Order 5
-(7, 5, 7, 4, 480.00),
-(8, 5, 8, 2, 530.00),
-
--- Order 6
-(9, 6, 9, 1, 400.00),
-(10, 6, 10, 1, 510.00),
-
--- Order 7
-(11, 7, 11, 5, 495.00),
-
--- Order 8
-(12, 8, 12, 2, 575.00),
-(13, 8, 13, 1, 610.00),
-
--- Order 9
-(14, 9, 14, 3, 540.00),
-(15, 9, 15, 1, 505.00);
 
 INSERT INTO Payments (payment_id, order_id, user_id, payment_date, amount, card_holder_name, card_number, card_expiration, cvv)
 VALUES

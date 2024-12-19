@@ -7,6 +7,8 @@ const searchRoutes = require('./routes/searchRoutes');
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require('./routes/authRoutes');
 const reviewRoutes = require('./routes/reviewRoutes'); // Import review routes
+const checkoutRoutes = require('./routes/checkoutRoutes'); 
+const orderRoutes = require('./routes/orderRoutes'); 
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -23,6 +25,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/assets', express.static('src/assets'));
 app.use('/auth',authRoutes)
+app.use('/checkout', checkoutRoutes);
+app.use('/order',orderRoutes)
+
 
 // integrate prodcuts routes
 app.use("/api", productRoutes);

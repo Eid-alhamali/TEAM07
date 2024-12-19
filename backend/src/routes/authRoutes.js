@@ -15,6 +15,51 @@ const usersController = new UsersController();
 
 
 // Registration Endpoint
+// router.post('/register', async (req, res) => {
+//     const { first_name, last_name, email, password, phone_number } = req.body;
+  
+  
+//     try {
+    
+//       db.query(
+//         'SELECT * FROM Users WHERE email = ? OR phone_number = ?',
+//         [email, phone_number],
+//         async (err, results) => {
+//           if (err) {
+//             console.error('Database error:', err);
+//             return res.status(500).json({ error: 'Database error' });
+//           }
+  
+//           if (results.length > 0) {
+//             return res.status(400).json({ error: 'Email or Phone number already exists' });
+//           }
+  
+//           const passwordString = String(password);
+//           const salt = await bcrypt.genSalt(10);
+//           const hashedPassword = await bcrypt.hash(passwordString, salt);
+  
+          
+//           db.query(
+//             'INSERT INTO Users (first_name, last_name, email, phone_number, password_hash) VALUES (?, ?, ?, ?, ?)',
+//             [first_name, last_name, email, phone_number, hashedPassword],
+//             (insertErr, result) => {
+//               if (insertErr) {
+//                 console.error('Insert error:', insertErr);
+//                 return res.status(500).json({ error: 'Failed to register user' });
+//               }
+  
+              
+//               res.status(201).json({ message: 'User registered successfully', userId: result.insertId });
+//             }
+//           );
+//         }
+//       );
+//     } catch (err) {
+//       console.error('Error:', err);
+//       res.status(500).json({ error: 'Server error' });
+//     }
+//   });
+
 router.post('/register', async (req, res) => {
     const { first_name, last_name, email, password, phone_number } = req.body;
   
@@ -47,11 +92,28 @@ router.post('/register', async (req, res) => {
                 console.error('Insert error:', insertErr);
                 return res.status(500).json({ error: 'Failed to register user' });
               }
-  
+          
+              const userId = result.insertId; 
               
-              res.status(201).json({ message: 'User registered successfully', userId: result.insertId });
+              
+              db.query(
+                'INSERT INTO ShoppingCart (user_id) VALUES (?)',
+                [userId],
+                (cartErr) => {
+                  if (cartErr) {
+                    console.error('Cart creation error:', cartErr);
+                    return res.status(500).json({ error: 'Failed to create shopping cart for user' });
+                  }
+          
+                  res.status(201).json({
+                    message: 'User registered successfully and shopping cart created',
+                    userId: userId,
+                  });
+                }
+              );
             }
           );
+                         
         }
       );
     } catch (err) {
@@ -59,6 +121,9 @@ router.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   });
+
+
+
 
 
 // Login Endpoint

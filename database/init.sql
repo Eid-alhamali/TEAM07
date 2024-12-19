@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_price DECIMAL(10, 2) NOT NULL,
-    status ENUM('processing', 'in-transit', 'delivered') DEFAULT 'processing',
+    status ENUM('processing', 'in-transit', 'delivered', 'canceled') DEFAULT 'processing',
     delivery_option_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -113,11 +113,11 @@ CREATE TABLE IF NOT EXISTS Orders (
 CREATE TABLE IF NOT EXISTS OrderItems (
     order_item_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
-    product_id INT,
+    variant_id INT,
     quantity INT NOT NULL CHECK (quantity > 0),
     price_at_purchase DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE SET NULL
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE SET NULL  -- I have changed here
 );
 
 CREATE TABLE IF NOT EXISTS Invoices (

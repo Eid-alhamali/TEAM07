@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import "./ProductImagesCarousel.css";
 
 const ProductImagesCarousel = ({ images, currentImageIndex, setCurrentImageIndex }) => {
+
+    console.log(`This is the picture path: ${images[currentImageIndex].url} `)
     const defaultImage = {
         url: "/assets/images/products/default_mockup.png",
         alt: "Default Mockup Image"
@@ -28,13 +30,16 @@ const ProductImagesCarousel = ({ images, currentImageIndex, setCurrentImageIndex
     };
 
     const handleImageError = (event) => {
+       
         event.target.src = `http://localhost:5001${defaultImage.url}`;
+
         event.target.alt = defaultImage.alt;
     };
 
     return (
         <div className="image-carousel">
             <div className="main-image">
+
                 <img
                     src={`http://localhost:5001${images[currentImageIndex].url}`}
                     alt={images[currentImageIndex].alt || "Product Image"}

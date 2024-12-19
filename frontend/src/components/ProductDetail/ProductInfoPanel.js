@@ -137,7 +137,7 @@ const ProductInfoPanel = ({
                 </div>
                 <button
                     className="add-to-cart-button"
-                    onClick={handleAddToCart}
+                    onClick={()=>{handleAddToCart(selectedVariant.variant_id )}}
                     disabled={!selectedVariant || selectedVariant.stock === 0}
                 >
                     {selectedVariant?.stock === 0 ? "Out of Stock" : "Add to Cart"}

@@ -1,59 +1,269 @@
-//src/components/Cart.js
-
+import  { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import './Cart.css';
-import { useContext } from 'react';
-import { CartContext } from '../CartContext';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useContext(CartContext);
+  const [cartItems, setCartItems] = useState(  [  ]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const token = localStorage.getItem('token');
 
-  // Calculate total price for all items in the cart
-  const totalCartPrice = cartItems.reduce((total, item) => {
-    return total + item.price * item.quantity;
-  }, 0);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      
+
+      // Fetch cart items from the backend for logged-in users
+      axios.get('http://localhost:5001/api/cart/getcartitems', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        setCartItems(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching cart items:', error);
+        setCartItems([]); // Reset to an empty array if there's an error
+      });
+    } else {
+      // Use localStorage for guest users
+      const localCart = JSON.parse(localStorage.getItem('cart')) || [];
+      console.log('Local Cart:', localCart);
+      setCartItems(localCart);
+      
+    }
+  }, []);
+
+  useEffect(() => {
+    
+    const total = cartItems.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0);
+    setTotalPrice(total);
+  }, [cartItems]);
+
+  const handleIncrement = (variantId) => {
+    
+  
+    if (token) {
+      axios.put('http://localhost:5001/api/cart/increment', { variantId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          setCartItems(prevItems => {
+            const updatedItems = prevItems.map(item => {
+              if (item.variantId === variantId) {
+                return { ...item, quantity: item.quantity + 1 };
+              }
+              return item;
+            });
+            return updatedItems;
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error updating cart item:', error);
+        
+      });
+    }else{
+
+      axios.get(`http://localhost:5001/api/cart/variant/${variantId}`)
+      .then((response) => {
+          if (response.status === 200) {
+              const { stock } = response.data;
+             
+              
+              
+              const cart = JSON.parse(localStorage.getItem('cart')) || [];
+              const productIndex = cart.findIndex(
+                  (item) => item.variantId === variantId
+              );
+
+              if (productIndex > -1) {
+                  
+                  const existingProduct = cart[productIndex];
+                  if (existingProduct.quantity + 1 > stock) {
+                      alert('Stock is insufficient to add more of this product.');
+                      return;
+                  }
+ 
+                  cart[productIndex].quantity += 1;
+                  
+                  localStorage.setItem('cart', JSON.stringify(cart));
+                  setCartItems(cart);
+                  
+              } else {
+                  alert('Product not found in the cart.');
+                  
+              }
+          } else {
+              alert('Failed to fetch product details. Please try again.');
+              
+          }
+      })
+      .catch((error) => {
+          console.error('Error fetching product details:', error);
+          alert('An error occurred while updating the product. Please try again.');
+      });
+  }
+  };
+  
+
+
+
+  const handleDecrement = (variantId) => {
+    
+  
+    if (token) {
+      axios.put('http://localhost:5001/api/cart/decrement', { variantId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          setCartItems(prevItems => {
+            const updatedItems = prevItems.map(item => {
+              if (item.variantId === variantId) {
+                // Ensure quantity never goes below 1
+                return { ...item, quantity: Math.max(item.quantity - 1, 1) };
+              }
+              return item;
+            });
+            return updatedItems;
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error updating cart item:', error);
+        
+      });
+    }
+
+    else {
+      
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const productIndex = cart.findIndex((item) => item.variantId === variantId);
+
+      if (productIndex > -1) {
+          
+          cart[productIndex].quantity = Math.max(cart[productIndex].quantity - 1, 1);
+          localStorage.setItem('cart', JSON.stringify(cart));     
+          setCartItems(cart);
+      } else {
+          console.error('Product not found in the cart.');
+      }
+  }
+
+  };
+
+  const handleRemove = (variantId) => {
+    if (!token) {
+
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const updatedCart = cart.filter((item) => item.variantId !== variantId);
+
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      setCartItems(updatedCart);
+
+      return; 
+    }
+  
+    axios
+      .delete('http://localhost:5001/api/cart/remove', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: { variantId },
+      })
+      .then((response) => {
+        if (response.data.message === 'success') {
+          setCartItems((prevItems) => prevItems.filter((item) => item.variantId !== variantId));
+        } else {
+          console.error('Unexpected response:', response.data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error removing cart item:', error);
+        
+      });
+  };
+  
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      
+      navigate("/login");
+    } else {
+      if (cartItems.length === 0) {
+        
+        alert("Your cart is empty. Please add items to your cart before proceeding to checkout.");
+        return; 
+      }}
+    
+      
+      navigate("/checkout", { state: { totalPrice, cartItems } });
+  };
 
   return (
-    <div className='cart-page'>
-      <div style={{ padding: '20px' }}>
-        <h1>Your Cart</h1>
-        {cartItems.length > 0 ? (
-          <ul>
-            <div>
-              {cartItems.map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    marginBottom: '15px',
-                    borderBottom: '1px solid #ccc',
-                    paddingBottom: '10px',
-                  }}
-                >
-                  <h3>{item.product} </h3>
-                  <p>Price per item: ${item.price}</p>
-                  <p>Weight: {item.weight_grams}g</p> {/* Display weight */}
-                  <div>
-                    <button className="button button-primary" onClick={() => decreaseQuantity(item.variantId)}>-</button>
-                    <span className="cart-item-quantity">Quantity: {item.quantity}</span>
-                    <button className="button button-primary" onClick={() => increaseQuantity(item.variantId)}>+</button>
+    <div className="cartPage-container">
+      <h2 className="cartPage-heading">Your Shopping Cart</h2>
+      {cartItems.length === 0 ? (
+        <div className="cartPage-empty">Your cart is empty.</div>
+      ) : (
+        <div className="cartPage-content">
+          <div className="cartPage-items">
+            {cartItems.map((item) => (
+              <div className="cartPage-item" key={item.variantId}>
+                <img src={`http://localhost:5001${item.image}`} alt={item.product_name} className="cartPage-itemImage" />
+                <div className="cartPage-itemDetails">
+                  <h3 className="cartPage-itemName">{item.product_name}</h3>
+                  <p className="cartPage-itemWeight">{item.weight}</p>
+                  <p className="cartPage-itemPrice">{parseFloat(item.price).toFixed(2)} TL</p>
+                  <div className="cartPage-quantityControls">
+                    <button 
+                      className="cartPage-decrementBtn" 
+                      onClick={() => handleDecrement(item.variantId)}
+                      disabled={item.quantity <= 1}
+                    >
+                      -
+                    </button>
+                    <span className="cartPage-quantity">{item.quantity}</span>
+                    <button 
+                      className="cartPage-incrementBtn" 
+                      onClick={() => handleIncrement(item.variantId)}
+                    >
+                      +
+                    </button>
                   </div>
-                  <p>Total price for this item: ${(item.price * item.quantity).toFixed(2)}</p>
-                  <button className="button button-danger remove-button" onClick={() => removeFromCart(item.variantId)}>
-                    Remove from Cart
+                  <button 
+                    className="cartPage-removeBtn" 
+                    onClick={() => handleRemove(item.variantId)}
+                  >
+                    Remove
                   </button>
                 </div>
-              ))}
-            </div>
-
-          </ul>
-        ) : (
-          <p>Your cart is currently empty.</p>
-        )}
-        {cartItems.length > 0 && (
-          <div>
-            <h3>Total Cart Price: ${totalCartPrice.toFixed(2)}</h3>
+              </div>
+            ))}
           </div>
-        )}
-      </div>
+          <div className="cartPage-summary">
+            <h3 className="cartPage-summaryHeading">Order Summary</h3>
+            <p className="cartPage-totalLabel">Total:</p>
+            <p className="cartPage-totalPrice">{totalPrice.toFixed(2)} TL</p>
+            <button 
+              className="cartPage-checkoutBtn" 
+              onClick={handleCheckout}
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
