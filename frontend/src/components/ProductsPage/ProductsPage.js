@@ -8,7 +8,7 @@ import "./ProductsPage.css";
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({});
-  const [sortOption, setSortOption] = useState("asc");
+  const [sortOption, setSortOption] = useState({ field: 'price', order: 'asc' });
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,12 +47,17 @@ const ProductsPage = () => {
 
   // Handle sort option change
   const handleSortChange = (event) => {
-    const newSortOption = event.target.value;
-    setSortOption(newSortOption);
+    const [field, order] = event.target.value.split('|');
 
+    // Update local state
+    setSortOption({ field, order });
+  
+    // Build query params
     const queryParams = new URLSearchParams(location.search);
-    queryParams.set("sort_by", "price");
-    queryParams.set("sort_order", newSortOption);
+    queryParams.set('sort_by', field);
+    queryParams.set('sort_order', order);
+  
+    // Navigate with the new sorting parameters
     navigate(`${location.pathname}?${queryParams.toString()}`);
   };
 
@@ -219,9 +224,13 @@ const ProductsPage = () => {
         <button onClick={() => setIsPanelOpen(true)} className="filter-button">
           Filter
         </button>
-        <select value={sortOption} onChange={handleSortChange} className="sort-dropdown">
-          <option value="asc">Lowest to Highest Price</option>
-          <option value="desc">Highest to Lowest Price</option>
+        <select value={`${sortOption.field}|${sortOption.order}`} onChange={handleSortChange} className="sort-dropdown">
+          <option value="price|asc">Lowest to Highest Price</option>
+          <option value="price|desc">Highest to Lowest Price</option>
+          <option value="average_rating|desc">Most Popular</option>
+          <option value="average_rating|asc">Least Popular</option>
+          <option value="stock|desc">Highest Stock</option>
+          <option value="stock|asc">Lowest Stock</option>
         </select>
       </div>
 
