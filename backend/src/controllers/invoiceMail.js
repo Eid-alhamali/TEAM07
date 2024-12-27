@@ -1,21 +1,13 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const checkoutPool = require('../config/promise/promise_db.js');
+const dbPool = require('../config/promise/promise_db.js');
 const path = require('path');
-
-checkoutPool.getConnection()
-    .then(connection => {
-        connection.release();
-    })
-    .catch(err => {
-        console.error('Error connecting to Checkout MySQL pool:', err);
-    });
 
 const getUserEmail = async (userId) => {
     let connection;
     try {
-        connection = await checkoutPool.getConnection();
+        connection = await dbPool.getConnection();
         const [result] = await connection.execute('SELECT email FROM Users WHERE user_id = ?', [userId]);
         
         if (result.length === 0) {

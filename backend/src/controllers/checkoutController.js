@@ -3,17 +3,7 @@ const fs = require('fs');
 const { generateInvoicePdf, sendInvoiceEmail } = require('./invoiceMail');
 
 
-const checkoutPool = require('../config/promise/promise_db.js');
-
-// Test the connection pool
-checkoutPool.getConnection()
-    .then(connection => {
-        connection.release();
-    })
-    .catch(err => {
-        console.error('Error connecting to Checkout MySQL pool:', err);
-    });
-
+const dbPool = require('../config/promise/promise_db.js');
 
 
 const checkout=  async (req, res) => {
@@ -29,7 +19,7 @@ const checkout=  async (req, res) => {
 
     try {
         // Get a connection from the checkout pool
-        connection = await checkoutPool.getConnection();
+        connection = await dbPool.getConnection();
 
         // Start transaction
         await connection.beginTransaction();

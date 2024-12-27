@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
@@ -22,6 +23,11 @@ const Navbar = () => {
     setIsLoggedIn(!!token);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
   // Handle search input changes
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -33,6 +39,19 @@ const Navbar = () => {
     if (searchQuery.trim()) {
       navigate(`/search?search=${encodeURIComponent(searchQuery)}`);
     }
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
+
+  // Check login status on hover
+  const handleUserIconHover = () => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
   };
 
   // Handle admin logout
@@ -148,7 +167,23 @@ const Navbar = () => {
             <img src={searchIcon} alt="Search" className="search-icon" />
           </button>
         </form>
-        <Link to="/login"><img src={userIcon} alt="User Icon" className="user-icon" /></Link>
+        <div 
+          className="user-icon-container" 
+          onMouseEnter={handleUserIconHover}
+        >
+          <img src={userIcon} alt="User Icon" className="user-icon" />
+          <div className="user-dropdown">
+            {isLoggedIn ? (
+              <>
+                <Link to="/my-orders">My Orders</Link>
+                <Link to="/wishlist">Wishlist</Link>
+                <button onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <Link to="/login">Login</Link>
+            )}
+          </div>
+        </div>
         <Link to="/cart"><img src={shopIcon} alt="Shop Icon" className="shop-icon" /></Link>
       </div>
     </nav>

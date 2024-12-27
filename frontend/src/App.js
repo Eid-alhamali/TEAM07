@@ -19,7 +19,7 @@ import OrderFailed from './components/OrderFailed';
 import OrderSuccess from './components/OrderSuccess';
 import SidebarLayout from './components/SidebarLayout'; 
 import OrderPage from "./components/OrdersPage";
-
+import WishlistPage from './components/WishlistPage/WishlistPage';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import AdminProductMgmt from './components/AdminProductMgmt';
 import AdminSalesMgmt from './components/AdminSalesMgmt';
@@ -51,6 +51,7 @@ function App() {
             <Route path="/order-failed" element={<OrderFailed/>} />
             <Route path="/order-success" element={<OrderSuccess/>} />
             <Route path="/my-orders" element={<SidebarLayout><OrderPage /></SidebarLayout>} />
+            <Route path="/wishlist" element={<WishlistPage />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLoginPage />} />

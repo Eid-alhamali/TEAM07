@@ -1,0 +1,28 @@
+/* General Page Styling */
+.wishlist-page {
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    color: black;
+    margin-bottom: 100px;
+}
+
+.wishlist-page .page-title {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* Products Grid */
+.wishlist-page .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.wishlist-page .empty-wishlist {
+    text-align: center;
+    font-size: 16px;
+    color: #999;
+    grid-column: span 3;
+}

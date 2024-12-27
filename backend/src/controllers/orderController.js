@@ -2,17 +2,7 @@ const mysql = require("mysql2");
 
 // Database connection
 const db = require('../config/db');
-const checkoutPool = require('../config/promise/promise_db.js');
-
-
-checkoutPool.getConnection()
-    .then(connection => {
-        console.log('Checkout MySQL pool connected');
-        connection.release();
-    })
-    .catch(err => {
-        console.error('Error connecting to Checkout MySQL pool:', err);
-    });
+const dbPool = require('../config/promise/promise_db.js');
 
  
     exports.getOrders = (req, res) => {
@@ -92,7 +82,7 @@ exports.getInvoice = async (req, res) => {
   const userId = req.user.user_id;
 
   try {
-    const connection = await checkoutPool.getConnection();
+    const connection = await dbPool.getConnection();
 
     try {
       const [rows] = await connection.query(
@@ -144,7 +134,7 @@ exports.cancelOrder = async (req, res) => {
 
   try {
     
-    const connection = await checkoutPool.getConnection();
+    const connection = await dbPool.getConnection();
     await connection.beginTransaction();
 
     const [order] = await connection.query(

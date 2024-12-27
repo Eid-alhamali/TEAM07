@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { toggleWishlist, getWishlistStatus } from "../../hooks/useWishlist";
 import "./ProductCard.css";
 
 import cartIcon from "../../assets/images/icons/cart-dark.svg";
@@ -32,7 +33,7 @@ const ProductCard = ({ product, onAddToCart }) => {
     const [discountType, setDiscountType] = useState(null);
     const [discountValue, setDiscountValue] = useState(null);
 
-    // Fetch images and discount
+    // Fetch images, discount, and wishlist status
     useEffect(() => {
         // Fetch images
         fetch(`http://localhost:5001/api/product/variant/${variant_id}/images`)
@@ -72,11 +73,26 @@ const ProductCard = ({ product, onAddToCart }) => {
                 setDiscountType(null);
                 setDiscountValue(null);
             });
+
+        // Fetch wishlist status
+        const fetchWishlistStatus = async () => {
+            try {
+                const status = await getWishlistStatus(variant_id);
+                setIsWishlist(status);
+            } catch (error) {
+                console.error(
+                    `Error fetching wishlist status for variant_id ${variant_id}:`,
+                    error
+                );
+            }
+        };
+
+        fetchWishlistStatus();
     }, [variant_id, price]);
 
     const handleWishlistClick = (e) => {
         e.preventDefault(); // Prevent navigation
-        setIsWishlist((prev) => !prev); // Toggle wishlist state
+        toggleWishlist(variant_id, isWishlist, setIsWishlist); 
     };
 
     const handleImageError = (event) => {

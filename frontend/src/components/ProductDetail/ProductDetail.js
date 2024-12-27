@@ -5,6 +5,7 @@ import ProductImagesCarousel from "./ProductImagesCarousel";
 import ProductInfoTable from "./ProductInfoTable";
 import ReviewsSection from "./ReviewsSection";
 import ProductInfoPanel from "./ProductInfoPanel";
+import { toggleWishlist, getWishlistStatus } from '../../hooks/useWishlist'; // Import toggleWishlist
 import axios from "axios";
 
 import "./ProductDetail.css";
@@ -21,7 +22,7 @@ const ProductDetail = () => {
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [wishlistFilled, setWishlistFilled] = useState(false);
 
-    // Set default variant when product or variants change
+    // Set default variant when product or variants change, and fetch wishlist status
     useEffect(() => {
         if (variants.length > 0 && !selectedVariant) {
             const initialVariant = variants.find(
@@ -29,6 +30,20 @@ const ProductDetail = () => {
             );
             setSelectedVariant(initialVariant || variants[0]); // Fallback to the first variant if not found
         }
+        // Fetch wishlist status
+        const fetchWishlistStatus = async () => {
+            try {
+                const status = await getWishlistStatus(variant_id);
+                setWishlistFilled(status);
+            } catch (error) {
+                console.error(
+                    `Error fetching wishlist status for variant_id ${variant_id}:`,
+                    error
+                );
+            }
+        };
+
+        fetchWishlistStatus();
     }, [variants, variant_id, selectedVariant]);
 
     // Add to Cart Handler
@@ -127,8 +142,7 @@ const ProductDetail = () => {
     
     // Wishlist Button Handler
     const handleWishlistClick = () => {
-        setWishlistFilled(!wishlistFilled);
-        // Add logic for adding/removing from wishlist (e.g., context, API call)
+        toggleWishlist(variant_id, wishlistFilled, setWishlistFilled); 
     };
 
     // Write Review Navigation

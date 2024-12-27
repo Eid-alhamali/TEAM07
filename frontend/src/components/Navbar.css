@@ -170,6 +170,56 @@
 .dropdown-column ul li a:hover {
   color: var(--primary-dark);
 }
+/* User Icon Dropdown */
+.user-icon-container {
+  position: relative;
+}
+
+.user-icon-container:hover .user-dropdown {
+  display: flex;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  color: var(--neutral-black);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+  color: var(--neutral-black);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0.5rem 0;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  color: var(--primary-dark);
+}
+
+.user-dropdown a + a,
+.user-dropdown a + button,
+.user-dropdown button + a,
+.user-dropdown button + button {
+  border-top: 1px solid var(--neutral-light-gray);
+}
 
 /* Admin Navbar Styles */
 
