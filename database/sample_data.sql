@@ -16,20 +16,29 @@ VALUES
 -- Note: Passwords are all "password"
 INSERT INTO Managers (manager_id, first_name, last_name, email, password_hash, role)
 VALUES
-(1, "Arya", "Hassibi", "arya@manager.com", UNHEX(SHA2("password", 256)), "sales_manager"),
-(2, "Beste", "Bayhan", "beste@manager.com", UNHEX(SHA2("password", 256)), "product_manager"),
-(3, "Mustafa", "Topcu", "mustafa@manager.com", UNHEX(SHA2("password", 256)), "sales_manager"),
-(4, "Orhun", "Ege Ozpay", "orhun@manager.com", UNHEX(SHA2("password", 256)), "product_manager"),
-(5, "Eid", "Alhamali", "eid@manager.com", UNHEX(SHA2("password", 256)), "sales_manager"),
-(6, "Ecem", "Akın", "ecem@manager.com", UNHEX(SHA2("password", 256)), "product_manager"),
-(7, "Zeynep", "Işık", "zeynep@manager.com", UNHEX(SHA2("password", 256)), "product_manager"),
-(8, "Cemal", "Yılmaz", "cemal@manager.com", UNHEX(SHA2("password", 256)), "product_manager"),
-(9, "Sales", "Manager", "sales@manager.com", UNHEX(SHA2("password", 256)), "sales_manager"),
-(10, "Product", "Manager", "product@manager.com", UNHEX(SHA2("password", 256)), "product_manager");
+(1, "Arya", "Hassibi", "arya@manager.com", SHA2("admin12345", 256), "sales_manager"),
+(2, "Beste", "Bayhan", "beste@manager.com", SHA2("admin12345", 256), "product_manager"),
+(3, "Mustafa", "Topcu", "mustafa@manager.com", SHA2("admin12345", 256), "sales_manager"),
+(4, "Orhun", "Ege Ozpay", "orhun@manager.com", SHA2("admin12345", 256), "product_manager"),
+(5, "Eid", "Alhamali", "eid@manager.com", SHA2("admin12345", 256), "sales_manager"),
+(6, "Ecem", "Akın", "ecem@manager.com", SHA2("admin12345", 256), "product_manager"),
+(7, "Zeynep", "Işık", "zeynep@manager.com", SHA2("admin12345", 256), "product_manager"),
+(8, "Cemal", "Yılmaz", "cemal@manager.com", SHA2("admin12345", 256), "product_manager"),
+(9, "Sales", "Manager", "sales@manager.com", SHA2("admin12345", 256), "sales_manager"),
+(10, "Product", "Manager", "product@manager.com", SHA2("admin12345", 256), "product_manager")
+ON DUPLICATE KEY UPDATE 
+    first_name = VALUES(first_name),
+    last_name = VALUES(last_name),
+    email = VALUES(email),
+    password_hash = VALUES(password_hash),
+    role = VALUES(role);
 
 INSERT INTO Categories (category_id, name, description)
 VALUES
-(1, "Coffee Beans", "Quality coffee beans, thats all we care about.");
+(1, 'Espresso Blends', 'Rich and full-bodied espresso blends.'),
+(2, 'Single Origin', 'Unique flavors from specific regions.'),
+(3, 'Decaf', 'Delicious coffee without the caffeine.'),
+(4, 'Organic', 'Coffee produced without synthetic pesticides or fertilizers.');
 
 INSERT INTO DeliveryOptions (delivery_option_id, name, cost, description)
 VALUES

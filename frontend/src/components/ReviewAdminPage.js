@@ -58,10 +58,10 @@ const ReviewAdminPage = () => {
     return (
         <div className="review-admin-container">
             <button
-                className="go-back-button" // Add a class for styling the button
-                onClick={() => navigate("/admin/main_page")} // Navigate back to Admin Main Page
+                className="go-back-button-review"
+                onClick={() => navigate("/admin/product_management")}
             >
-                Go Back 
+                Go Back
             </button>
             <h1 className="review-admin-title">Review Management</h1>
             <p className="review-admin-description">
@@ -81,13 +81,13 @@ const ReviewAdminPage = () => {
                             </p>
                             <div className="review-actions">
                                 <button
-                                    className="accept-button"
+                                    className="accept-button elegant-button"
                                     onClick={() => handleApprove(review.comment_id)}
                                 >
                                     Accept
                                 </button>
                                 <button
-                                    className="reject-button"
+                                    className="reject-button elegant-button"
                                     onClick={() => handleReject(review.comment_id)}
                                 >
                                     Reject
@@ -99,9 +99,9 @@ const ReviewAdminPage = () => {
                     <p>No pending reviews.</p>
                 )}
             </div>
-            
         </div>
     );
 };
+
 
 export default ReviewAdminPage;

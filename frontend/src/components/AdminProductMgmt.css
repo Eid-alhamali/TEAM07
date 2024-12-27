@@ -1,0 +1,205 @@
+.admin-container {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff; /* Keep background white */
+    padding: 3rem 2rem;
+}
+
+.admin-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.admin-description {
+    font-size: 1.1rem;
+    color: #555555;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.action-button {
+    background-color: #007bff; /* Primary blue button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.action-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Lift button on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #dddddd;
+}
+
+.table th {
+    background-color: #f1f1f1; /* Light gray header */
+    color: #333333;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+.orders-page__item-customer-id,
+.orders-page__item-product-id {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-top: 5px;
+}
+
+.table td {
+    background-color: #ffffff; /* White row background */
+    color: #555555;
+}
+
+.table tr:hover {
+    background-color: #f5f5f5; /* Slight highlight on hover */
+    transition: background-color 0.3s ease;
+}
+
+.no-deliveries {
+    font-size: 1.1rem;
+    color: #555555;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+/* Order List Styling */
+.orders-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.orders-page__order {
+    border: 1px solid #cdeeff;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.orders-page__order.expanded {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.orders-page__order-header {
+    display: flex;
+    justify-content: space-between;
+    background: #cdeeff;
+    padding: 20px;
+    cursor: pointer;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.orders-page__order-header:hover {
+    background: #e6e4ff;
+}
+
+.orders-page__order-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.orders-page__order-id {
+    font-weight: 600;
+    color: #333;
+}
+
+.orders-page__order-total {
+    color: #444;
+    font-weight: 500;
+}
+
+.orders-page__order-status {
+    font-style: normal;
+    font-weight: 500;
+    color: #f57150;
+    text-transform: capitalize;
+}
+
+.orders-page__order-date {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.orders-page__toggle-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #7559dd;
+    transition: transform 0.2s ease-in-out;
+}
+
+.orders-page__order.expanded .orders-page__toggle-icon {
+    transform: rotate(90deg);
+}
+
+.orders-page__order-details {
+    padding: 20px;
+    background: #ffffff;
+}
+
+/* Smooth page transitions */
+.admin-container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

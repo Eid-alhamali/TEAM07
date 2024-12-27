@@ -1,0 +1,105 @@
+/* Container Styles */
+.view-products-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Card Styles */
+.view-products-card {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.view-products-card:hover {
+    transform: translateY(-2px); /* Move up on hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a shadow */
+}
+
+/* Variant Actions */
+.variant-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Stock Input */
+.stock-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Buttons */
+.elegant-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.elegant-button:hover {
+    transform: scale(1.05);
+}
+
+.update-stock-button {
+    background-color: #4caf50;
+}
+
+.update-stock-button:hover {
+    background-color: #45a045;
+}
+
+.delete-variant-button {
+    background-color: #f44336;
+}
+
+.delete-variant-button:hover {
+    background-color: #e53935;
+}
+
+/* Input Focus */
+.stock-input:focus {
+    border-color: #4caf50;
+    outline: none;
+}
+
+/* Top Buttons */
+.view-products-top-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.view-products-go-back-button,
+.view-products-add-product-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #e36c16;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-products-go-back-button:hover,
+.view-products-add-product-button:hover {
+    background-color: #7b5a3e;
+    transform: scale(1.05);
+}
+

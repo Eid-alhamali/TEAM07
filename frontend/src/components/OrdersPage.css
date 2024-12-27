@@ -32,6 +32,7 @@
   }
   
   .orders-page__list {
+    width: 70%;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -246,6 +247,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+
   }
   
   .orders-page__pdf-icon {
@@ -343,3 +345,147 @@
     font-size: 0.9rem;
   }
   
+
+  .orders-page__actions {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    margin-top: 20px;
+}
+
+.orders-page__btn-accept,
+.orders-page__btn-decline,
+.orders-page__btn-deliver {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+/* Accept Button Styling */
+.orders-page__btn-accept {
+  background-color: #89cff0; /* Baby blue */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.orders-page__btn-accept:hover {
+  background-color: #68b9e5; /* Darker baby blue on hover */
+}
+
+.orders-page__btn-accept:active {
+  transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Decline Button Styling */
+.orders-page__btn-decline {
+  background-color: #ff6961; /* Light red for decline */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.orders-page__btn-decline:hover {
+  background-color: #e65a54; /* Darker red on hover */
+}
+
+.orders-page__btn-decline:active {
+  transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Send Delivery Button Styling */
+.orders-page__btn-send-delivery {
+  background-color: #89cff0; /* Baby blue */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.orders-page__btn-send-delivery:hover {
+  background-color: #68b9e5; /* Darker baby blue on hover */
+}
+
+.orders-page__btn-send-delivery:active {
+  transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Delivered Status Label Styling */
+.orders-page__status-delivered {
+  color: #2ecc71; /* Green for delivered status */
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #e8f8f5;
+  display: inline-block;
+}
+
+.orders-page__status-canceled {
+  color: #f0f0f0; /* Green for delivered status */
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #f32424;
+  display: inline-block;
+}
+
+/* Button Container Styling */
+.orders-page__actions {
+  display: flex;
+  gap: 15px; /* Space between buttons */
+  margin-top: 20px;
+}
+
+.orders-section {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.orders-section-title {
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.orders-section-title:hover {
+  background-color: #eaeaea;
+}
+
+.orders-section-content {
+  padding: 10px 15px;
+}
+
+.go-back-button {
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.go-back-button:hover {
+  background-color: #0056b3;
+}

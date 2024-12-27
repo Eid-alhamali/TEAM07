@@ -19,16 +19,31 @@ CREATE TABLE IF NOT EXISTS Managers (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARBINARY(256) NOT NULL,
+    password_hash VARCHAR(256) NOT NULL,
     role ENUM('sales_manager', 'product_manager') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO Managers (manager_id, first_name, last_name, email, password_hash, role)
+VALUES
+(1, 'Arya', 'Hassibi', 'arya@manager.com', SHA2('admin12345', 256), 'sales_manager'),
+(2, 'Beste', 'Bayhan', 'beste@manager.com', SHA2('admin12345', 256), 'product_manager'),
+(3, 'Mustafa', 'Topcu', 'mustafa@manager.com', SHA2('admin12345', 256), 'sales_manager'),
+(4, 'Orhun', 'Ege Ozpay', 'orhun@manager.com', SHA2('admin12345', 256), 'product_manager'),
+(5, 'Eid', 'Alhamali', 'eid@manager.com', SHA2('admin12345', 256), 'sales_manager'),
+(6, 'Ecem', 'Akın', 'ecem@manager.com', SHA2('admin12345', 256), 'product_manager'),
+(7, 'Zeynep', 'Işık', 'zeynep@manager.com', SHA2('admin12345', 256), 'product_manager'),
+(8, 'Cemal', 'Yılmaz', 'cemal@manager.com', SHA2('admin12345', 256), 'product_manager'),
+(9, 'Sales', 'Manager', 'sales@manager.com', SHA2('admin12345', 256), 'sales_manager'),
+(10, 'Product', 'Manager', 'product@manager.com', SHA2('admin12345', 256), 'product_manager');
+
 
 CREATE TABLE IF NOT EXISTS Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
     description TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,7 +69,7 @@ CREATE TABLE IF NOT EXISTS Product_Variant (
     weight_grams INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL DEFAULT 0,
-    sku VARCHAR(50) UNIQUE,
+    sku VARCHAR(50),
     serial_number VARCHAR(100) UNIQUE,
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );

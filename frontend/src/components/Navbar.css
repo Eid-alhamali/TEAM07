@@ -1,3 +1,5 @@
+/* User Navbar Styles */
+
 /* Navbar Container */
 .navbar {
   display: flex;
@@ -97,10 +99,7 @@
 .search-icon {
   width: 20px;
   height: 20px;
-  /* filter: brightness(0) saturate(100%) invert(55%) sepia(47%) saturate(588%)
-    hue-rotate(357deg) brightness(95%) contrast(90%); */
 }
-
 
 /* Icons */
 .shop-icon,
@@ -113,7 +112,7 @@
 }
 
 .shop-icon:hover,
-.user-icon:hover{
+.user-icon:hover {
   transform: scale(1.1);
 }
 
@@ -172,6 +171,67 @@
   color: var(--primary-dark);
 }
 
+/* Admin Navbar Styles */
+
+.admin-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333; /* Dark background for admin */
+  color: #fff; /* White text for admin */
+  padding: 2.5rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-navbar .navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.admin-navbar .navbar-logo {
+  max-width: 200px;
+  width: 10vw;
+  min-width: 100px;
+  margin-right: 10px;
+}
+
+.admin-navbar .admin-navbar-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.admin-navbar .admin-logout-button {
+  background-color: #ff4d4f; /* Red button for logout */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-navbar .back-to-user-button {
+  background-color: transparent; /* Transparent background */
+  color: #fff; /* White text */
+  border: 2px solid #fff; /* White border */
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-navbar .admin-logout-button:hover {
+  background-color: #e04344;
+  transform: scale(1.05);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .navbar {
@@ -201,6 +261,20 @@
   }
 
   .navbar-right {
+    margin-top: 10px;
+  }
+
+  .admin-navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .admin-navbar .navbar-left {
+    margin-bottom: 1rem;
+  }
+
+  .admin-navbar .admin-logout-button {
     margin-top: 10px;
   }
 }

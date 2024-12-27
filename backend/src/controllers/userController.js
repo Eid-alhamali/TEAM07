@@ -37,6 +37,7 @@ const UsersController = class {
     login(email, password) {
         return new Promise(async (resolve, reject) => {
             try {
+                console.log("we are here");
                 const user = await this.getUserByEmail(email);
 
                 // Validate password
@@ -92,34 +93,37 @@ const UsersController = class {
         });
     }
 
-    isAdmin(id) {
+    getManagerByEmail(email) {
         return new Promise((resolve, reject) => {
-
             this.con.query(
-                'SELECT * FROM `Users` WHERE `user_id` = ?',
-                [id],     // Check if the ID exists in the Users table
+                'SELECT * FROM Managers WHERE email = ?',
+                [email],
                 (err, result) => {
                     if (err) return reject(err);
-    
-                    if (result.length > 0) {     // If found in Users table, the user is not an admin
-                        return resolve(false);
+                    if (result.length < 1) {
+                        return reject(new Error("Manager not found"));
+                    } else {
+                        return resolve(result[0]);
                     }
-    
-                    this.con.query(    // Check if the ID exists in the Managers table
-                        'SELECT * FROM `Managers` WHERE `manager_id` = ?',
-                        [id],
-                        (err, result) => {
-                            if (err) return reject(err);
-    
-                            if (result.length > 0) {  // If found in Managers table, the user is an admin
-                                return resolve(true);
-                            }
-    
-                            return reject(new Error('User not found in a role as a User or Manager'));
-                            // If not found in either table, return an error
+                }
+            );
+        });
+    }
 
-                        }
-                    );
+
+    isAdmin(id) {
+        return new Promise((resolve, reject) => {
+            this.con.query(
+                'SELECT role FROM Managers WHERE manager_id = ?',
+                [id],
+                (err, result) => {
+                    if (err) return reject(err);
+
+                    if (result.length > 0) {
+                        return resolve({ isAdmin: true, role: result[0].role });
+                    } else {
+                        return resolve({ isAdmin: false });
+                    }
                 }
             );
         });

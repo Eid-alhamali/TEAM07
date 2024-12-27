@@ -1,95 +1,121 @@
+/* Container Styles */
 .review-admin-container {
+    margin: 20px auto;
+    padding: 20px;
     max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
     background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-
-.go-back-button {
-    background-color: #9a68db;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transitions */
-}
-
-.go-back-button:hover {
-    background-color: #8d23e3;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a shadow for a deeper look */
-}
-
-.go-back-button:active {
-    transform: scale(0.95); /* Add a press-down effect */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Reduce the shadow */
-}
+/* Title and Description */
 .review-admin-title {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
-    color: #333;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333333;
 }
 
 .review-admin-description {
-    font-size: 1rem;
+    font-size: 1.2rem;
     text-align: center;
-    color: #666;
     margin-bottom: 2rem;
+    color: #555555;
 }
 
+/* Go Back Button */
+.go-back-button-review {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #e36c16;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.go-back-button-review:hover {
+    background-color: #7b5a3e;
+    transform: scale(1.05);
+}
+
+/* Review List */
 .review-list {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 20px;
 }
 
+/* Review Card */
 .review-item {
-    background-color: #fff;
-    padding: 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
+.review-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Review Details */
 .review-title {
     font-size: 1.2rem;
     font-weight: bold;
+    color: #333333;
     margin-bottom: 0.5rem;
-    color: #555;
 }
 
 .review-content {
     font-size: 1rem;
-    color: #444;
+    color: #555555;
     margin-bottom: 1rem;
 }
 
-.review-actions {
-    display: flex;
-    gap: 1rem;
+.review-rating,
+.review-date {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 0.5rem;
 }
 
-.accept-button,
-.reject-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+/* Buttons */
+.elegant-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.elegant-button:hover {
+    transform: scale(1.05);
+}
+
+/* Accept Button */
 .accept-button {
-    background-color: #4caf50;
-    color: #fff;
+    background-color: #4caf50; /* More elegant green */
+    margin-right: 10px; /* Add spacing between buttons */
 }
 
-.reject-button {
-    background-color: #f44336;
-    color: #fff;
+.accept-button:hover {
+    background-color: #45a045;
 }
+
+/* Reject Button */
+.reject-button {
+    background-color: #f44336; /* More elegant red */
+}
+
+.reject-button:hover {
+    background-color: #e53935;
+}
+
