@@ -8,7 +8,7 @@
     padding: 3rem 2rem;
 }
 
-.admin-title {
+.admin-container .admin-title {
     font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
@@ -17,7 +17,7 @@
     letter-spacing: 1px;
 }
 
-.admin-description {
+.admin-container .admin-description {
     font-size: 1.1rem;
     color: #555555;
     text-align: center;
@@ -25,14 +25,14 @@
     line-height: 1.6;
 }
 
-.product-actions {
+.admin-container .product-actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.action-button {
+.admin-container .action-button {
     background-color: #007bff; /* Primary blue button */
     color: white;
     border: none;
@@ -44,13 +44,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.action-button:hover {
+.admin-container .action-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
     transform: translateY(-2px); /* Lift button on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
 }
 
-.table-container {
+.admin-container .table-container {
     width: 100%;
     max-width: 1000px;
     margin-top: 2rem;
@@ -60,7 +60,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-.table {
+.admin-container .table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9rem;
@@ -68,38 +68,38 @@
     overflow: hidden;
 }
 
-.table th,
-.table td {
+.admin-container .table th,
+.admin-container .table td {
     padding: 12px;
     text-align: center;
     border-bottom: 1px solid #dddddd;
 }
 
-.table th {
+.admin-container .table th {
     background-color: #f1f1f1; /* Light gray header */
     color: #333333;
     text-transform: uppercase;
     font-size: 0.95rem;
     font-weight: bold;
 }
-.orders-page__item-customer-id,
-.orders-page__item-product-id {
+.admin-container .orders-page__item-customer-id,
+.admin-container .orders-page__item-product-id {
     font-size: 0.9rem;
     color: #666666;
     margin-top: 5px;
 }
 
-.table td {
+.admin-container .table td {
     background-color: #ffffff; /* White row background */
     color: #555555;
 }
 
-.table tr:hover {
+.admin-container .table tr:hover {
     background-color: #f5f5f5; /* Slight highlight on hover */
     transition: background-color 0.3s ease;
 }
 
-.no-deliveries {
+.admin-container .no-deliveries {
     font-size: 1.1rem;
     color: #555555;
     margin-top: 1.5rem;
@@ -107,7 +107,7 @@
 }
 
 /* Order List Styling */
-.orders-page__list {
+.admin-container .orders-page__list {
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -116,7 +116,7 @@
     max-width: 1000px;
 }
 
-.orders-page__order {
+.admin-container .orders-page__order {
     border: 1px solid #cdeeff;
     border-radius: 20px;
     overflow: hidden;
@@ -124,11 +124,11 @@
     transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
-.orders-page__order.expanded {
+.admin-container .orders-page__order.admin-container .expanded {
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
-.orders-page__order-header {
+.admin-container .orders-page__order-header {
     display: flex;
     justify-content: space-between;
     background: #cdeeff;
@@ -138,40 +138,40 @@
     border-bottom: 1px solid #eaeaea;
 }
 
-.orders-page__order-header:hover {
+.admin-container .orders-page__order-header:hover {
     background: #e6e4ff;
 }
 
-.orders-page__order-info {
+.admin-container .orders-page__order-info {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     align-items: center;
 }
 
-.orders-page__order-id {
+.admin-container .orders-page__order-id {
     font-weight: 600;
     color: #333;
 }
 
-.orders-page__order-total {
+.admin-container .orders-page__order-total {
     color: #444;
     font-weight: 500;
 }
 
-.orders-page__order-status {
+.admin-container .orders-page__order-status {
     font-style: normal;
     font-weight: 500;
     color: #f57150;
     text-transform: capitalize;
 }
 
-.orders-page__order-date {
+.admin-container .orders-page__order-date {
     color: #999;
     font-size: 0.9rem;
 }
 
-.orders-page__toggle-icon {
+.admin-container .orders-page__toggle-icon {
     font-size: 1.5rem;
     font-weight: bold;
     line-height: 1;
@@ -179,17 +179,17 @@
     transition: transform 0.2s ease-in-out;
 }
 
-.orders-page__order.expanded .orders-page__toggle-icon {
+.admin-container .orders-page__order.admin-container .expanded .admin-container .orders-page__toggle-icon {
     transform: rotate(90deg);
 }
 
-.orders-page__order-details {
+.admin-container .orders-page__order-details {
     padding: 20px;
     background: #ffffff;
 }
 
 /* Smooth page transitions */
-.admin-container {
+.admin-container .admin-container {
     animation: fadeIn 0.5s ease-in-out;
 }
 

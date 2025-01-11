@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
-import compressoLogo from "../assets/images/icons/logo-dark.svg";
+import compressoLogoDark from "../assets/images/icons/logo-dark.svg";
+import compressoLogoLight from "../assets/images/icons/logo-light.svg";
 import shopIcon from "../assets/images/icons/cart-dark.svg";
 import userIcon from "../assets/images/icons/user-dark.svg";
 import searchIcon from "../assets/images/icons/icons8-search.svg";
@@ -70,8 +71,8 @@ const Navbar = () => {
     return (
       <nav className="admin-navbar">
         <div className="navbar-left">
-          <img src={compressoLogo} alt="Compresso Logo" className="navbar-logo" />
-          <span className="admin-navbar-title">Admin Side</span>
+          <img src={compressoLogoLight} alt="Compresso Logo" className="navbar-logo" />
+          <span className="admin-navbar-title"> │ Admin Side</span>
         </div>
         <div className="navbar-right">
           {isLoginPage && !isLoggedIn ? (
@@ -91,7 +92,7 @@ const Navbar = () => {
   // User Navbar
   return (
     <nav className="navbar">
-      <img src={compressoLogo} alt="Compresso Logo" className="navbar-logo" />
+      <img src={compressoLogoDark} alt="Compresso Logo" className="navbar-logo" />
       <div className="navbar-center">
         <ul className="navbar-links">
           <li><Link to="/">HOME</Link></li>

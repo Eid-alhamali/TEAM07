@@ -8,7 +8,7 @@
 }
 
 /* Card Styles */
-.view-products-card {
+.view-products-container .view-products-card {
     margin-bottom: 20px;
     padding: 15px;
     border: 1px solid #ddd;
@@ -19,13 +19,13 @@
     cursor: pointer;
 }
 
-.view-products-card:hover {
+.view-products-container .view-products-card:hover {
     transform: translateY(-2px); /* Move up on hover */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a shadow */
 }
 
 /* Variant Actions */
-.variant-actions {
+.view-products-container .variant-actions {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -33,7 +33,7 @@
 }
 
 /* Stock Input */
-.stock-input {
+.view-products-container .stock-input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -42,7 +42,7 @@
 }
 
 /* Buttons */
-.elegant-button {
+.view-products-container .elegant-button {
     padding: 8px 12px;
     font-size: 14px;
     color: #fff;
@@ -52,41 +52,41 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.elegant-button:hover {
+.view-products-container .elegant-button:hover {
     transform: scale(1.05);
 }
 
-.update-stock-button {
+.view-products-container .update-stock-button {
     background-color: #4caf50;
 }
 
-.update-stock-button:hover {
+.view-products-container .update-stock-button:hover {
     background-color: #45a045;
 }
 
-.delete-variant-button {
+.view-products-container .delete-variant-button {
     background-color: #f44336;
 }
 
-.delete-variant-button:hover {
+.view-products-container .delete-variant-button:hover {
     background-color: #e53935;
 }
 
 /* Input Focus */
-.stock-input:focus {
+.view-products-container .stock-input:focus {
     border-color: #4caf50;
     outline: none;
 }
 
 /* Top Buttons */
-.view-products-top-buttons {
+.view-products-container .view-products-top-buttons {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.view-products-go-back-button,
-.view-products-add-product-button {
+.view-products-container .view-products-go-back-button,
+.view-products-container .view-products-add-product-button {
     padding: 10px 15px;
     font-size: 16px;
     color: #fff;
@@ -97,8 +97,8 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.view-products-go-back-button:hover,
-.view-products-add-product-button:hover {
+.view-products-container .view-products-go-back-button:hover,
+.view-products-container .view-products-add-product-button:hover {
     background-color: #7b5a3e;
     transform: scale(1.05);
 }

@@ -8,7 +8,7 @@
     padding: 10rem; /* Reduces padding for better vertical alignment */
 }
 
-.go-back-button {
+.admin-container .go-back-button {
     background-color: #6c63ff;
     color: white;
     border: none;
@@ -20,21 +20,21 @@
     margin-top: 10px; /* Add some margin to prevent overlap */
 }
 
-.admin-title {
+.admin-container .admin-title {
     font-size: 2rem;
     text-align: center;
     margin-bottom: 1rem;
     color: #333;
 }
 
-.admin-description {
+.admin-container .admin-description {
     text-align: center;
     margin-bottom: 1.5rem; /* Slightly reduce margin */
     color: #555;
 }
 
-.product-actions,
-.sales-actions {
+.admin-container .product-actions,
+.admin-container .sales-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -42,7 +42,7 @@
     margin-bottom: 1.5rem; /* Slightly reduce margin */
 }
 
-.action-button {
+.admin-container .action-button {
     background-color: #4caf50;
     color: white;
     border: none;
@@ -51,18 +51,18 @@
     cursor: pointer;
 }
 
-.action-button:hover {
+.admin-container .action-button:hover {
     background-color: #45a049;
 }
 
-.table-container {
+.admin-container .table-container {
     display: flex;
     justify-content: center;
     width: 100%;
     margin-top: 1.5rem; /* Add some space between actions and table */
 }
 
-.table {
+.admin-container .table {
     width: 100%;
     max-width: 800px;
     border-collapse: collapse;
@@ -70,14 +70,14 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.table th,
-.table td {
+.admin-container .table th,
+.admin-container .table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
 }
 
-.table th {
+.admin-container .table th {
     background-color: #f2f2f2;
     color: black;
 }

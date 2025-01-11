@@ -6,7 +6,7 @@
     margin: 0; /* Ensure no margin */
 }
 
-.sidebar {
+.admin-delivery-container .sidebar {
     width: 250px;
     background-color: #333;
     color: #fff;
@@ -20,7 +20,7 @@
     left: 0;
 }
 
-.go-back-button {
+.admin-delivery-container .go-back-button {
     background-color: #e36c16;
     color: #fff;
     border: none;
@@ -31,11 +31,11 @@
     text-align: center;
 }
 
-.go-back-button:hover {
+.admin-delivery-container .go-back-button:hover {
     background-color: #7b5a3e;
 }
 
-.sidebar-option {
+.admin-delivery-container .sidebar-option {
     padding: 15px;
     text-transform: uppercase;
     border-radius: 5px;
@@ -44,27 +44,27 @@
     text-align: center;
 }
 
-.sidebar-option:hover {
+.admin-delivery-container .sidebar-option:hover {
     background-color: #444;
 }
 
-.sidebar-option.active {
+.admin-delivery-container .sidebar-option.admin-delivery-container .active {
     background-color: #89d4db;
 }
 
-.main-content {
+.admin-delivery-container .main-content {
     flex: 1;
     padding: 40px;
     overflow-y: auto;
 }
-.main-content-deliveries {
+.admin-delivery-container .main-content-deliveries {
     flex: 1;
     margin-left: 250px; /* Account for sidebar width */
     padding: 40px;
     overflow-y: auto;
 }
 
-.admin-title {
+.admin-delivery-container .admin-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
