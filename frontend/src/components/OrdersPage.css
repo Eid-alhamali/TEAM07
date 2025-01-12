@@ -299,6 +299,7 @@
     justify-content: flex-start;
   }
 
+
   .orders-page__pdf-wrapper {
     justify-content: flex-start;
   }
@@ -316,6 +317,292 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
   margin-top: 20px;
+}
+
+.orders-page__btn-cancel:hover {
+  background-color: #d9363e;
+}
+
+.orders-page__btn-cancel:active {
+  transform: scale(0.98);
+}
+
+.orders-page__btn-cancel:disabled {
+  background-color: #ffccc7;
+  cursor: not-allowed;
+  color: #fff;
+}
+
+/* Canceled Message Styles */
+.orders-page__canceled-message {
+  width: 300px;
+  max-width: 300px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff1f0;
+  border: 1px solid #ffa39e;
+  border-radius: 4px;
+  color: #a8071a;
+  font-weight: 500;
+}
+
+/* Cancel Error Message Styles */
+.orders-page__cancel-error {
+  margin-top: 10px;
+  color: #ff4d4f;
+  font-size: 0.9rem;
+}
+
+/* .orders-page__refund-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+} */
+
+.orders-page__refund-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.orders-page__refund-status.approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.orders-page__refund-status.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.refund-list__btn-pending,
+.refund-list__btn-approved,
+.refund-list__btn-rejected {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  cursor: pointer;
+  flex: none;
+}
+
+.refund-list__btn-approved {
+  background: #109137;
+  color: #fff;
+  cursor: default;
+}
+
+.refund-list__btn-rejected {
+  background: #FF4500;
+  color: #fff;
+  cursor: default;
+}
+
+
+
+.refund-list__btn-pending {
+  background: #f0a823;
+  color: #fff;
+  cursor: default;
+}
+
+
+.refund-list__btn-pending:active,
+.refund-list__btn-approved:active,
+.refund-list__btn-rejected:active {
+  transform: none;
+}
+
+.refund-list__btn-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px; /* Add some space between the image and the text */
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.orders-page__order-details .orders-page__address {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.orders-page__address-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.orders-page__address p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.orders-page__order-details .orders-page__address p {
+  margin-bottom: 8px;
+}
+
+
+.orders-page__actions {
+  display: flex;
+  gap: 15px; /* Space between buttons */
+  margin-top: 20px;
+}
+
+.orders-page__btn-accept,
+.orders-page__btn-decline,
+.orders-page__btn-deliver {
+  padding: 10px 20px;
+
+
+  .orders-page__pdf-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+/* Cancel Order Button Styles */
+.orders-page__btn-cancel {
+  padding: 10px 16px;
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  margin-top: 20px;
+}
+/* Accept Button Styling */
+.orders-page__btn-accept {
+background-color: #89cff0; /* Baby blue */
+color: #ffffff;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+
+.orders-page__btn-accept:hover {
+background-color: #68b9e5; /* Darker baby blue on hover */
+}
+
+.orders-page__btn-accept:active {
+transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Decline Button Styling */
+.orders-page__btn-decline {
+background-color: #ff6961; /* Light red for decline */
+color: #ffffff;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.orders-page__btn-decline:hover {
+background-color: #e65a54; /* Darker red on hover */
+}
+
+.orders-page__btn-decline:active {
+transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Send Delivery Button Styling */
+.orders-page__btn-send-delivery {
+background-color: #89cff0; /* Baby blue */
+color: #ffffff;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.orders-page__btn-send-delivery:hover {
+background-color: #68b9e5; /* Darker baby blue on hover */
+}
+
+.orders-page__btn-send-delivery:active {
+transform: scale(0.97); /* Slight shrink effect on click */
+}
+
+/* Delivered Status Label Styling */
+.orders-page__status-delivered {
+color: #2ecc71; /* Green for delivered status */
+font-weight: 600;
+font-size: 1rem;
+padding: 10px 20px;
+border-radius: 5px;
+background-color: #e8f8f5;
+display: inline-block;
+}
+
+.orders-page__status-canceled {
+color: #f0f0f0; /* Green for delivered status */
+font-weight: 600;
+font-size: 1rem;
+padding: 10px 20px;
+border-radius: 5px;
+background-color: #f32424;
+display: inline-block;
+}
+
+/* Button Container Styling */
+.orders-page__actions {
+display: flex;
+gap: 15px; /* Space between buttons */
+margin-top: 20px;
+}
+
+.orders-section {
+margin-bottom: 20px;
+border: 1px solid #ddd;
+border-radius: 5px;
+overflow: hidden;
+}
+
+.orders-section-title {
+background-color: #f5f5f5;
+padding: 10px 15px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.orders-section-title:hover {
+background-color: #eaeaea;
+}
+
+.orders-section-content {
+padding: 10px 15px;
+}
+
+.go-back-button {
+margin-bottom: 20px;
+padding: 10px 15px;
+background-color: #007bff;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.go-back-button:hover {
+background-color: #0056b3;
 }
 
 .orders-page__btn-cancel:hover {

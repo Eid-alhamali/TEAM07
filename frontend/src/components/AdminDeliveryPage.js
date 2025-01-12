@@ -105,7 +105,6 @@ const AdminDeliveryPage = () => {
         await handleStatusUpdate(orderId, "delivered");
     };
 
-    // Count orders for each status
     const statusCounts = {
         processing: orders.filter((order) => order.status === "processing").length,
         "in-transit": orders.filter((order) => order.status === "in-transit").length,
@@ -164,6 +163,13 @@ const AdminDeliveryPage = () => {
                                 </div>
                                 {isExpanded && (
                                     <div className="orders-page__order-details">
+                                        <div className="orders-page__address">
+                                            <h3>Shipping Address</h3>
+                                            <p><strong>Address Line: </strong>{order.address.address_line}</p>
+                                            <p><strong>City: </strong>{order.address.city}, {order.address.country}</p>
+                                            <p><strong>Postal Code: </strong>{order.address.postal_code}</p>
+                                            <p><strong>Phone: </strong>{order.address.phone_number}</p>
+                                        </div>
                                         <ul className="orders-page__items-list">
                                             {order.order_items.map((item, idx) => (
                                                 <li key={idx} className="orders-page__item">
@@ -254,3 +260,4 @@ const AdminDeliveryPage = () => {
 };
 
 export default AdminDeliveryPage;
+
