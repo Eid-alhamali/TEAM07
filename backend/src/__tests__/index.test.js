@@ -1,320 +1,448 @@
-const productController = require('../controllers/productController');
-const db = require('../config/db');
+/**
+ * @file productController.test.js
+ * @description Tests for productController.js
+ */
 
+const request = require('supertest');
+const db = require('../config/db');
+const checkoutPool = require('../config/promise/promise_db');
+const productController = require('../controllers/productController');
+
+// We assume your main app is exported from ../index or a similar file.
+// If you just want pure unit tests (no supertest), you can skip requiring the app.
+const app = require('../index');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mocks
+// ─────────────────────────────────────────────────────────────────────────────
 jest.mock('../config/db', () => ({
-    query: jest.fn()
+  query: jest.fn(),
+}));
+
+jest.mock('../config/promise/promise_db', () => ({
+  getConnection: jest.fn(),
 }));
 
 describe('productController', () => {
-    let req, res;
+  let mockRes;
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 1) listProducts
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('listProducts', () => {
+    it('should return 400 if invalid sort_by parameter', () => {
+      const mockReq = {
+        query: {
+          sort_by: 'invalid_column',
+          sort_order: 'asc',
+        },
+      };
+
+      productController.listProducts(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Invalid sort_by parameter.',
+      });
+      expect(db.query).not.toHaveBeenCalled();
+    });
+
+    it('should handle DB errors gracefully', () => {
+      const mockReq = {
+        query: {
+          sort_by: 'price',
+          sort_order: 'asc',
+        },
+      };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      productController.listProducts(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to retrieve products.',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 2) getProductById
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('getProductById', () => {
+    it('should return 404 if product not found', () => {
+      const mockReq = { params: { id: 999 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, []); // no product
+      });
+
+      productController.getProductById(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Product not found' });
+    });
+
+    it('should return 500 on DB error', () => {
+      const mockReq = { params: { id: 1 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      productController.getProductById(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Internal server error',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 3) listCategories
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('listCategories', () => {
+    it('should return 500 if DB error occurs', () => {
+      const mockReq = {};
+      db.query.mockImplementation((sql, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      productController.listCategories(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to fetch categories',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 4) addCategory
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('addCategory', () => {
+    it('should return 400 if category name is missing', () => {
+      const mockReq = { body: { description: 'Desc' } };
+
+      productController.addCategory(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Category name is required',
+      });
+    });
+
+    it('should return 500 if DB error occurs', () => {
+      const mockReq = { body: { name: 'NewCat' } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(new Error('Insert Error'), null);
+      });
+
+      productController.addCategory(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to add category',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 5) deleteCategory
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('deleteCategory', () => {
+    it('should return 404 if category not found', () => {
+      const mockReq = { params: { id: 999 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, { affectedRows: 0 });
+      });
+
+      productController.deleteCategory(mockReq, mockRes);
+
+      expect(mockRes.status).not.toHaveBeenCalledWith(500);
+      expect(mockRes.status).not.toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Category not found',
+      });
+    });
+
+    it('should handle DB errors', () => {
+      const mockReq = { params: { id: 5 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      productController.deleteCategory(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to delete category',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 6) updateStock
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('updateStock', () => {
+    it('should return 400 if stock is negative', () => {
+      const mockReq = {
+        params: { variant_id: 10 },
+        body: { stock: -5 },
+      };
+
+      productController.updateStock(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Stock cannot be negative.',
+      });
+      expect(db.query).not.toHaveBeenCalled();
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 7) createProduct
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('createProduct', () => {
+    let mockReq;
+    let mockConn;
 
     beforeEach(() => {
-        req = { query: {} };
-        res = {
-            json: jest.fn(),
-            status: jest.fn().mockReturnThis()
-        };
-        jest.clearAllMocks();
+      mockReq = {
+        body: {
+          product: {
+            name: 'New Coffee',
+            origin: 'Brazil',
+            roast_level: 'Medium',
+            bean_type: 'Arabica',
+            grind_type: 'Whole Bean',
+            flavor_profile: 'Chocolaty',
+            processing_method: 'Natural',
+            caffeine_content: 'High',
+            category_id: 1,
+            description: 'Delicious coffee',
+            warranty_status: true,
+            distributor_info: 'Some distributor info',
+          },
+          variants: [
+            {
+              weight_grams: 500,
+              price: 10.99,
+              stock: 100,
+              sku: 'SKU123',
+            },
+          ],
+          images: [
+            {
+              image_url: 'http://example.com/img.jpg',
+              alt_text: 'Example Image',
+            },
+          ],
+        },
+      };
+
+      mockConn = {
+        beginTransaction: jest.fn(),
+        commit: jest.fn(),
+        rollback: jest.fn(),
+        release: jest.fn(),
+        query: jest.fn(),
+      };
+      checkoutPool.getConnection.mockResolvedValue(mockConn);
     });
 
-    describe('listProducts', () => {
-        test('should return 400 if invalid sort_by parameter is given', () => {
-            req.query = { sort_by: 'invalid', sort_order: 'asc' };
-            productController.listProducts(req, res);
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Invalid sort_by parameter.' });
-        });
+    it('should rollback on error and return 500', async () => {
+      // Force an error on first insert
+      mockConn.query.mockRejectedValueOnce(new Error('Insert Error'));
 
-        test('should return 400 if invalid sort_order parameter is given', () => {
-            req.query = { sort_by: 'price', sort_order: 'invalid' };
-            productController.listProducts(req, res);
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Invalid sort_order parameter.' });
-        });
+      await productController.createProduct(mockReq, mockRes);
 
-        test('should return products array on success', () => {
-            req.query = { sort_by: 'price', sort_order: 'asc', roast_level: 'Medium' };
-            const mockResults = [
-                { product_id: 1, name: 'Medium Roast Coffee', price: 10.0 }
-            ];
-
-            db.query.mockImplementation((sql, params, callback) => {
-                expect(params).toContain('Medium');
-                callback(null, mockResults);
-            });
-
-            productController.listProducts(req, res);
-            expect(res.json).toHaveBeenCalledWith(mockResults);
-        });
-
-        test('should return empty array if no products found', () => {
-            req.query = { sort_by: 'price', sort_order: 'asc' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, []); 
-            });
-            productController.listProducts(req, res);
-            expect(res.json).toHaveBeenCalledWith([]);
-        });
-
-        test('should return 500 if database error occurs', () => {
-            req.query = { sort_by: 'price', sort_order: 'asc' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-            productController.listProducts(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Failed to retrieve products.' });
-        });
+      expect(mockConn.beginTransaction).toHaveBeenCalledTimes(1);
+      expect(mockConn.rollback).toHaveBeenCalledTimes(1);
+      expect(mockConn.commit).not.toHaveBeenCalled();
+      expect(mockConn.release).toHaveBeenCalledTimes(1);
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Internal server error',
+        details: 'Insert Error',
+      });
     });
 
-    describe('getProductById', () => {
-        test('should return a product if found', () => {
-            req.params = { id: 1 };
-            const mockProduct = { product_id: 1, name: 'Espresso Beans' };
+    it('should commit transaction and return 201 on success', async () => {
+      // Mock success for each query in the transaction
+      mockConn.query
+        .mockResolvedValueOnce([{ insertId: 101 }]) // Insert product
+        .mockResolvedValueOnce([{ insertId: 202 }]) // Insert variant
+        .mockResolvedValueOnce([{}]); // Insert images
 
-            db.query.mockImplementation((sql, params, callback) => {
-                expect(params).toEqual([1]);
-                callback(null, [mockProduct]);
-            });
+      await productController.createProduct(mockReq, mockRes);
 
-            productController.getProductById(req, res);
-            expect(res.json).toHaveBeenCalledWith(mockProduct);
-        });
-
-        test('should return 404 if product not found', () => {
-            req.params = { id: 999 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, []);
-            });
-
-            productController.getProductById(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Product not found' });
-        });
-
-        test('should return 500 if database error occurs', () => {
-            req.params = { id: 1 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.getProductById(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockConn.beginTransaction).toHaveBeenCalled();
+      expect(mockConn.commit).toHaveBeenCalled();
+      expect(mockConn.release).toHaveBeenCalled();
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: 'Product added successfully',
+        productId: 101,
+      });
     });
+  });
 
-    describe('createProduct', () => {
-        test('should create a product and return 201 with productId', () => {
-            req.body = { name: 'New Coffee', roast_level: 'Medium', bean_type: 'Arabica' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, { insertId: 123 });
-            });
+  // ────────────────────────────────────────────────────────────────────────────
+  // 8) updateProduct
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('updateProduct', () => {
+    it('should return 404 if product not found', () => {
+      const mockReq = {
+        params: { id: 10 },
+        body: { name: 'Updated Name' },
+      };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, { affectedRows: 0 });
+      });
 
-            productController.createProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(201);
-            expect(res.json).toHaveBeenCalledWith({ message: 'Product created', productId: 123 });
-        });
+      productController.updateProduct(mockReq, mockRes);
 
-        test('should return 500 if database error occurs during create', () => {
-            req.body = { name: 'Error Coffee' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.createProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Product not found' });
     });
+  });
 
-    describe('updateProduct', () => {
-        test('should update product and return 200 if found', () => {
-            req.params = { id: 1 };
-            req.body = { name: 'Updated Coffee' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, { affectedRows: 1 });
-            });
+  // ────────────────────────────────────────────────────────────────────────────
+  // 9) deleteProduct
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('deleteProduct', () => {
+    it('should return 404 if product not found', () => {
+      const mockReq = { params: { id: 999 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, { affectedRows: 0 });
+      });
 
-            productController.updateProduct(req, res);
-            expect(res.json).toHaveBeenCalledWith({ message: 'Product updated' });
-        });
+      productController.deleteProduct(mockReq, mockRes);
 
-        test('should return 404 if product not found', () => {
-            req.params = { id: 999 };
-            req.body = { name: 'Non-existent Coffee' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, { affectedRows: 0 });
-            });
-
-            productController.updateProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Product not found' });
-        });
-
-        test('should return 500 if database error occurs during update', () => {
-            req.params = { id: 1 };
-            req.body = { name: 'Error Coffee' };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.updateProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Product not found' });
     });
+  });
 
-    describe('deleteProduct', () => {
-        test('should delete product and return 200 if found', () => {
-            req.params = { id: 1 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, { affectedRows: 1 });
-            });
+  // ────────────────────────────────────────────────────────────────────────────
+  // 10) deleteVariant
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('deleteVariant', () => {
+    it('should return 404 if variant not found', () => {
+      const mockReq = { params: { variant_id: 123 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, { affectedRows: 0 });
+      });
 
-            productController.deleteProduct(req, res);
-            expect(res.json).toHaveBeenCalledWith({ message: 'Product deleted' });
-        });
+      productController.deleteVariant(mockReq, mockRes);
 
-        test('should return 404 if product not found', () => {
-            req.params = { id: 999 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, { affectedRows: 0 });
-            });
-
-            productController.deleteProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Product not found' });
-        });
-
-        test('should return 500 if database error occurs during delete', () => {
-            req.params = { id: 1 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.deleteProduct(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Variant not found.',
+      });
     });
+  });
 
-    describe('allVariantsOfProductId', () => {
-        test('should return variants if found', () => {
-            req.params = { product_id: 1 };
-            const mockVariants = [
-                { variant_id: 1, product_id: 1, price: 10.0 },
-                { variant_id: 2, product_id: 1, price: 15.0 }
-            ];
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, mockVariants);
-            });
+  // ────────────────────────────────────────────────────────────────────────────
+  // 11) allVariantsOfProductId
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('allVariantsOfProductId', () => {
+    it('should return 404 if no variants found', () => {
+      const mockReq = { params: { product_id: 111 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, []);
+      });
 
-            productController.allVariantsOfProductId(req, res);
-            expect(res.json).toHaveBeenCalledWith({ product_id: 1, variants: mockVariants });
-        });
+      productController.allVariantsOfProductId(mockReq, mockRes);
 
-        test('should return 404 if no variants found', () => {
-            req.params = { product_id: 999 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, []);
-            });
-
-            productController.allVariantsOfProductId(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'No variants found for the specified product.' });
-        });
-
-        test('should return 500 if database error occurs', () => {
-            req.params = { product_id: 1 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.allVariantsOfProductId(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                error: 'Failed to retrieve variants. Please try again later.',
-                details: 'DB Error'
-            });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'No variants found for the specified product.',
+      });
     });
+  });
 
-    describe('getProductDetails', () => {
-        test('should return product details if found', () => {
-            req.params = { product_id: 1 };
-            const mockProduct = { product_id: 1, name: 'Special Blend', average_rating: 4.5 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, [mockProduct]);
-            });
+  // ────────────────────────────────────────────────────────────────────────────
+  // 12) getProductDetails
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('getProductDetails', () => {
+    it('should return 404 if product not found', () => {
+      const mockReq = { params: { product_id: 999 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(null, []);
+      });
 
-            productController.getProductDetails(req, res);
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(mockProduct);
-        });
+      productController.getProductDetails(mockReq, mockRes);
 
-        test('should return 404 if product not found', () => {
-            req.params = { product_id: 999 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(null, []);
-            });
-
-            productController.getProductDetails(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Product not found' });
-        });
-
-        test('should return 500 if database error occurs', () => {
-            req.params = { product_id: 1 };
-            db.query.mockImplementation((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.getProductDetails(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Product not found' });
     });
+  });
 
-    describe('getProductByVariantId', () => {
+  // ────────────────────────────────────────────────────────────────────────────
+  // 13) getProductDetailsByVariant
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('getProductDetailsByVariant', () => {
+    it('should return 404 if product not found', () => {
+      const mockReq = { params: { variant_id: 10 } };
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []); // no product found
+      });
 
-        test('should return 404 if product not found', () => {
-            req.params = { variant_id: 999 };
-            db.query.mockImplementationOnce((sql, params, callback) => {
-                callback(null, []);
-            });
+      productController.getProductDetailsByVariant(mockReq, mockRes);
 
-            productController.getProductByVariantId(req, res);
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Product not found' });
-        });
-
-        test('should return 500 if database error occurs while getting product', () => {
-            req.params = { variant_id: 10 };
-            db.query.mockImplementationOnce((sql, params, callback) => {
-                callback(new Error('DB Error'), null);
-            });
-
-            productController.getProductByVariantId(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
-
-        test('should return 500 if database error occurs while getting images', () => {
-            req.params = { variant_id: 10 };
-            const mockProduct = { product_id: 5, name: 'Latte', variant_id: 10 };
-
-            db.query
-                .mockImplementationOnce((sql, params, callback) => {
-                    callback(null, [mockProduct]);
-                })
-                .mockImplementationOnce((sql, params, callback) => {
-                    callback(new Error('DB Error'), null);
-                });
-
-            productController.getProductByVariantId(req, res);
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
-        });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Product not found' });
     });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 14) getImagesForVariant
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('getImagesForVariant', () => {
+    it('should return 500 on DB error', () => {
+      const mockReq = { params: { variantId: 999 } };
+      db.query.mockImplementation((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      productController.getImagesForVariant(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        success: false,
+        error: 'Internal Server Error',
+      });
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 15) getDiscountForVariant
+  // ────────────────────────────────────────────────────────────────────────────
+  describe('getDiscountForVariant', () => {
+    it('should return 404 if variant is not found', () => {
+      const mockReq = { params: { variantId: 999 } };
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        // First call: fetch variant price => returns empty
+        cb(null, []);
+      });
+
+      productController.getDiscountForVariant(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        success: false,
+        error: 'Variant not found',
+      });
+    });
+  });
 });

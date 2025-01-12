@@ -19,7 +19,7 @@ exports.searchProducts = (req, res) => {
     const searchTerms = search.trim().split(' ').filter(Boolean);
 
     // Build the WHERE clause and query parameters
-    let whereClause = '';
+    let whereClause = '1=1';
     let queryParams = [];
 
     if (searchTerms.length > 0) {

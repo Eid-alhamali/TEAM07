@@ -1,207 +1,470 @@
-// cart.test.js
-const request = require("supertest");
-const app = require("../index");
-const mysql = require("mysql2");
-const {
-    generateMockUserId,
-    generateMockVariantId,
-    generateMockCartItems,
-    generateMockAddress,
-} = require("../utils/mockData.js");
+/**
+ * @file cart.test.js
+ * @description Unit tests for cartController
+ */
 
-// Mocking functions
-jest.mock("mysql2");
+const cartController = require('../controllers/cartController');
+const db = require('../config/db');
 
-describe("Cart API Endpoints", () => {
-    beforeEach(() => {
-        mysql.createConnection().query.mockReset();
+// We mock the entire db module so that db.query can be easily controlled
+jest.mock('../config/db', () => ({
+  query: jest.fn(),
+}));
+
+describe('cartController', () => {
+  let req, res;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    req = {
+      user: {},
+      body: {},
+      params: {},
+    };
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 1) getItems
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('getItems', () => {
+    it('should return 400 if user ID is not provided', () => {
+      // userId is missing
+      req.user = {}; // no user_id
+      cartController.getItems(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ error: 'User ID is required' });
+      expect(db.query).not.toHaveBeenCalled();
     });
 
-    test("GET /api/cart/:user_id should fetch cart items", async () => {
-        const mockUserId = generateMockUserId();
-        const mockCartItems = generateMockCartItems();
+    it('should return 500 if DB error occurs', () => {
+      req.user.user_id = 123;
+      db.query.mockImplementation((sql, params, callback) => {
+        callback(new Error('DB Error'), null);
+      });
 
-        mysql
-            .createConnection()
-            .query.mockImplementation((sql, params, callback) =>
-                callback(null, mockCartItems)
-            );
-
-        const res = await request(app).get(`/api/cart/${mockUserId}`);
-
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({ items: mockCartItems, total: 200 });
-
-        // Normalize query string
-        const expectedQuery = `
-            SELECT ci.product_id, p.name, p.price, ci.quantity, (p.price * ci.quantity) AS subtotal
-            FROM ShoppingCartItems ci
-            JOIN Products p ON ci.product_id = p.product_id
-            WHERE ci.cart_id = (SELECT cart_id FROM ShoppingCart WHERE user_id = ? LIMIT 1)
-            `
-            .replace(/\s+/g, " ")
-            .trim(); // Remove extra spaces
-
-        const receivedQuery = mysql
-            .createConnection()
-            .query.mock.calls[0][0].replace(/\s+/g, " ")
-            .trim(); // Normalize actual query
-
-        expect(receivedQuery).toBe(expectedQuery); // Compare normalized queries
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.any(String),
-            [String(mockUserId)], // Ensure user_id is passed as a string
-            expect.any(Function)
-        );
+      cartController.getItems(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
     });
 
-    test("POST /api/cart/add should add an item to the cart", async () => {
-        const mockUserId = generateMockUserId();
-        const mockVariantId = generateMockVariantId();
-        const mockQuantity = 3;
+    it('should return cart items with or without discount applied', () => {
+      req.user.user_id = 123;
+      const mockResults = [
+        {
+          product_name: 'Coffee A',
+          variantId: 1,
+          quantity: 2,
+          price: 10,
+          weight: 500,
+          image: 'urlA',
+          discount_type: 'percentage',
+          discount_value: 10,
+        },
+        {
+          product_name: 'Coffee B',
+          variantId: 2,
+          quantity: 1,
+          price: 20,
+          weight: 250,
+          image: 'urlB',
+          discount_type: null,
+          discount_value: null,
+        },
+      ];
+      db.query.mockImplementation((sql, params, callback) => {
+        callback(null, mockResults);
+      });
 
-        mysql
-            .createConnection()
-            .query.mockImplementationOnce((sql, params, callback) =>
-                callback(null, [{ quantity: 10 }])
-            ) // Check stock
-            .mockImplementationOnce((sql, params, callback) => callback(null)); // Add to cart
+      cartController.getItems(req, res);
 
-        const res = await request(app).post("/api/cart/add").send({
-            user_id: mockUserId,
-            variant_id: mockVariantId,
-            quantity: mockQuantity,
+      // The second item has no discount
+      // The first item discount => 10% off => 10 - 1 = 9
+      expect(res.status).not.toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith([
+        {
+          product_name: 'Coffee A',
+          variantId: 1,
+          quantity: 2,
+          price: 9, // discount applied
+          weight: 500,
+          image: 'urlA',
+          discount_type: 'percentage',
+          discount_value: 10,
+        },
+        {
+          product_name: 'Coffee B',
+          variantId: 2,
+          quantity: 1,
+          price: 20,
+          weight: 250,
+          image: 'urlB',
+          discount_type: null,
+          discount_value: null,
+        },
+      ]);
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 2) addToCart
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('addToCart', () => {
+    it('should return 500 if DB error when retrieving cart', () => {
+      req.user.user_id = 1;
+      req.body = { variantId: 101 };
+      db.query.mockImplementationOnce((sql, params, callback) => {
+        callback(new Error('DB Error'), null);
+      });
+
+      cartController.addToCart(req, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+    });
+
+    it('should return 404 if cart not found', () => {
+      req.user.user_id = 1;
+      req.body = { variantId: 101 };
+      // First query => SELECT cart_id => returns empty
+      db.query.mockImplementationOnce((sql, params, callback) => {
+        callback(null, []);
+      });
+
+      cartController.addToCart(req, res);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Shopping cart not found' });
+    });
+
+    it('should return 500 if DB error when checking item in cart', () => {
+      // First query => cart found
+      db.query
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ cart_id: 999 }]);
+        })
+        // second query => fails
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(new Error('DB Error'), null);
         });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({ message: "Item added to cart" });
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            "SELECT quantity FROM Product_Variant WHERE variant_id = ?",
-            [mockVariantId],
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("INSERT INTO Cart_Items"),
-            expect.arrayContaining([mockUserId, mockVariantId, mockQuantity]),
-            expect.any(Function)
-        );
+      req.user.user_id = 1;
+      req.body = { variantId: 101 };
+      cartController.addToCart(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
     });
 
-    test("PUT /api/cart/update should update cart item quantity", async () => {
-        const mockUserId = generateMockUserId();
-        const mockVariantId = generateMockVariantId(); 
-        const mockQuantity = 5;
+    it('should increment item if it already exists in cart', () => {
+      // 1) cart found
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ cart_id: 999 }]);
+      });
+      // 2) item found => quantity=5
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ quantity: 5 }]);
+      });
+      // 3) now calls checkStockAndUpdateCart => we mock the stock query => stock=10
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        // stock => 10
+        cb(null, [{ stock: 10 }]);
+      });
+      // 4) update query => success
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, { affectedRows: 1 });
+      });
 
-        mysql
-            .createConnection()
-            .query.mockImplementationOnce((sql, params, callback) =>
-                callback(null, [{ quantity: 10 }])
-            ) // Check stock
-            .mockImplementationOnce((sql, params, callback) => callback(null)); // Update quantity
+      req.user.user_id = 1;
+      req.body = { variantId: 101 };
+      cartController.addToCart(req, res);
 
-        const res = await request(app).put("/api/cart/update").send({
-            user_id: mockUserId,
-            variant_id: mockVariantId,
-            quantity: mockQuantity,
-        });
-
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({ message: "Cart item updated" });
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            "SELECT quantity FROM Product_Variant WHERE variant_id = ?",
-            [mockVariantId],
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("UPDATE Cart_Items"),
-            expect.arrayContaining([mockQuantity, mockUserId, mockVariantId]),
-            expect.any(Function)
-        );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Item quantity updated successfully' });
     });
 
-    test("DELETE /api/cart/remove should remove an item from the cart", async () => {
-        const mockUserId = generateMockUserId();
-        const mockVariantId = generateMockVariantId();
+    it('should add item if not in cart', () => {
+      // 1) cart found
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ cart_id: 999 }]);
+      });
+      // 2) item not found => []
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []);
+      });
+      // 3) calls checkStockAndAddItem => stock=5
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ stock: 5 }]);
+      });
+      // 4) insert => success
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, { insertId: 123 });
+      });
 
-        mysql
-            .createConnection()
-            .query.mockImplementation((sql, params, callback) =>
-                callback(null)
-            );
+      req.user.user_id = 1;
+      req.body = { variantId: 101 };
+      cartController.addToCart(req, res);
 
-        const res = await request(app).delete("/api/cart/remove").send({
-            user_id: mockUserId,
-            variant_id: mockVariantId,
-        });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Item added to cart successfully' });
+    });
+  });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({ message: "Item removed from cart" });
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("DELETE FROM Cart_Items"),
-            expect.arrayContaining([mockUserId, mockVariantId]),
-            expect.any(Function)
-        );
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 3) incrementItem
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('incrementItem', () => {
+    it('should return 500 if DB error in stock query', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(new Error('DB error'), null);
+      });
+      cartController.incrementItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
     });
 
-    test("POST /api/cart/checkout should place an order", async () => {
-        const mockUserId = generateMockUserId();
-        const mockAddress = generateMockAddress();
-        const mockCartItems = generateMockCartItems();
-        const mockOrderId = 12345;
+    it('should return 404 if variant not found in stock query', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []);
+      });
+      cartController.incrementItem(101, 1, res);
 
-        mysql
-            .createConnection()
-            .query.mockImplementationOnce((sql, params, callback) =>
-                callback(null, [mockAddress])
-            ) // Fetch address
-            .mockImplementationOnce((sql, params, callback) =>
-                callback(null, mockCartItems)
-            ) // Fetch cart items
-            .mockImplementationOnce((sql, params, callback) =>
-                callback(null, { insertId: mockOrderId })
-            ) // Create order
-            .mockImplementationOnce((sql, params, callback) => callback(null)) // Insert order items
-            .mockImplementationOnce((sql, params, callback) => callback(null)); // Clear cart
-
-        const res = await request(app).post("/api/cart/checkout").send({
-            user_id: mockUserId,
-        });
-
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({
-            message: "Order placed successfully",
-            order_id: mockOrderId,
-            delivery_address: mockAddress,
-        });
-
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining(
-                "SELECT address_id, address_line, city, state, postal_code, country"
-            ),
-            [mockUserId],
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining(
-                "SELECT ci.variant_id, p.price, ci.quantity"
-            ),
-            [mockUserId],
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("INSERT INTO Orders"),
-            [mockUserId, 200],
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("INSERT INTO Order_Items"),
-            expect.any(Array),
-            expect.any(Function)
-        );
-        expect(mysql.createConnection().query).toHaveBeenCalledWith(
-            expect.stringContaining("DELETE FROM Cart_Items"),
-            [mockUserId],
-            expect.any(Function)
-        );
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Variant not found' });
     });
+
+    it('should return 500 if DB error in cart query', () => {
+      // stock is found
+      db.query
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ stock: 10 }]);
+        })
+        // cart query error
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(new Error('DB error'), null);
+        });
+
+      cartController.incrementItem(101, 1, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+    });
+
+    it('should return 404 if item not in cart', () => {
+      // 1) stock => 10
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ stock: 10 }]);
+      });
+      // 2) cart => no item
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []);
+      });
+
+      cartController.incrementItem(101, 1, res);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Item not in cart' });
+    });
+
+    it('should return 400 if newQuantity > stock', () => {
+      // 1) stock => 2
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ stock: 2 }]);
+      });
+      // 2) cart => quantity=2 => newQuantity=3 => over stock
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ quantity: 2 }]);
+      });
+
+      cartController.incrementItem(101, 1, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Insufficient stock' });
+    });
+
+    it('should return 500 if DB error while updating quantity', () => {
+      db.query
+        // stock => 10
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ stock: 10 }]);
+        })
+        // cart => quantity=2 => newQuantity=3 => OK
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ quantity: 2 }]);
+        })
+        // update => error
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(new Error('Update error'), null);
+        });
+
+      cartController.incrementItem(101, 1, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Failed to update quantity' });
+    });
+
+    it('should succeed with json { message: "success" } if stock is sufficient', () => {
+      db.query
+        // stock => 10
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ stock: 10 }]);
+        })
+        // cart => quantity=2 => newQuantity=3 => under stock
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ quantity: 2 }]);
+        })
+        // update => success
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, { affectedRows: 1 });
+        });
+
+      cartController.incrementItem(101, 1, res);
+      expect(res.json).toHaveBeenCalledWith({ message: 'success' });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 4) decrementItem
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('decrementItem', () => {
+    it('should return 500 if DB error in cart query', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(new Error('DB error'), null);
+      });
+      cartController.decrementItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+    });
+
+    it('should return 404 if item not in cart', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []);
+      });
+      cartController.decrementItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Item not in cart' });
+    });
+
+    it('should return 400 if currentQuantity <= 1', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, [{ quantity: 1 }]);
+      });
+      cartController.decrementItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Quantity cannot be less than 1' });
+    });
+
+    it('should return 500 if DB error while updating quantity', () => {
+      // quantity=3 => newQuantity=2 => ok
+      db.query
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ quantity: 3 }]);
+        })
+        // update => error
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(new Error('Update error'), null);
+        });
+
+      cartController.decrementItem(101, 1, res);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Failed to update quantity' });
+    });
+
+    it('should succeed if item decrements successfully', () => {
+      db.query
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, [{ quantity: 5 }]);
+        })
+        .mockImplementationOnce((sql, params, cb) => {
+          cb(null, { affectedRows: 1 });
+        });
+
+      cartController.decrementItem(101, 1, res);
+      expect(res.json).toHaveBeenCalledWith({ message: 'success' });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 5) removeItem
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('removeItem', () => {
+    it('should return 500 if DB error', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+      cartController.removeItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+    });
+
+    it('should return 404 if affectedRows=0', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, { affectedRows: 0 });
+      });
+      cartController.removeItem(101, 1, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Item not found in cart' });
+    });
+
+    it('should succeed with {message: "success"} if item is removed', () => {
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, { affectedRows: 1 });
+      });
+      cartController.removeItem(101, 1, res);
+
+      expect(res.json).toHaveBeenCalledWith({ message: 'success' });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 6) getOneItem
+  // ─────────────────────────────────────────────────────────────────────────────
+  describe('getOneItem', () => {
+    it('should return 500 on DB error', () => {
+      req.params.variantId = 999;
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(new Error('DB Error'), null);
+      });
+
+      cartController.getOneItem(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Internal server error' });
+    });
+
+    it('should return 404 if no results', () => {
+      req.params.variantId = 999;
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, []);
+      });
+
+      cartController.getOneItem(req, res);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Product variant not found' });
+    });
+
+    it('should return 200 and the item details if found', () => {
+      req.params.variantId = 999;
+      const mockResults = [
+        {
+          product_name: 'Coffee AAA',
+          variantId: 999,
+          stock: 50,
+          price: 20,
+          weight: 500,
+          image: 'http://example.com/img.jpg',
+        },
+      ];
+      db.query.mockImplementationOnce((sql, params, cb) => {
+        cb(null, mockResults);
+      });
+
+      cartController.getOneItem(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockResults[0]);
+    });
+  });
 });
