@@ -13,6 +13,7 @@ exports.listProducts = (req, res) => {
         grind_type,
         caffeine_content,
         origin,
+        processing_method,
         average_rating,
         sort_by = 'price', // Default sorting
         sort_order = 'asc' // Default order
@@ -46,6 +47,7 @@ exports.listProducts = (req, res) => {
             p.roast_level, 
             p.bean_type, 
             p.grind_type, 
+            p.processing_method,
             p.description,
             p.caffeine_content, 
             p.origin, 
@@ -95,6 +97,10 @@ exports.listProducts = (req, res) => {
     if (grind_type) {
         conditions.push(`p.grind_type = ?`);
         params.push(grind_type);
+    }
+    if (processing_method) {
+        conditions.push(`p.processing_method = ?`);
+        params.push(processing_method);
     }
     if (caffeine_content) {
         conditions.push(`p.caffeine_content = ?`);

@@ -4,8 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "./ProductCard";
 import "./ProductsPage.css";
+import useFetchCategories from "../../hooks/userFetchCategories";
 
 const ProductsPage = () => {
+  const { categories } = useFetchCategories();
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({});
   const [sortOption, setSortOption] = useState({ field: 'price', order: 'asc' });
@@ -100,10 +102,17 @@ const ProductsPage = () => {
           case 'origin':
             label = 'Origin';
             break;
+          case 'category_id':
+            label = 'Category';
+            break;
           default:
             label = key;
         }
-        breadcrumbs.push({ label, value });
+        if (key === 'category_id' && categories[value - 1]) {
+          breadcrumbs.push({ label: 'Category', value: categories[value - 1].name });
+        } else {
+          breadcrumbs.push({ label, value });
+        }
       }
     });
     return breadcrumbs;

@@ -10,6 +10,7 @@ const reviewRoutes = require('./routes/reviewRoutes'); // Import review routes
 const checkoutRoutes = require('./routes/checkoutRoutes'); 
 const orderRoutes = require('./routes/orderRoutes'); 
 const wishlistRoutes = require('./routes/wishlistRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');

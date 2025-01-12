@@ -6,7 +6,7 @@ import Cart from './components/Cart';
 import ProductsPage from './components/ProductsPage/ProductsPage';
 import ProductDetail from './components/ProductDetail/ProductDetail'; // Import ProductDetail
 import { CartProvider } from './CartContext'; // Import CartProvider
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import LoginForm from "./components/LoginForm";
 import Register from "./components/Register";
 import WriteReview from './components/WriteReview'; 
