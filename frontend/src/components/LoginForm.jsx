@@ -32,6 +32,25 @@ const LoginForm = () => {
     try {
       const response = await axios.post("http://localhost:5001/auth/login", { email, password });
       localStorage.setItem("token", response.data.token);
+      const token = localStorage.getItem('token');
+      const cart = JSON.parse(localStorage.getItem('cart'));
+    
+      if (cart && Array.isArray(cart) && cart.length > 0) {
+        // Call the endpoint to update the cart
+        await axios.post(
+          "http://localhost:5001/api/cart/sync_cart", 
+          cart, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+            },
+          }
+        );
+        
+        // If the cart update is successful, clear the cart from localStorage
+        localStorage.removeItem('cart');
+      }
+    
       navigate("/");
     } catch (err) {
       setError("Invalid email or password.");

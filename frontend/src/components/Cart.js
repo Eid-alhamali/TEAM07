@@ -2,11 +2,24 @@ import  { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Cart.css';
+import Toast from './Toast';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState(  [  ]);
   const [totalPrice, setTotalPrice] = useState(0);
   const token = localStorage.getItem('token');
+
+  const [toast, setToast] = useState({ visible: false, message: '', type: '' });
+
+  const showToast = (message, type) => {
+    setToast({ visible: true, message, type });
+  };
+
+  const handleCloseToast = () => {
+    setToast({ visible: false, message: '', type: '' });
+  };
+
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -165,10 +178,9 @@ const Cart = () => {
 
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const updatedCart = cart.filter((item) => item.variantId !== variantId);
-
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       setCartItems(updatedCart);
-
+      showToast('Item removed from your cart successfully!', 'success');
       return; 
     }
   
@@ -182,12 +194,15 @@ const Cart = () => {
       .then((response) => {
         if (response.data.message === 'success') {
           setCartItems((prevItems) => prevItems.filter((item) => item.variantId !== variantId));
+          showToast('Item removed from your cart successfully!', 'success');
         } else {
-          console.error('Unexpected response:', response.data);
+          console.error('Unexpected response:', response.data);  
+          showToast('Unable to remove item. Please try again later.', 'error');
         }
       })
       .catch((error) => {
         console.error('Error removing cart item:', error);
+        showToast('Unable to remove item. Please try again later.', 'error');
         
       });
   };
@@ -220,7 +235,7 @@ const Cart = () => {
           <div className="cartPage-items">
             {cartItems.map((item) => (
               <div className="cartPage-item" key={item.variantId}>
-                <img src={`http://localhost:5001${item.image}`} alt={item.product_name} className="cartPage-itemImage" />
+                <img src={`http://localhost:5001${item.image}`} alt={item.product_name} className="cartPage-itemImage" onError={(e) => e.target.src = 'http://localhost:5001/assets/images/products/default_mockup.png'} />
                 <div className="cartPage-itemDetails">
                   <h3 className="cartPage-itemName">{item.product_name}</h3>
                   <p className="cartPage-itemWeight">{item.weight}</p>
@@ -264,6 +279,12 @@ const Cart = () => {
           </div>
         </div>
       )}
+       <Toast
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onClose={handleCloseToast}
+      />
     </div>
   );
 };

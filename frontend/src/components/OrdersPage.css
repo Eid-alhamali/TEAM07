@@ -1,491 +1,447 @@
 .orders-page__container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
-    color: #333;
-    padding-top: var(--spacing-sm);
-    top: 0;
-  }
-  
-  .orders-page__title {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    text-align: center;
-    font-weight: 600;
-    color: #222;
-  }
-  
-  .orders-page__loading-container,
-  .orders-page__error,
-  .orders-page__no-orders {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 1.1rem;
-    color: #555;
-  }
-  
-  .orders-page__spinner {
-    display: inline-block;
-    padding: 10px;
-  }
-  
-  .orders-page__list {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
-  
-  .orders-page__order {
-    border: 1px solid #d0cdff;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #fff;
-    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
-  }
-  
-  .orders-page__order.expanded {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-  }
-  
-  .orders-page__order-header {
-    display: flex;
-    justify-content: space-between;
-    background: #EBEAFF;
-    padding: 20px;
-    cursor: pointer;
-    align-items: center;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .orders-page__order-header:hover {
-    background: #e6e4ff;
-  }
-  
-  .orders-page__order-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    align-items: center;
-  }
-  
-  .orders-page__order-id {
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .orders-page__order-total {
-    color: #444;
-    font-weight: 500;
-  }
-  
-  .orders-page__order-status {
-    font-style: normal;
-    font-weight: 500;
-    color: #3028d3;
-    text-transform: capitalize;
-  }
-  
-  .orders-page__order-date {
-    color: #999;
-    font-size: 0.9rem;
-  }
-  
-  .orders-page__toggle-icon {
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 1;
-    color: #381c9e;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .orders-page__order.expanded .orders-page__toggle-icon {
-    transform: rotate(90deg);
-  }
-  
-  .orders-page__order-details {
-    padding: 20px;
-    background: #ffffff;
-    position: relative; /* For positioning the invoice section */
-  }
-  
-  .orders-page__items-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .orders-page__item {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .orders-page__item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-  
-  .orders-page__item-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-  }
-  
-  .orders-page__item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    flex: 1; /* Ensure it takes the remaining space */
-  }
-  
-  .orders-page__item-name {
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .orders-page__item-weight,
-  .orders-page__item-price,
-  .orders-page__item-quantity {
-    font-size: 0.95rem;
-    color: #555;
-  }
-  
-  /* New Styles for Per-Item Actions */
-  .orders-page__item-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .orders-page__btn-comment,
-  .orders-page__btn-refund {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-    cursor: pointer;
-    flex: none;
-  }
-  
-  .orders-page__btn-comment,
-  .orders-page__btn-refund {
-    background: #e5e5e5;
-    color: #666;
-  }
-  
-  .orders-page__btn-comment:disabled,
-  .orders-page__btn-refund:disabled {
-    background: #d4d4d4;
-    cursor: not-allowed;
-    color: #999;
-  }
-  
-  .orders-page__btn-comment:not(:disabled) {
-    background: #8b0f0f;
-    color: #fff;
-  }
-  
-  .orders-page__btn-refund:not(:disabled) {
-    background: #000000;
-    color: #fff;
-  }
-  
-  .orders-page__btn-comment:not(:disabled):hover {
-    background: #6d0707;
-  }
-  
-  .orders-page__btn-refund:not(:disabled):hover {
-    background: #000000;
-  }
-  
-  .orders-page__btn-comment:not(:disabled):active,
-  .orders-page__btn-refund:not(:disabled):active {
-    transform: scale(0.98);
-  }
-  
-  /* Invoice Section Styles */
-  .orders-page__invoice-section {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f9f9f9;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-  
-  .orders-page__invoice-text {
-    flex: 1;
-  }
-  
-  .orders-page__invoice-text h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  .orders-page__invoice-text p {
-    margin: 2px 0;
-    font-size: 0.95rem;
-    color: #555;
-  }
-  
-  .orders-page__pdf-wrapper {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-  }
-  
-  .orders-page__pdf-icon {
-    width: 30px; /* Adjust size as needed */
-    height: 30px; /* Adjust size as needed */
-    transition: opacity 0.3s ease;
-  }
-  
-  .orders-page__pdf-icon.disabled {
-    opacity: 0.5; 
-    cursor: not-allowed;
-  }
-  
-  .orders-page__loading-text {
-    margin-left: 10px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  /* Existing Styles... */
-  
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    .orders-page__order-info {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-  
-    .orders-page__item {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .orders-page__item-image {
-      width: 100%;
-      height: auto;
-    }
-  
-    .orders-page__invoice-section {
-      position: static;
-      margin-top: 20px;
-      width: 100%;
-      justify-content: flex-start;
-    }
-  
-    .orders-page__pdf-wrapper {
-      justify-content: flex-start;
-    }
-  }
-  
-  /* Cancel Order Button Styles */
-  .orders-page__btn-cancel {
-    padding: 10px 16px;
-    background-color: #ff4d4f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-    margin-top: 20px;
-  }
-  
-  .orders-page__btn-cancel:hover {
-    background-color: #d9363e;
-  }
-  
-  .orders-page__btn-cancel:active {
-    transform: scale(0.98);
-  }
-  
-  .orders-page__btn-cancel:disabled {
-    background-color: #ffccc7;
-    cursor: not-allowed;
-    color: #fff;
-  }
-  
-  /* Canceled Message Styles */
-  .orders-page__canceled-message {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #fff1f0;
-    border: 1px solid #ffa39e;
-    border-radius: 4px;
-    color: #a8071a;
-    font-weight: 500;
-  }
-  
-  /* Cancel Error Message Styles */
-  .orders-page__cancel-error {
-    margin-top: 10px;
-    color: #ff4d4f;
-    font-size: 0.9rem;
-  }
-  
-
-  .orders-page__actions {
-    display: flex;
-    gap: 15px; /* Space between buttons */
-    margin-top: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  padding-top: var(--spacing-sm);
+  top: 0;
 }
 
-.orders-page__btn-accept,
-.orders-page__btn-decline,
-.orders-page__btn-deliver {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
-}
-/* Accept Button Styling */
-.orders-page__btn-accept {
-  background-color: #89cff0; /* Baby blue */
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
-}
-
-.orders-page__btn-accept:hover {
-  background-color: #68b9e5; /* Darker baby blue on hover */
-}
-
-.orders-page__btn-accept:active {
-  transform: scale(0.97); /* Slight shrink effect on click */
-}
-
-/* Decline Button Styling */
-.orders-page__btn-decline {
-  background-color: #ff6961; /* Light red for decline */
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
-}
-
-.orders-page__btn-decline:hover {
-  background-color: #e65a54; /* Darker red on hover */
-}
-
-.orders-page__btn-decline:active {
-  transform: scale(0.97); /* Slight shrink effect on click */
-}
-
-/* Send Delivery Button Styling */
-.orders-page__btn-send-delivery {
-  background-color: #89cff0; /* Baby blue */
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease-in-out;
-}
-
-.orders-page__btn-send-delivery:hover {
-  background-color: #68b9e5; /* Darker baby blue on hover */
-}
-
-.orders-page__btn-send-delivery:active {
-  transform: scale(0.97); /* Slight shrink effect on click */
-}
-
-/* Delivered Status Label Styling */
-.orders-page__status-delivered {
-  color: #2ecc71; /* Green for delivered status */
+.orders-page__title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
   font-weight: 600;
-  font-size: 1rem;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #e8f8f5;
-  display: inline-block;
+  color: #222;
 }
 
-.orders-page__status-canceled {
-  color: #f0f0f0; /* Green for delivered status */
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #f32424;
-  display: inline-block;
+.orders-page__loading-container,
+.orders-page__error,
+.orders-page__no-orders {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.1rem;
+  color: #555;
 }
 
-/* Button Container Styling */
-.orders-page__actions {
+.orders-page__spinner {
+  display: inline-block;
+  padding: 10px;
+}
+
+.orders-page__list {
   display: flex;
-  gap: 15px; /* Space between buttons */
+  flex-direction: column;
+  gap: 25px;
+}
+
+.orders-page__order {
+  border: 1px solid #d0cdff;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.orders-page__order.expanded {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.orders-page__order-header {
+  display: flex;
+  justify-content: space-between;
+  background: #EBEAFF;
+  padding: 20px;
+  cursor: pointer;
+  align-items: center;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.orders-page__order-header:hover {
+  background: #e6e4ff;
+}
+
+.orders-page__order-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+.orders-page__order-id {
+  font-weight: 600;
+  color: #333;
+}
+
+.orders-page__order-total {
+  color: #444;
+  font-weight: 500;
+}
+
+.orders-page__order-status {
+  font-style: normal;
+  font-weight: 500;
+  color: #3028d3;
+  text-transform: capitalize;
+}
+
+.orders-page__order-date {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.orders-page__toggle-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+  color: #381c9e;
+  transition: transform 0.2s ease-in-out;
+}
+
+.orders-page__order.expanded .orders-page__toggle-icon {
+  transform: rotate(90deg);
+}
+
+.orders-page__order-details {
+  padding: 20px;
+  background: #ffffff;
+  position: relative; /* For positioning the invoice section */
+}
+
+.orders-page__items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.orders-page__item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.orders-page__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.orders-page__item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.orders-page__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1; /* Ensure it takes the remaining space */
+}
+
+.orders-page__item-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.orders-page__item-weight,
+.orders-page__item-price,
+.orders-page__item-quantity {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* New Styles for Per-Item Actions */
+.orders-page__item-actions {
+  display: flex;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin: 10px;
+  font-size: 0.9em;
+}
+
+.orders-page__btn-comment,
+.orders-page__btn-refund {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 5px;
+  margin-left: 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  cursor: pointer;
+  flex: none;
+}
+
+
+
+
+.orders-page__btn-comment,
+.orders-page__btn-refund {
+  background: #e5e5e5;
+  color: #666;
+}
+
+.orders-page__btn-comment:disabled,
+.orders-page__btn-refund:disabled {
+  background: #d4d4d4;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.orders-page__btn-comment:not(:disabled) {
+  background: #0748c2;
+  color: #fff;
+}
+
+.orders-page__btn-refund:not(:disabled) {
+  background: #000000;
+  color: #fff;
+}
+
+.orders-page__btn-comment:not(:disabled):hover {
+  background: #0542b3;
+}
+
+.orders-page__btn-refund:not(:disabled):hover {
+  background: #000000;
+}
+
+.orders-page__btn-comment:not(:disabled):active,
+.orders-page__btn-refund:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* Invoice Section Styles */
+.orders-page__invoice-section {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.orders-page__invoice-text {
+  flex: 1;
+}
+
+.orders-page__invoice-text h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.orders-page__invoice-text p {
+  margin: 2px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.orders-page__pdf-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.orders-page__pdf-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  transition: opacity 0.3s ease;
+}
+
+.orders-page__pdf-icon.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+
+.orders-page__loading-text {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Existing Styles... */
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .orders-page__order-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .orders-page__item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .orders-page__item-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .orders-page__invoice-section {
+    position: static;
+    margin-top: 20px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .orders-page__pdf-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+/* Cancel Order Button Styles */
+.orders-page__btn-cancel {
+  padding: 10px 16px;
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
   margin-top: 20px;
 }
 
-.orders-section {
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
+.orders-page__btn-cancel:hover {
+  background-color: #d9363e;
 }
 
-.orders-section-title {
-  background-color: #f5f5f5;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-weight: bold;
+.orders-page__btn-cancel:active {
+  transform: scale(0.98);
 }
 
-.orders-section-title:hover {
-  background-color: #eaeaea;
-}
-
-.orders-section-content {
-  padding: 10px 15px;
-}
-
-.go-back-button {
-  margin-bottom: 20px;
-  padding: 10px 15px;
-  background-color: #007bff;
+.orders-page__btn-cancel:disabled {
+  background-color: #ffccc7;
+  cursor: not-allowed;
   color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-.go-back-button:hover {
-  background-color: #0056b3;
+/* Canceled Message Styles */
+.orders-page__canceled-message {
+  width: 300px;
+  max-width: 300px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff1f0;
+  border: 1px solid #ffa39e;
+  border-radius: 4px;
+  color: #a8071a;
+  font-weight: 500;
 }
+
+/* Cancel Error Message Styles */
+.orders-page__cancel-error {
+  margin-top: 10px;
+  color: #ff4d4f;
+  font-size: 0.9rem;
+}
+
+/* .orders-page__refund-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+} */
+
+.orders-page__refund-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.orders-page__refund-status.approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.orders-page__refund-status.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.refund-list__btn-pending,
+.refund-list__btn-approved,
+.refund-list__btn-rejected {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  cursor: pointer;
+  flex: none;
+}
+
+.refund-list__btn-approved {
+  background: #109137;
+  color: #fff;
+  cursor: default;
+}
+
+.refund-list__btn-rejected {
+  background: #FF4500;
+  color: #fff;
+  cursor: default;
+}
+
+
+
+.refund-list__btn-pending {
+  background: #f0a823;
+  color: #fff;
+  cursor: default;
+}
+
+
+.refund-list__btn-pending:active,
+.refund-list__btn-approved:active,
+.refund-list__btn-rejected:active {
+  transform: none;
+}
+
+.refund-list__btn-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px; /* Add some space between the image and the text */
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.orders-page__order-details .orders-page__address {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.orders-page__address-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.orders-page__address p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.orders-page__order-details .orders-page__address p {
+  margin-bottom: 8px;
+}
+

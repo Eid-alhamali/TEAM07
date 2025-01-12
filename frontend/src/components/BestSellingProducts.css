@@ -1,0 +1,155 @@
+/* Scoped CSS Variables within .bestselling-container for consistent scaling */
+.bestselling-container {
+    --base-font-size: 16px;
+    --card-width: 300px;
+    --image-height: 360px;
+    --padding-container: 20px;
+    --padding-info: 15px; /* Reduced from 25px to make fields less tall */
+    --font-size-name: 20px; /* Reduced from 22px */
+    --font-size-rating: 16px; /* Reduced from 18px */
+    --font-size-price: 20px; /* Reduced from 24px */
+    --button-size: 55px;
+    --button-font-size: 24px;
+    --gap-size: 40px;
+    --margin-bottom-name: 10px; /* Reduced from 15px */
+    --margin-bottom-rating: 10px; /* Reduced from 15px */
+    --margin-price: 10px 0; /* Reduced from 15px 0 */
+
+    /* Apply the scoped variables */
+    font-family: Arial, sans-serif;
+    padding: var(--padding-container);
+    text-align: center;
+    background-color: #d9deda;
+}
+
+.bestselling-heading {
+    margin-bottom: 30px;
+    color: #000000;
+    /* Title size remains fixed */
+}
+
+/* Product list grid */
+.bestselling-list {
+    display: flex;
+    gap: var(--gap-size);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.bestselling-product-card {
+    background: #fff;
+    width: var(--card-width);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: none;
+    text-align: center;
+    position: relative;
+    padding: 0;
+}
+
+.bestselling-image-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bestselling-image-link:hover {
+    text-decoration: none;
+}
+
+.bestselling-image-wrapper {
+    width: 100%;
+    height: var(--image-height);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Product info styles */
+.bestselling-product-info {
+    padding: var(--padding-info);
+    background: #fff;
+    text-align: left;
+}
+
+.bestselling-name {
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: var(--margin-bottom-name);
+    font-size: var(--font-size-name);
+    cursor: pointer;
+}
+
+.bestselling-name a {
+    color: #333;
+    text-decoration: none;
+}
+
+.bestselling-rating {
+    margin: 0;
+    margin-bottom: var(--margin-bottom-rating);
+    font-size: var(--font-size-rating);
+    color: #555;
+    background: #f0f0f0;
+    padding: 8px 12px; /* Maintained padding for readability */
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.bestselling-price {
+    margin: var(--margin-price);
+    font-size: var(--font-size-price);
+    color: #333;
+}
+
+.bestselling-add-button {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: var(--button-size);
+    height: var(--button-size);
+    border-radius: 50%;
+    background: #333;
+    color: #fff;
+    border: none;
+    font-size: var(--button-font-size);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bestselling-add-button:hover {
+    background: #555;
+}
+
+.bestselling-view-all {
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.bestselling-view-all a {
+    color: #333;
+    text-decoration: none;
+}
+
+.bestselling-view-all:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .bestselling-container {
+        --card-width: 90%; /* Make cards fluid on smaller screens */
+        --image-height: 250px;
+        --padding-info: 10px;
+        --font-size-name: 18px;
+        --font-size-rating: 14px;
+        --font-size-price: 18px;
+        --button-size: 45px;
+        --button-font-size: 20px;
+        --gap-size: 20px;
+        --margin-bottom-name: 8px;
+        --margin-bottom-rating: 8px;
+        --margin-price: 8px 0;
+    }
+}

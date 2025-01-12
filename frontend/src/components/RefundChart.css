@@ -1,0 +1,119 @@
+.rc-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 900px; /* Increased width to accommodate more buttons */
+    margin: 0 auto;
+  }
+  
+.rc-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+.rc-filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+  
+.rc-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+.rc-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+.rc-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+.rc-input:focus {
+    border-color: #2196F3;
+    outline: none;
+  }
+  
+.rc-toggle-buttons {
+    display: flex;
+    flex-direction: column; /* Stack button groups vertically */
+    align-items: center;
+    margin: 20px 0;
+    gap: 15px; /* Space between button groups */
+  }
+
+.rc-button-group {
+    display: flex;
+    gap: 10px;
+  }
+
+.rc-metric-group .rc-button {
+    padding: 8px 16px; /* Smaller padding for metric buttons */
+    font-size: 14px; /* Smaller font size */
+    border: 2px solid #000000; 
+    color: #000000; 
+    background-color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+.rc-data-group .rc-button {
+    padding: 8px 16px; /* Smaller padding for data selection buttons */
+    font-size: 14px; /* Smaller font size */
+    border: 2px solid #000000; /* Blue border for data selection buttons */
+    color: rgb(0, 0, 0); /* Blue text */
+    background-color: #c4e91e;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+.rc-button.active {
+    background-color: currentColor; /* Use the color defined in the group */
+    color: white;
+  }
+  
+.rc-metric-group .rc-button.active {
+    background-color: #000000; /* Green background for active metric buttons */
+  }
+  
+.rc-data-group .rc-button.active {
+    background-color: #2b2c24; /* Blue background for active data selection buttons */
+  }
+  
+.rc-button:hover {
+    background-color: #f9fcec;
+  }
+  
+.rc-metric-group .rc-button:hover {
+    background-color: #f9fcec; /* Light green on hover for metric buttons */
+  }
+  
+.rc-data-group .rc-button:hover {
+    background-color: #f2f7e0; /* Light blue on hover for data selection buttons */
+  }
+  
+.rc-total-box {
+    text-align: center;
+    margin: 10px 0; /* Reduced vertical spacing */
+    padding: 10px; /* Reduced internal spacing */
+    background-color: #ffffff;
+    border: 1px solid rgb(3, 3, 0);
+    border-radius: 6px; /* Smaller border radius */
+    font-size: 14px; /* Slightly increased font size for readability */
+    font-weight: normal; /* Optional: make the font weight lighter */
+    color: #000000;
+    width: fit-content; /* Adjust width to fit content */
+    margin-left: auto; 
+    margin-right: auto;
+  }

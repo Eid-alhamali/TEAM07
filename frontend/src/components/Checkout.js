@@ -1,27 +1,22 @@
-import { useState ,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Checkout.css';
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Checkout = () => {
-  
   const location = useLocation();
   const { totalPrice, cartItems } = location.state || { totalPrice: 0, cartItems: [] };
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    
-    const token = localStorage.getItem('token'); 
-
-    
+    const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
     }
   }, [navigate]);
 
-  
-  
+  const [showCardIcon, setShowCardIcon] = useState(false);
   const [error, setError] = useState(null);
   const [address, setAddress] = useState({
     firstname: "",
@@ -36,8 +31,7 @@ const Checkout = () => {
   const [payment, setPayment] = useState({
     cardHolderName: "",
     cardNumber: "",
-    cardExpirationMonth: "",
-    cardExpirationYear: "",
+    cardExpiration: "",
     ccv: "",
   });
 
@@ -46,7 +40,35 @@ const Checkout = () => {
     setter((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {  
+  const handleCardNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); 
+    const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 '); 
+    setPayment((prev) => ({ ...prev, cardNumber: formattedValue }));
+  
+    if (value.length === 16) {
+      setShowCardIcon(true);
+      
+    } else {
+      setShowCardIcon(false);
+      
+    }
+  };
+  
+
+  const handleCardExpirationChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+    if (value.length > 2) {
+      value = `${value.slice(0, 2)}/${value.slice(2, 4)}`; // Enforce MM/YY format
+    }
+    setPayment((prev) => ({ ...prev, cardExpiration: value }));
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+    setAddress((prev) => ({ ...prev, phonenumber: value }));
+  };
+
+  const validateForm = () => {
     if (
       !address.firstname || 
       !address.lastname || 
@@ -57,86 +79,73 @@ const Checkout = () => {
       !address.phonenumber || 
       !payment.cardNumber || 
       !payment.cardHolderName || 
-      !payment.cardExpirationMonth || 
-      !payment.cardExpirationYear || 
+      !payment.cardExpiration || 
       !payment.ccv
-    ) {     
-        return false;
+    ) {
+      setError('Please fill out all required fields.');
+      return false;
     }
-    
-    setError('');
+
+    const unformattedCardNumber = payment.cardNumber.replace(/\s/g, '');
+    if (unformattedCardNumber.length !== 16) {
+      setError('Card number must be exactly 16 digits.');
+      return false;
+    }
+
+    const [month, year] = payment.cardExpiration.split('/');
+    if (month && (parseInt(month, 10) < 1 || parseInt(month, 10) > 12)) {
+      setError('Month must be between 01 and 12.');
+      return false;
+    }
+    if (year && parseInt(year, 10) < 25) {
+      setError('Year must be 25 or greater.');
+      return false;
+    }
+
     return true;
   };
 
+  const handlePayment = async () => {
+    if (validateForm()) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const orderData = {
+          address: address,      
+          payment: payment,       
+          cartItems: cartItems,   
+          totalPrice: totalPrice, 
+        };
 
-  
-const handlePayment = async () => {
-  console.log('handlePayment invoked');
-  if (validateForm()) {
-    const token = localStorage.getItem('token');
-    console.log('handlePayment invoked');
-    if (token) {
-      const orderData = {
-        address: address,      
-        payment: payment,       
-        cartItems: cartItems,   
-        totalPrice: totalPrice, 
-      };
+        try {
+          const response = await axios.post(
+            'http://localhost:5001/checkout/status', 
+            orderData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json', 
+              },
+            }
+          );
 
-      try {
-        const response = await axios.post(
-          'http://localhost:5001/checkout/status', 
-          orderData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json', 
-            },
+          if (response.status === 201) {
+            navigate("/order-success", { state: { order_id: response.data.order_id } });
+          } else {
+            console.warn('Unexpected response:', response.data);
           }
-        );
-
-        console.log('handlePayment invoked');
-        if (response.status === 201) {
-          console.log(`order id:  ${response.data.order_id}`);
-          navigate("/order-success",{ state: { order_id: response.data.order_id } });
-        } else {
-          
-          console.warn('Unexpected response:', response.data);
-          
+        } catch (error) {
+          console.error('Error during payment processing:', error);
         }
-      } catch (error) {
-        
-        if (error.response) {
-          
-          console.error('Server Error:', error.response.data);
-          
-        } else if (error.request) {
-          
-          console.error('Network Error:', error.request);
-          
-        } else {
-          
-          console.error('Error:', error.message);
-        }
-        
+      } else {
+        console.error('Authentication token not found.');
       }
-    } else {
-      
-      console.error('Authentication token not found.');
-      
     }
-  } else {
-    
-    console.error('Form validation failed.');
-    
-  }
-};
+  };
 
   return (
     <div className={`checkout-wrapper`}>
-      
       <div className="checkout-form-box">
-        <form action="">
+        <form>
           <h1>Checkout</h1>
           <h2>Shipping Information</h2>
 
@@ -221,7 +230,7 @@ const handlePayment = async () => {
                 placeholder='Phone Number' 
                 name="phonenumber"
                 value={address.phonenumber}
-                onChange={(e) => handleInputChange(e, setAddress)}
+                onChange={handlePhoneNumberChange}
                 required
               />
             </div>
@@ -241,42 +250,37 @@ const handlePayment = async () => {
             />
           </div>
 
-          <div className="checkout-single-input-box">
+
+          <div className="checkout-single-input-box card-number-container">
             <label htmlFor="cardnumber">Card Number</label>
-            <input 
-              type="text" 
-              placeholder='Card Number' 
-              name="cardNumber"
-              value={payment.cardNumber}
-              onChange={(e) => handleInputChange(e, setPayment)}
-              required
-            />
+            <div className="card-number-input-wrapper">
+              <input
+                type="text"
+                placeholder="1234 5678 9012 3456"
+                name="cardNumber"
+                value={payment.cardNumber}
+                onChange={handleCardNumberChange}
+                maxLength={19} // Includes spaces
+                required
+              />
+              <img
+                src="/mastercard.png"
+                alt="MasterCard Icon"
+                className={`card-icon ${showCardIcon ? 'card-icon-visible' : ''}`}
+              />
+            </div>
           </div>
 
-          <div className="checkout-single-label">
-            <label htmlFor="expirationdate">Expiration Date</label>
-          </div>
-          <div className="checkout-double-input-box">
-            <div className="checkout-column1">
-              <input 
-                type="text" 
-                placeholder='Month' 
-                name="cardExpirationMonth"
-                value={payment.cardExpirationMonth}
-                onChange={(e) => handleInputChange(e, setPayment)}
-                required
-              />
-            </div>
-            <div className="checkout-column2">
-              <input 
-                type="text" 
-                placeholder='Year' 
-                name="cardExpirationYear"
-                value={payment.cardExpirationYear}
-                onChange={(e) => handleInputChange(e, setPayment)}
-                required
-              />
-            </div>
+          <div className="checkout-single-input-box">
+            <label htmlFor="expirationdate">Expiration Date (MM/YY)</label>
+            <input 
+              type="text" 
+              placeholder='MM/YY' 
+              name="cardExpiration"
+              value={payment.cardExpiration}
+              onChange={handleCardExpirationChange}
+              required
+            />
           </div>
 
           <div className="checkout-single-input-box">
@@ -287,14 +291,14 @@ const handlePayment = async () => {
               name="ccv"
               value={payment.ccv}
               onChange={(e) => handleInputChange(e, setPayment)}
+              maxLength={4}
               required
             />
           </div>
-          
+
           {error && <p className="checkout-error-message">{error}</p>}
 
           <button type="button" className="checkout-button" onClick={handlePayment}>Pay Now</button>
-
         </form>
       </div>
 
@@ -304,7 +308,11 @@ const handlePayment = async () => {
           {cartItems.map((item, index) => (
             <li key={index} className="checkout-cart-item">
               <div className="checkout-item-image">
-                <img src={`http://localhost:5001${item.image}`} alt={item.product_name} />
+                <img
+                  src={`http://localhost:5001${item.image}`}
+                  alt={item.product_name}
+                  onError={(e) => e.target.src = 'http://localhost:5001/assets/images/products/default_mockup.png'}
+                />
               </div>
               <div className="checkout-item-details">
                 <span className="checkout-item-name">{item.product_name}</span>
@@ -319,7 +327,7 @@ const handlePayment = async () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;

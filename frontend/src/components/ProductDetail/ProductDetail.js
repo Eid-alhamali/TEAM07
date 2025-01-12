@@ -7,6 +7,7 @@ import ReviewsSection from "./ReviewsSection";
 import ProductInfoPanel from "./ProductInfoPanel";
 import { toggleWishlist, getWishlistStatus } from '../../hooks/useWishlist'; // Import toggleWishlist
 import axios from "axios";
+import Toast from '../Toast';
 
 import "./ProductDetail.css";
 
@@ -21,6 +22,18 @@ const ProductDetail = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [wishlistFilled, setWishlistFilled] = useState(false);
+
+
+    const [toast, setToast] = useState({ visible: false, message: '', type: '' });
+
+    const showToast = (message, type) => {
+      setToast({ visible: true, message, type });
+    };
+  
+    const handleCloseToast = () => {
+      setToast({ visible: false, message: '', type: '' });
+    };
+
 
     // Set default variant when product or variants change, and fetch wishlist status
     useEffect(() => {
@@ -65,9 +78,10 @@ const ProductDetail = () => {
     
                 
                 if (response.status === 200) {
-                    alert('Product added to cart successfully!');
+                    
+                    showToast('Product added to cart successfully!', 'success');
                 } else {
-                    alert('Failed to add product to cart. Please try again.');
+                    showToast('An error occurred. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Error adding product to cart:', error);
@@ -102,14 +116,15 @@ const ProductDetail = () => {
                         
                         const existingProduct = cart[existingProductIndex];
                         if (existingProduct.quantity + 1 > stock) {
-                            alert('Stock is insufficient to add more of this product.');
+                            showToast('Stock is insufficient for this product.', 'error');
                             return;
                         }
                         cart[existingProductIndex].quantity += 1;
                     } else {
                         
                         if (newQuantity > stock) {
-                            alert('Stock is insufficient for this product.');
+                            
+                            showToast('Stock is insufficient for this product.', 'error');
                             return;
                         }
                         cart.push({
@@ -125,13 +140,13 @@ const ProductDetail = () => {
                     
                     localStorage.setItem('cart', JSON.stringify(cart));
     
-                    alert('Product added to cart successfully!');
+                    showToast('Product added to cart successfully!', 'success');
                 } else {
-                    alert('Failed to fetch product details. Please try again.');
+                    showToast('Failed to fetch product details. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Error fetching product details:', error);
-                alert('An error occurred while adding the product. Please try again.');
+                showToast('Failed to fetch product details. Please try again.', 'error');
             }
         }
     
@@ -187,6 +202,12 @@ const ProductDetail = () => {
                 averageRating={averageRating}
                 onWriteReview={handleWriteReviewClick}
             />
+             <Toast
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onClose={handleCloseToast}
+      />
         </div>
     );
 };

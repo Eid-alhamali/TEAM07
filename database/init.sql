@@ -89,17 +89,6 @@ CREATE TABLE IF NOT EXISTS DeliveryOptions (
     description TEXT
 );
 
--- Now create tables that reference the above tables
-CREATE TABLE IF NOT EXISTS Address (
-    address_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    address_line VARCHAR(255) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    state VARCHAR(100),
-    postal_code VARCHAR(20),
-    country VARCHAR(100) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS Comments (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -134,6 +123,22 @@ CREATE TABLE IF NOT EXISTS OrderItems (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE SET NULL  -- I have changed here
 );
+
+
+CREATE TABLE IF NOT EXISTS Address (
+    address_id INT AUTO_INCREMENT PRIMARY KEY,
+    address_name VARCHAR(25),
+    user_id INT DEFAULT NULL,
+    order_id INT DEFAULT NULL,
+    address_line VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(25) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE
+);
+
 
 CREATE TABLE IF NOT EXISTS Invoices (
     invoice_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -191,22 +196,16 @@ CREATE TABLE IF NOT EXISTS RefundRequests (
     refund_request_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     user_id INT NOT NULL,
-    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',  -- Status of the refund request
-    notes TEXT,  -- Optional notes, e.g., reason for rejection or additional details
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS ReturnItems (
-    return_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    refund_request_id INT NOT NULL,
-    product_id INT,
+    variant_id INT,
     quantity INT NOT NULL CHECK (quantity > 0),
-    price_at_purchase DECIMAL(10, 2) NOT NULL,  -- Price paid at purchase, including any discounts
-    reason TEXT,  -- Reason provided by customer for the return
-    FOREIGN KEY (refund_request_id) REFERENCES RefundRequests(refund_request_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE SET NULL
+    price_at_purchase DECIMAL(10, 2) NOT NULL,
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',  
+    reason TEXT,
+    reject_reason TEXT DEFAULT NULL,  
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (variant_id) REFERENCES Product_Variant(variant_id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS ShoppingCart (

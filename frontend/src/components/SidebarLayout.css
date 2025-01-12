@@ -2,84 +2,91 @@
 
 
 .sl-sidebar-layout {
-    display: flex;
-    height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    margin: 0; 
-    position: relative;
-    top: 0;
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  margin: 0; 
+  position: relative;
+  top: 0;
 }
-  
-  /* Sidebar styling */
-  .sl-sidebar {
-    top :0;
-    width: 250px;
-    background: linear-gradient(to right, #3e39eb, #5858ee), linear-gradient(to bottom, #3e39eb, #4e36d3);
-    color: #ecf0f1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 30px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Profile section */
-  .sl-profile-section {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .sl-profile-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
 
-    display: block; 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
+/* Sidebar styling */
+.sl-sidebar {
+  top :0;
+  width: 250px;
+  /* background: linear-gradient(to right, #3e39eb, #5858ee), linear-gradient(to bottom, #3e39eb, #4e36d3); */
+  background-color: #3a5d91;
+  color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
-  .sl-profile-name {
-    margin-top: 15px;
-    font-size: 1.2em;
-    font-weight: 600;
-  }
-  
-  /* Navigation styling */
-  .sl-nav {
-    width: 100%;
-  }
-  
-  .sl-nav-list {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .sl-nav-item {
-    width: 100%;
-  }
-  
-  .sl-nav-link {
-    display: block;
-    padding: 15px 20px;
-    color: #ecf0f1;
-    text-decoration: none;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  .sl-nav-link:hover {
-    background-color: #34495e;
-    color: #ffffff;
-  }
-  
-  /* Main content styling */
-  .sl-content {
-    flex: 1;
-    padding: 40px;
-    background-color: #ffffff;
-    overflow-y: auto;
-  }
-  
+
+/* Profile section */
+/* Profile section */
+.sl-profile-section {
+text-align: center;
+margin-bottom: 40px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
+
+/* Profile picture styling */
+.sl-profile-pic {
+width: 100px;
+height: 100px;
+border-radius: 10%;
+object-fit: cover;
+
+display: block; 
+margin: 0; 
+padding: 0; 
+box-sizing: border-box; 
+}
+
+.sl-profile-name {
+margin-top: 15px;
+font-size: 1.5em !important; /* or any size you want */
+font-weight: 600;
+}
+
+/* Navigation styling */
+.sl-nav {
+  width: 100%;
+}
+
+.sl-nav-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.sl-nav-item {
+  width: 100%;
+}
+
+.sl-nav-link {
+  display: block;
+  padding: 15px 20px;
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sl-nav-link:hover {
+  background-color: #25416b;
+  color: #ffffff;
+}
+
+/* Main content styling */
+.sl-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}

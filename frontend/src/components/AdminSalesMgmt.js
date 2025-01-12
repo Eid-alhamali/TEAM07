@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./AdminSalesMgmt.css"; // Import the CSS for styling
+import { useNavigate } from "react-router-dom";
 
 const AdminSalesMgmt = () => {
     const [invoices, setInvoices] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchInvoices = async () => {
             try {
@@ -33,8 +34,8 @@ const AdminSalesMgmt = () => {
             <div className="sales-actions">
                 <button className="action-button">Set Prices/Discounts</button>
                 <button className="action-button">Notify Users About Discounts</button>
-                <button className="action-button">View Revenue/Profit Chart</button>
-                <button className="action-button">Evaluate Refund Requests</button>
+                <button className="action-button" onClick={() => navigate("/invoice_list")}>View Revenue/Profit Chart</button>
+                <button className="action-button" onClick={() => navigate("/refund-list")}>Evaluate Refund Requests</button>
             </div>
             <h2>Invoices</h2>
             <div className="table-container">

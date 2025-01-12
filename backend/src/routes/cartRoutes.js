@@ -28,5 +28,6 @@ router.delete('/remove', authMiddleware, (req, res) => {
 router.get('/getcartitems', authMiddleware, cartController.getItems);
 router.post('/add-to-cart', authMiddleware, cartController.addToCart );
 router.get('/variant/:variantId', cartController.getOneItem );
+router.post('/sync_cart', authMiddleware, cartController.syncToCart );
 
 module.exports = router;

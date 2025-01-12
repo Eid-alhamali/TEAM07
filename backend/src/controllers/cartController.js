@@ -58,76 +58,77 @@ const db = require('../config/db');
   
 
 
+  exports.syncToCart = (req, res) => {
+    const userId = req.user.user_id; 
+    const items = req.body; 
+  
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty items array' });
+    }
+    // Step 1: Check if the cart exists for the user
+    const checkCartQuery = 'SELECT cart_id FROM ShoppingCart WHERE user_id = ?';
+    db.query(checkCartQuery, [userId], (err, cartResult) => {
+      if (err) {
+        console.error('Error checking cart:', err);
+        return res.status(500).json({ error: 'Database error while checking cart' });
+      }
+  
+      let cartId;   
+      cartId = cartResult[0].cart_id;
+      handleItems(cartId);
+     
+    });
+     
+    function handleItems(cartId) {
+      // Step 2: Iterate through the items and check if they exist in the cart
+      const checkItemQuery = 'SELECT variant_id FROM ShoppingCartItems WHERE cart_id = ? AND variant_id = ?';
+      const insertItemQuery = 'INSERT INTO ShoppingCartItems (cart_id, variant_id, quantity) VALUES (?, ?, ?)';
+      const checkStockQuery = 'SELECT stock FROM Product_Variant WHERE variant_id = ?';
+      items.forEach((item) => {
+        db.query(checkStockQuery, [item.variantId], (err, stockResult) => {
+          if (err) {
+            console.error('Error checking stock:', err);
+            return res.status(500).json({ error: 'Database error while checking stock' });
+          }
+  
+          if (stockResult.length === 0) {
+            return res.status(400).json({ error: `Variant ID ${item.variantId} does not exist` });
+          }
+  
+          const availableStock = stockResult[0].stock;
+          const quantityToAdd = Math.min(item.quantity, availableStock);
+  
+          if (quantityToAdd > 0) {
+            db.query(checkItemQuery, [cartId, item.variantId], (err, itemResult) => {
+              if (err) {
+                console.error('Error checking item:', err);
+                return res.status(500).json({ error: 'Database error while checking item' });
+              }
+  
+              if (itemResult.length === 0) {
+                // Item does not exist, insert it
+                db.query(
+                  insertItemQuery,
+                  [cartId, item.variantId, quantityToAdd],
+                  (err) => {
+                    if (err) {
+                      console.error('Error adding item to cart:', err);
+                      return res.status(500).json({ error: 'Database error while adding item to cart' });
+                    }
+                  }
+                );
+              }
+            });
+          }
+        });
+      });
+  
+
+      res.status(200).json({ message: 'Cart updated successfully' });
+    }
+  };
 
 
-//   exports.getItems = (req, res) => {      
-//     const userId = req.user.user_id; 
-
-//     if (!userId) {
-//         return res.status(400).json({ error: "User ID is required" });
-//     }
-
-//     const query = `
-//       SELECT 
-//         p.name AS product_name,
-//         pv.variant_id AS variantId,
-//         ci.quantity,
-//         pv.price,
-//         pv.weight_grams AS weight,
-//         pi.image_url AS image,
-//         -- Discount Details
-//         d.discount_id,
-//         d.discount_type,
-//         d.value,
-//         -- Calculate Final Price After Discount
-//         CASE
-//           WHEN d.discount_type = 'percentage' THEN ROUND(pv.price * (1 - d.value / 100), 2)
-//           WHEN d.discount_type = 'fixed' THEN ROUND(pv.price - d.value, 2)
-//           ELSE pv.price
-//         END AS final_price
-//       FROM ShoppingCart sc
-//       JOIN ShoppingCartItems ci ON ci.cart_id = sc.cart_id
-//       JOIN Product_Variant pv ON pv.variant_id = ci.variant_id
-//       JOIN Products p ON p.product_id = pv.product_id
-//       LEFT JOIN Product_Images pi ON pi.variant_id = pv.variant_id
-//         AND pi.image_id = (
-//           SELECT MIN(image_id) 
-//           FROM Product_Images 
-//           WHERE variant_id = pv.variant_id
-//         )
-//       -- Join Discounts Table to Fetch Applicable Discounts
-//       LEFT JOIN Discounts d ON d.variant_id = pv.variant_id
-//         AND d.active = TRUE
-//         AND CURDATE() BETWEEN d.start_date AND d.end_date
-//       WHERE sc.user_id = ?
-//     `;
-
-//     db.query(query, [userId], (err, results) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).json({ message: 'Database error' });
-//         }
-
-//         // Optionally, you can format the response to include only necessary fields
-//         const formattedResults = results.map(item => ({
-//             product_name: item.product_name,
-//             variantId: item.variantId,
-//             quantity: item.quantity,
-//             original_price: item.price,
-//             weight: item.weight,
-//             image: item.image,
-//             final_price: item.final_price,
-//             // Include discount details if needed
-//             discount: item.discount_id ? {
-//                 discount_id: item.discount_id,
-//                 discount_type: item.discount_type,
-//                 value: item.value
-//             } : null
-//         }));
-
-//         res.json(formattedResults);
-//     });
-// }
 
 
 

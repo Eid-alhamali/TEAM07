@@ -104,10 +104,6 @@ exports.generateInvoicePdf = (orderId, cart, address, totalPrice) => {
 
 
 
-
-
-
-
 exports.sendInvoiceEmail = async (userId, pdfPath) => {
   try {
     const userEmail = await getUserEmail(userId); 
@@ -140,3 +136,135 @@ exports.sendInvoiceEmail = async (userId, pdfPath) => {
   }
 };
 
+
+
+exports.sendRefundEmail = async (userId, order_id,product_name, refund_date, refund_quantity, refund_price, refund_weight) => {
+  try {
+    const userEmail = await getUserEmail(userId); 
+    console.log(`orderid: ${order_id}`);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'noreply.compresso@gmail.com', 
+        pass:  'ezhnrpwiwzguzdfe', 
+      },
+    });
+    
+    const approve_title = `Refund Request Approved for Order #${order_id}`;
+
+const emailTextHTML = `
+  <p>Dear Customer,</p>
+
+  <p>Thank you for reaching out to us regarding your recent refund request. We are pleased to inform you that your refund request for the product <strong>${product_name}</strong> has been <strong>approved</strong>.</p>
+
+  <h3>Order Details:</h3>
+  <ul>
+    <li><strong>Order ID</strong>: ${order_id}</li>
+    <li><strong>Refund Approved</strong>: ${refund_quantity} unit(s) of <strong>${product_name}</strong></li>
+    <li><strong>Refund Amount</strong>: $${refund_price} (Total Refund Value)</li>
+    <li><strong>Refund Weight</strong>: ${refund_weight} gram</li>
+    <li><strong>Refund Request Date</strong>: ${refund_date}</li>
+  </ul>
+
+  <h3>Next Steps:</h3>
+  <p>The approved refund amount of <strong>$${refund_price}</strong> will be processed and credited to your original payment method within 5 days. Please note that the exact time frame may vary depending on your bank or payment provider.</p>
+
+  <p>We sincerely appreciate your patience and understanding throughout this process. If you have any questions or concerns, please feel free to contact us at <a href="mailto:noreply.compresso@gmail.com">noreply.compresso@gmail.com</a>.</p>
+
+  <p>Thank you for choosing Compresso.</p>
+
+  <p>Best regards,<br>
+  <strong>Compresso Team</strong></p>
+`;
+
+
+
+    const mailOptions = {
+      from: 'noreply.compresso@gmail.com',
+      to: userEmail,
+      subject:  approve_title,
+      html: emailTextHTML, 
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
+};
+
+exports.sendRejectEmail = async (userId, order_id, reject_reason, product_name, refund_date, refund_quantity, refund_price, refund_weight) => {
+  try {
+    const userEmail = await getUserEmail(userId); 
+    console.log(`orderid: ${order_id}`);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'noreply.compresso@gmail.com', 
+        pass:  'ezhnrpwiwzguzdfe', 
+      },
+    });
+   
+    const reject_title = `Refund Request Rejected for Order #${order_id}`
+
+
+    const emailText = `
+    Dear Customer,
+
+    Thank you for reaching out to us regarding your recent refund request. After carefully reviewing your request, we regret to inform you that your refund request for the product **${product_name}** has been **rejected**.
+
+    ### Order Details:
+    - **Order ID**: ${order_id}
+    - **Refund Requested**: ${refund_quantity} unit(s) of **${product_name}**
+    - **Refund Amount**: $${refund_price} (Total Refund Value)
+    - **Refund Weight**: ${refund_weight} gram
+    - **Refund Request Date**: ${refund_date} 
+
+    ### Reason for Rejection:
+    Unfortunately, your refund request could not be processed at this time due to ${reject_reason}.
+
+    We understand this may be disappointing, and we are committed to providing the best customer service possible. If you have any questions or would like to discuss the matter further, please don't hesitate to reach out to us at noreply.compresso@gmail.com .
+
+    Thank you for your understanding.
+
+    Best regards,  
+    **Compresso Team**
+  `;
+  const emailTextHTML = `
+  <p>Dear Customer,</p>
+
+  <p>Thank you for reaching out to us regarding your recent refund request. After carefully reviewing your request, we regret to inform you that your refund request for the product <strong>${product_name}</strong> has been <strong>rejected</strong>.</p>
+
+  <h3>Order Details:</h3>
+  <ul>
+    <li><strong>Order ID</strong>: ${order_id}</li>
+    <li><strong>Refund Requested</strong>: ${refund_quantity} unit(s) of <strong>${product_name}</strong></li>
+    <li><strong>Refund Amount</strong>: $${refund_price} (Total Refund Value)</li>
+    <li><strong>Refund Weight</strong>: ${refund_weight} gram</li>
+    <li><strong>Refund Request Date</strong>: ${refund_date}</li>
+  </ul>
+
+  <h3>Reason for Rejection:</h3>
+  <p>Unfortunately, your refund request could not be processed at this time due to ${reject_reason}.</p>
+
+  <p>We understand this may be disappointing, and we are committed to providing the best customer service possible. If you have any questions or would like to discuss the matter further, please don't hesitate to reach out to us at <a href="mailto:noreply.compresso@gmail.com">noreply.compresso@gmail.com</a>.</p>
+
+  <p>Thank you for your understanding.</p>
+
+  <p>Best regards,<br>
+  <strong>Compresso Team</strong></p>
+`;
+  
+    const mailOptions = {
+      from: 'noreply.compresso@gmail.com',
+      to: userEmail,
+      subject: reject_title,
+      html:  emailTextHTML, 
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
+};

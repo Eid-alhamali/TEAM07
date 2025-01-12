@@ -1,0 +1,314 @@
+.refund-list__container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f3f0;
+    color: #333;
+    padding-top: var(--spacing-sm);
+    top: 0;
+  }
+  
+  .refund-list__title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+    color: #222;
+  }
+  
+  .refund-list__loading-container,
+  .refund-list__error,
+  .refund-list__no-refunds {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .refund-list__spinner {
+    display: inline-block;
+    padding: 10px;
+  }
+  
+  .refund-list__list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .refund-list__refund {
+    border: 1px solid #cac0d6;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
+  .refund-list__refund.expanded {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  }
+  
+  .refund-list__refund-header {
+    display: flex;
+    justify-content: space-between;
+    background: #f9fcec;
+    padding: 20px;
+    cursor: pointer;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .refund-list__refund-header:hover {
+    background: rgb(247, 252, 219);
+  }
+  
+  .refund-list__refund-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .refund-list__refund-id {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .refund-list__refund-status {
+    font-style: normal;
+    font-weight: 500;
+    color: #000000;
+    text-transform: capitalize;
+  }
+  
+  .refund-list__refund-request-date {
+    color: #999;
+    font-size: 0.9rem;
+  }
+  
+  .refund-list__toggle-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #18094e;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .refund-list__refund.expanded .refund-list__toggle-icon {
+    transform: rotate(90deg);
+  }
+  
+  .refund-list__refund-details {
+    padding: 20px;
+    background: #ffffff;
+    position: relative;
+  }
+  
+  .refund-list__items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .refund-list__item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .refund-list__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  
+  .refund-list__item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
+  
+  .refund-list__item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+  }
+  
+  .refund-list__item-name {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .refund-list__item-quantity,
+  .refund-list__item-price,
+  .refund-list__item-weight {
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .refund-list__additional-details {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .refund-list__additional-details p {
+    margin: 5px 0;
+  }
+  
+  .refund-list__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .refund-list__btn-accept,
+  .refund-list__btn-reject,
+  .refund-list__btn-approved,
+  .refund-list__btn-rejected {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    cursor: pointer;
+    flex: none;
+  }
+  
+  .refund-list__btn-accept {
+    background: #109137;
+    color: #fff;
+  }
+  
+  .refund-list__btn-accept:hover {
+    background: rgb(20, 134, 26);
+  }
+  
+  .refund-list__btn-accept:active {
+    transform: scale(0.98);
+  }
+  
+  .refund-list__btn-reject {
+    background: #d83125;
+    color: #fff;
+  }
+  
+  .refund-list__btn-reject:hover {
+    background: #bb1307;
+  }
+  
+  .refund-list__btn-reject:active {
+    transform: scale(0.98);
+  }
+  
+  .refund-list__btn-approved {
+    background: #109137;
+    color: #fff;
+    cursor: default;
+    display: flex;
+    align-items: center;
+  }
+  
+  .refund-list__btn-rejected {
+    background: #c90d00;
+    color: #fff;
+    cursor: default;
+    display: flex;
+    align-items: center;
+  }
+  
+  .refund-list__btn-approved:active,
+  .refund-list__btn-rejected:active {
+    transform: none;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .refund-list__refund-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .refund-list__item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .refund-list__item-image {
+      width: 100%;
+      height: auto;
+    }
+  }
+  
+  .refund-list__btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px; /* Add some space between the image and the text */
+    vertical-align: middle;
+  }
+  
+  /* New Styles for Filter Bar */
+  .refund-list__filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  
+  .refund-list__filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .refund-list__filter-btn:hover {
+    background-color: #d5d5d5;
+  }
+  
+  .refund-list__filter-btn.active {
+    background-color: #18094e;
+    color: #fff;
+  }
+  
+  /* Optional: Add focus styles for accessibility */
+  .refund-list__filter-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 9, 78, 0.5);
+  }
+
+  .orders-page__back-btn {
+    position: absolute;
+    top: 70px;
+    left: 10px;
+    cursor: pointer;
+    color:#222;
+    z-index: 10;
+  }
+  
+  .orders-page__back-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+  
+  .orders-page__back-btn:hover .orders-page__back-icon {
+    transform: scale(1.1);
+  }
+  
+  

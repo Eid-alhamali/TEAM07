@@ -3,7 +3,17 @@ const fs = require('fs');
 const { generateInvoicePdf, sendInvoiceEmail } = require('./invoiceMail');
 
 
-const dbPool = require('../config/promise/promise_db.js');
+const checkoutPool = require('../config/promise/promise_db.js');
+
+// Test the connection pool
+checkoutPool.getConnection()
+    .then(connection => {
+        connection.release();
+    })
+    .catch(err => {
+        console.error('Error connecting to Checkout MySQL pool:', err);
+    });
+
 
 
 const checkout=  async (req, res) => {
@@ -19,7 +29,7 @@ const checkout=  async (req, res) => {
 
     try {
         // Get a connection from the checkout pool
-        connection = await dbPool.getConnection();
+        connection = await checkoutPool.getConnection();
 
         // Start transaction
         await connection.beginTransaction();
@@ -71,6 +81,14 @@ const checkout=  async (req, res) => {
         }
 
      
+        await connection.execute(
+            `INSERT INTO Address (order_id, address_line, city, phone_number, postal_code, country)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [order_id, address.address, address.city, address.phonenumber, address.zipcode, address.country]
+        );
+
+
+
      const invoicePdfPath = await generateInvoicePdf(order_id, cartItems, address, totalPrice);
 
      

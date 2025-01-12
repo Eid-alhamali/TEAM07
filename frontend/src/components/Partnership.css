@@ -1,0 +1,177 @@
+/* Partnership.css */
+
+/* Main Section Styling */
+.partnership-section {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #d9deda;
+  }
+  
+  /* Container to hold both content and logos side by side */
+  .partnership-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 1200px; /* Remains unchanged */
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Content Section Styling */
+  .partnership-content {
+    flex: 1;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .partnership-heading {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .partnership-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+  .partnership-button {
+    align-self: flex-start;
+    background-color: #7c8865;
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .partnership-button:hover {
+    background-color: #575e49;
+  }
+  
+  /* Logos Section Styling */
+  .partnership-logos {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fafafa;
+  }
+  
+  .partnership-logo-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Reduced from 30px to 20px */
+    margin-right: 40px;
+  }
+  
+  .partnership-logo-row:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Updated logo size adjustments */
+  .partnership-logo {
+    width: 120px; /* Increased from 100px */
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s;
+  }
+  
+  .partnership-logo:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .partnership-container {
+      flex-direction: column;
+    }
+  
+    .partnership-logos {
+      padding: 200px;
+    }
+  
+    .partnership-content {
+      padding: 30px;
+    }
+  
+    .partnership-heading {
+      font-size: 28px;
+    }
+  
+    .partnership-button {
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+  
+    .partnership-logo-row {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 10px; /* Further reduced gap */
+    }
+  
+    .partnership-logo {
+      width: 100px; /* Increased from 80px */
+      margin-bottom: 15px; /* Reduced from 20px */
+    }
+  
+    .partnership-logo:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .partnership-section {
+      padding: 200px 10px;
+    }
+  
+    .partnership-container {
+      flex-direction: column;
+    }
+  
+    .partnership-content, .partnership-logos {
+      padding: 20px;
+    }
+  
+    .partnership-heading {
+      font-size: 24px;
+    }
+  
+    .partnership-description {
+      font-size: 14px;
+    }
+  
+    .partnership-button {
+      padding: 10px 18px;
+      font-size: 13px;
+    }
+  
+    .partnership-logo-row {
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px; /* Further reduced gap */
+    }
+  
+    .partnership-logo {
+      width: 90px; /* Increased from 60px */
+      margin-bottom: 10px; /* Reduced from 15px */
+    }
+  
+    .partnership-logo:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
