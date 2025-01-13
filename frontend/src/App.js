@@ -55,7 +55,7 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess/>} />
             <Route path="/my-orders" element={<SidebarLayout><OrderPage /></SidebarLayout>} />
             <Route path="/wishlist" element={<WishlistPage />} />
-            <Route path="/profile_page" element={<ProfilePage/>} />
+            <Route path="/profile_page" element={<SidebarLayout><ProfilePage/></SidebarLayout>} />
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<ProtectedAdminRoute />}>

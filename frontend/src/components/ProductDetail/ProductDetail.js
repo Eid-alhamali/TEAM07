@@ -80,12 +80,19 @@ const ProductDetail = () => {
                 if (response.status === 200) {
                     
                     showToast('Product added to cart successfully!', 'success');
-                } else {
-                    showToast('An error occurred. Please try again.', 'error');
+                } 
+                else if(response.status === 400){
+
+                    showToast('Stock is insufficient for this product.', 'error');
+
+                }
+                
+                else {
+                    showToast('Stock is insufficient for this product.', 'error');
                 }
             } catch (error) {
                 console.error('Error adding product to cart:', error);
-                alert('An error occurred. Please try again.');
+                showToast('Stock is insufficient for this product.', 'error');
             }
         }
     

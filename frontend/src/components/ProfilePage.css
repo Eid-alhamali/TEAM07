@@ -2,233 +2,233 @@
 
 /* Container for the entire profile page */
 .profilepart_container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  /* Profile Section */
-  .profilepart_profileSection {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .profilepart_profilePicture {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .profilepart_role {
-    margin-top: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333333;
-  }
-  
-  .profilepart_contactInfo {
-    margin-top: 5px;
-    color: #555555;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    font-size: 14px;
-  }
-  
-  /* Address Section */
-  .profilepart_addressSection {
-    margin-top: 20px;
-  }
-  
-  .profilepart_sectionTitle {
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: #333333;
-    border-bottom: 2px solid #eeeeee;
-    padding-bottom: 5px;
-  }
-  
-  .profilepart_addressList {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  /* Individual Address Item */
-  .profilepart_addressItem {
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    padding: 10px;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .profilepart_addressItem:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Address Header */
-  .profilepart_addressHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .profilepart_addressHeader h4 {
-    margin: 0;
-    font-size: 18px;
-    color: #1976d2;
-  }
-  
-  .profilepart_addressHeader span {
-    font-size: 24px;
-    color: #1976d2;
-  }
-  
-  /* Address Details */
-  .profilepart_addressDetails {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #eeeeee;
-  }
-  
-  .profilepart_addressFields {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .profilepart_addressFields label {
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-    color: #555555;
-  }
-  
-  .profilepart_addressFields input {
-    padding: 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    margin-top: 5px;
-    font-size: 14px;
-  }
-  
-  .profilepart_addressButtons {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-  }
-  
-  .profilepart_saveButton,
-  .profilepart_deleteButton {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .profilepart_saveButton {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .profilepart_saveButton:disabled {
-    background-color: #a5d6a7;
-    cursor: not-allowed;
-  }
-  
-  .profilepart_deleteButton {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  /* New Address Section */
-  .profilepart_newAddress {
-    margin-top: 20px;
-  }
-  
-  .profilepart_createAddressButton {
-    padding: 10px 15px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .profilepart_createAddressButton:hover {
-    background-color: #1565c0;
-  }
-  
-  .profilepart_newAddressForm {
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .profilepart_newAddressForm h4 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    color: #333333;
-  }
-  
-  .profilepart_newAddressForm label {
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-    color: #555555;
-  }
-  
-  .profilepart_newAddressForm input {
-    padding: 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    margin-top: 5px;
-    font-size: 14px;
-  }
-  
-  .profilepart_newAddressButtons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .profilepart_newAddressButtons button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .profilepart_newAddressButtons button[type='submit'] {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .profilepart_newAddressButtons button[type='submit']:disabled {
-    background-color: #a5d6a7;
-    cursor: not-allowed;
-  }
-  
-  .profilepart_newAddressButtons button[type='button'] {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .profilepart_newAddressButtons button[type='button']:hover {
-    background-color: #d32f2f;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 55px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Profile Section */
+.profilepart_profileSection {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profilepart_profilePicture {
+  width: 150px;
+  height: 150px;
+  border-radius: 5%;
+  object-fit: cover;
+}
+
+.profilepart_role {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.profilepart_contactInfo {
+  margin-top: 5px;
+  color: #555555;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* Address Section */
+.profilepart_addressSection {
+  margin-top: 20px;
+}
+
+.profilepart_sectionTitle {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333333;
+  border-bottom: 2px solid #eeeeee;
+  padding-bottom: 5px;
+}
+
+.profilepart_addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual Address Item */
+.profilepart_addressItem {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 10px;
+  transition: box-shadow 0.3s ease;
+}
+
+.profilepart_addressItem:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Address Header */
+.profilepart_addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profilepart_addressHeader h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #113c66;
+}
+
+.profilepart_addressHeader span {
+  font-size: 24px;
+  color: #1976d2;
+}
+
+/* Address Details */
+.profilepart_addressDetails {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eeeeee;
+}
+
+.profilepart_addressFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profilepart_addressFields label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555555;
+}
+
+.profilepart_addressFields input {
+  padding: 8px;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.profilepart_addressButtons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.profilepart_saveButton,
+.profilepart_deleteButton {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profilepart_saveButton {
+  background-color: #193da0;
+  color: white;
+}
+
+.profilepart_saveButton:disabled {
+  background-color: #3c5cb6;
+  cursor: not-allowed;
+}
+
+.profilepart_deleteButton {
+  background-color: #050714;
+  color: white;
+}
+
+/* New Address Section */
+.profilepart_newAddress {
+  margin-top: 20px;
+}
+
+.profilepart_createAddressButton {
+  padding: 10px 15px;
+  background-color: #113c66;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profilepart_createAddressButton:hover {
+  background-color: #09223b;
+}
+
+.profilepart_newAddressForm {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #ffffff;
+}
+
+.profilepart_newAddressForm h4 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #333333;
+}
+
+.profilepart_newAddressForm label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555555;
+}
+
+.profilepart_newAddressForm input {
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.profilepart_newAddressButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.profilepart_newAddressButtons button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profilepart_newAddressButtons button[type='submit'] {
+  background-color: #193da0;
+  color: white;
+}
+
+.profilepart_newAddressButtons button[type='submit']:disabled {
+  background-color: #3a5bb4;
+  cursor: not-allowed;
+}
+
+.profilepart_newAddressButtons button[type='button'] {
+  background-color: #0e0403;
+  color: white;
+}
+
+.profilepart_newAddressButtons button[type='button']:hover {
+  background-color: #000000;
+}

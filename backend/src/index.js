@@ -13,6 +13,8 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const LineRoutes = require('./routes/LineRoutes'); 
 const discountRouter = require('./routes/discountRouter'); // Adjust the path as needed
+const profileRoutes = require('./routes/profileRoutes');
+
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -39,6 +41,8 @@ app.use("/api", productRoutes);
 app.use('/api/reviews', reviewRoutes); // Add review routes integration
 
 app.use('/api', wishlistRoutes);
+
+app.use('/profile',profileRoutes);
 
 // Database connection
 const db = require('./config/db');

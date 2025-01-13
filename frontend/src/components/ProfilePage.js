@@ -1,47 +1,80 @@
 // src/components/ProfilePage.js
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import './ProfilePage.css';
+import axios from 'axios';
 
 const ProfilePage = () => {
   // Dummy profile data
-//   const [profile, setProfile] = useState({
-//     picture: '/profile.png',
-//     role: 'Mustafa Topcu',
-//     email: 'customer@example.com',
-//     phone: '+1 234 567 890',
-//     taxId: '2',
-//   });
-
-  const profile = ({
-    picture: '/profile_black.png',
-    role: 'Mustafa Topcu',
-    email: 'customer@example.com',
-    phone: '5453943602',
-    taxId: '2',
+  const [profile, setProfile] = useState({
+    picture: '/profile_dark.png',
+    role: 'Loading...',
+    email: '...',
+    phone: '...',
+    taxId: '...',
   });
+
+  
 
   // Dummy address data
   const [addresses, setAddresses] = useState([
-    {
-      address_id: 1,
-      address_name: 'Home',
-      address_line: '123 Main St',
-      city: 'New York',
-      phone_number: '+1 234 567 890',
-      postal_code: '10001',
-      country: 'USA',
-    },
-    {
-      address_id: 2,
-      address_name: 'Office',
-      address_line: '456 Corporate Blvd',
-      city: 'Los Angeles',
-      phone_number: '+1 987 654 321',
-      postal_code: '90001',
-      country: 'USA',
-    },
+    // {
+    //   address_id: 1,
+    //   address_name: 'Home',
+    //   address_line: '123 Main St',
+    //   city: 'New York',
+    //   phone_number: '+1 234 567 890',
+    //   postal_code: '10001',
+    //   country: 'USA',
+    // },
+    // {
+    //   address_id: 2,
+    //   address_name: 'Office',
+    //   address_line: '456 Corporate Blvd',
+    //   city: 'Los Angeles',
+    //   phone_number: '+1 987 654 321',
+    //   postal_code: '90001',
+    //   country: 'USA',
+    // },
   ]);
   
+
+
+  useEffect(() => {
+    // Function to fetch user profile and addresses
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        
+        const response = await axios.get('http://localhost:5001/profile/getprofile', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+  
+        const { user_id, first_name, last_name, email, phone_number, addresses } = response.data;
+        
+        setProfile({
+          picture: '/profile_dark.png', 
+          role: `${first_name} ${last_name}`,
+          email: email,
+          phone: phone_number,
+          taxId: user_id,
+        });
+        
+        setAddresses(addresses);
+        
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+
+
+
+
   // State to manage which address is expanded
   const [expandedAddressId, setExpandedAddressId] = useState(null);
 
@@ -89,24 +122,69 @@ const ProfilePage = () => {
 
   // Save changes to an address
   const handleSaveChanges = (address_id) => {
-    setAddresses((prevAddresses) =>
-      prevAddresses.map((addr) =>
-        addr.address_id === address_id ? { ...editedAddress } : addr
-      )
-    );
-    setExpandedAddressId(null);
-    setIsModified(false);
+    // Assuming the token is stored in localStorage or somewhere in your app
+    const token = localStorage.getItem('token');
+  
+    // Create the address object to send in the request body
+    const updatedAddress = {
+      address_id,
+      ...editedAddress, // Include the edited fields from the state
+    };
+  
+    // Send the request to the server
+    axios
+      .put('http://localhost:5001/profile/update', updatedAddress, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request header
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        setAddresses((prevAddresses) =>
+          prevAddresses.map((addr) =>
+            addr.address_id === address_id ? { ...editedAddress } : addr
+          )
+        );
+        // Reset the expanded address and modification state
+        setExpandedAddressId(null);
+        setIsModified(false);
+        alert('Address updated successfully!');
+      })
+      .catch((error) => {
+        console.error('Error updating address:', error);
+        alert('Failed to update address. Please try again.');
+      });
   };
 
   // Delete an address
   const handleDeleteAddress = (address_id) => {
     if (window.confirm('Are you sure you want to delete this address?')) {
-      setAddresses((prevAddresses) => prevAddresses.filter((addr) => addr.address_id !== address_id));
-      // If the deleted address was expanded, collapse it
-      if (expandedAddressId === address_id) {
-        setExpandedAddressId(null);
-        setIsModified(false);
-      }
+      // Assuming you have access to the token somehow (e.g., from localStorage, state, etc.)
+      const token = localStorage.getItem('token'); // Replace with the method you use to retrieve the token
+  
+      axios
+        .post(
+          'http://localhost:5001/profile/remove',
+          { address_id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log('Address deleted successfully:', response.data);
+          setAddresses((prevAddresses) => prevAddresses.filter((addr) => addr.address_id !== address_id));
+          // If the deleted address was expanded, collapse it
+          if (expandedAddressId === address_id) {
+            setExpandedAddressId(null);
+            setIsModified(false);
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting address:', error);
+          alert('Failed to delete address. Please try again.');
+        });
     }
   };
 
@@ -122,25 +200,53 @@ const ProfilePage = () => {
   // Add a new address
   const handleAddAddress = (e) => {
     e.preventDefault();
+  
+    // Validate if all fields are filled
     const isValid = Object.values(newAddress).every((field) => field.trim() !== '');
     if (!isValid) {
       alert('Please fill in all fields.');
       return;
     }
-    const newAddressEntry = {
-      address_id: Date.now(), // Simple unique ID generation
-      ...newAddress,
+  
+    // Assuming token is stored in localStorage (you can adjust this as per your app's token management)
+    const token = localStorage.getItem('token'); 
+  
+    // Create the address object to send
+    const addressData = {
+      address_name: newAddress.address_name,
+      address_line: newAddress.address_line,
+      city: newAddress.city,
+      phone_number: newAddress.phone_number,
+      postal_code: newAddress.postal_code,
+      country: newAddress.country,
     };
-    setAddresses((prevAddresses) => [...prevAddresses, newAddressEntry]);
-    setNewAddress({
-      address_name: '',
-      address_line: '',
-      city: '',
-      phone_number: '',
-      postal_code: '',
-      country: '',
-    });
-    setIsCreating(false);
+  
+    // Send the request to the server
+    axios
+      .post('http://localhost:5001/profile/add', addressData, {
+        headers: {
+          Authorization: `Bearer ${token}`,  // Include the token in the request header
+        },
+      })
+      .then((response) => {
+        setAddresses((prevAddresses) => [...prevAddresses, response.data]);
+        
+        setNewAddress({
+          address_name: '',
+          address_line: '',
+          city: '',
+          phone_number: '',
+          postal_code: '',
+          country: '',
+        });
+        
+        setIsCreating(false);
+        alert('Address added successfully!');
+      })
+      .catch((error) => {
+        console.error('Error adding address:', error);
+        alert('Failed to add address. Please try again.');
+      });
   };
 
   return (
