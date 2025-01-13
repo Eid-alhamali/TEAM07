@@ -12,6 +12,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const LineRoutes = require('./routes/LineRoutes'); 
+const discountRouter = require('./routes/discountRouter'); // Adjust the path as needed
 
 const port = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -31,6 +32,7 @@ app.use('/auth',authRoutes)
 app.use('/checkout', checkoutRoutes);
 app.use('/order',orderRoutes)
 app.use('/chart',LineRoutes);
+app.use('/api/discounts', discountRouter); 
 
 // integrate prodcuts routes
 app.use("/api", productRoutes);

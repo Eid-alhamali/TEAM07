@@ -50,6 +50,12 @@ const AddProductPage = () => {
     const handleVariantChange = (index, e) => {
         const { name, value } = e.target;
         const updatedVariants = [...variants];
+        const parsedValue = parseFloat(value);
+
+        if ((name === "price" || name === "stock" || name === "weight_grams") && parsedValue <= 0) {
+            alert(`${name.replace("_", " ")} must be greater than 0.`);
+            return;
+        }
         updatedVariants[index][name] = value;
         setVariants(updatedVariants);
     };

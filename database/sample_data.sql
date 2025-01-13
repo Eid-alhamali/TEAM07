@@ -3,15 +3,15 @@ USE ecommerce_db;
 -- Note: Passwords are all "password"
 INSERT INTO Users (user_id, first_name, last_name, email, phone_number, tax_id, password_hash)
 VALUES
-(1, "Arya", "Hassibi", "arya@user.com", "+905301234567", "12345678901", SHA2("password", 256)),
-(2, "Beste", "Bayhan", "beste@user.com", "+905302345678", "23456789012", SHA2("password", 256)),
-(3, "Mustafa", "Topcu", "mustafa@user.com", "+905303456789", "34567890123", SHA2("password", 256)),
-(4, "Orhun Ege", "Ozpay", "orhun@user.com", "+905304567890", "45678901234", SHA2("password", 256)),
-(5, "Eid", "Alhamali", "eid@user.com", "+905305678901", "56789012345", SHA2("password", 256)),
-(6, "Ecem", "Akın", "ecem@user.com", "+905306789012", "67890123456", SHA2("password", 256)),
-(7, "Zeynep", "Işık", "zeynep.isik@user.com", "+905307890123", "78901234567", SHA2("password", 256)),
-(8, "Cemal", "Yılmaz", "cemal.yilmaz@user.com", "+905308901234", "89012345678", SHA2("password", 256)),
-(9, "Test", "User", "test@user.com", "+905309012345", "90123456789", SHA2("password", 256));
+(1, "Arya", "Hassibi", "arya.hassibi@sabanciuniv.com", "+905301234567", "12345678901", SHA2("password", 256)),
+(2, "Beste", "Bayhan", "bestebayhan@sabanciuniv.edu", "+905302345678", "23456789012", SHA2("password", 256)),
+(3, "Mustafa", "Topcu", "mustafatopcu@sabanciuniv.com", "+905303456789", "34567890123", SHA2("password", 256)),
+(4, "Orhun Ege", "Ozpay", "orhun@sabanciuniv.com", "+905304567890", "45678901234", SHA2("password", 256)),
+(5, "Eid", "Alhamali", "eid@sabanciuniv.com", "+905305678901", "56789012345", SHA2("password", 256)),
+(6, "Ecem", "Akın", "ecem@sabanciuniv.com", "+905306789012", "67890123456", SHA2("password", 256)),
+(7, "Zeynep", "Işık", "zeynep.isik@sabanciuniv.com", "+905307890123", "78901234567", SHA2("password", 256)),
+(8, "Cemal", "Yılmaz", "cemal.yilmaz@sabanciuniv.com", "+905308901234", "89012345678", SHA2("password", 256)),
+(9, "Test", "User", "test@sabanciuniv.com", "+905309012345", "90123456789", SHA2("password", 256));
 
 -- Note: Passwords are all "password"
 INSERT INTO Managers (manager_id, first_name, last_name, email, password_hash, role)
@@ -394,11 +394,11 @@ VALUES
 
 INSERT INTO Discounts (discount_id, discount_type, value, start_date, end_date, variant_id, active)
 VALUES
-(1, "percentage", 10.00, "2024-12-01", "2025-12-31", 1, TRUE),
-(2, "fixed", 50.00, "2024-11-15", "2025-11-30", 5, TRUE),
+(1, "percentage", 10.00, "2024-12-01", "2025-12-31", 1, FALSE),
+(2, "fixed", 50.00, "2024-11-15", "2025-11-30", 5, FALSE),
 (3, "percentage", 15.00, "2024-10-01", "2025-10-31", 9, FALSE),
-(4, "fixed", 100.00, "2024-12-05", "2025-12-20", 28, TRUE),
-(5, "percentage", 5.00, "2024-12-10", "2025-12-25", 16, TRUE);
+(4, "fixed", 100.00, "2024-12-05", "2025-12-20", 28, FALSE),
+(5, "percentage", 5.00, "2024-12-10", "2025-12-25", 16, FALSE);
 
 INSERT INTO Wishlist (wishlist_id, user_id, created_at)
 VALUES

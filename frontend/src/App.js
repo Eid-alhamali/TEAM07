@@ -30,6 +30,7 @@ import AdminDeliveryPage from './components/AdminDeliveryPage';
 import RefundList from "./components/RefundList";
 import InvoiceOrders from './components/InvoiceOrders';
 import ProfilePage from './components/ProfilePage';
+import SetPricesDiscounts from "./components/SetPricesDiscounts";
 import './index.css'; 
 
 function App() {
@@ -54,8 +55,6 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess/>} />
             <Route path="/my-orders" element={<SidebarLayout><OrderPage /></SidebarLayout>} />
             <Route path="/wishlist" element={<WishlistPage />} />
-            <Route path="/refund-list" element={<RefundList/>} />
-            <Route path="/invoice_list" element={<InvoiceOrders/>} />
             <Route path="/profile_page" element={<ProfilePage/>} />
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -64,10 +63,15 @@ function App() {
               <Route path="main_page" element={<MainAdminPage />} />
               <Route path="product_management" element={<AdminProductMgmt />} />
               <Route path="sales_management" element={<AdminSalesMgmt />} />
+              <Route path="set_prices_discounts" element={<SetPricesDiscounts />} />
               <Route path="view_products" element={<ViewProductsPage />} />
               <Route path="add_product" element={<AddProductPage />} />
               <Route path="categories" element={<AdminCategoryPage />} />
               <Route path="delivery_list" element={<AdminDeliveryPage />} />
+              <Route path="invoice_list" element={<InvoiceOrders/>} />
+              <Route path="refund-list" element={<RefundList/>} />
+
+
          
             </Route>
           </Routes>

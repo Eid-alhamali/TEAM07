@@ -268,3 +268,80 @@ exports.sendRejectEmail = async (userId, order_id, reject_reason, product_name, 
     throw err;
   }
 };
+
+
+exports.sendDiscountNotification = async (variantId, discountValue) => {
+  let connection;
+  try {
+    connection = await dbPool.getConnection();
+
+    // Get the product name based on the variantId
+    const [productResult] = await connection.execute(
+      `SELECT p.name AS product_name, pv.weight_grams
+       FROM Products p
+       JOIN Product_Variant pv ON p.product_id = pv.product_id
+       WHERE pv.variant_id = ?`,
+      [variantId]
+    );
+
+    if (productResult.length === 0) {
+      console.log('No product found for variant ID: ${variantId}');
+      return;
+    }
+
+    const { product_name: productName, weight_grams: weightGrams } = productResult[0];
+    const displayWeight = weightGrams ? `${weightGrams}g` : '';
+
+    // Get emails of users who have this variant in their wishlist
+    const [users] = await connection.execute(
+      `SELECT DISTINCT u.email, u.first_name
+       FROM Users u
+       INNER JOIN Wishlist w ON u.user_id = w.user_id
+       INNER JOIN WishlistItems wi ON w.wishlist_id = wi.wishlist_id
+       WHERE wi.variant_id = ?`,
+      [variantId]
+    );
+
+    if (users.length === 0) {
+      console.log(`No users have this product (variant ID: ${variantId}) in their wishlist.`);
+      return;
+    }
+
+    // Set up the email transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'noreply.compresso@gmail.com',
+        pass: 'ezhnrpwiwzguzdfe',
+      },
+    });
+
+    // Send emails to users
+    for (const user of users) {
+      const mailOptions = {
+        from: 'noreply.compresso@gmail.com',
+        to: user.email,
+        subject: `☕ Enjoy ${discountValue}% Off ${productName} (${displayWeight}) This Week! 🎉`,
+        html: `
+          <h1 style="text-align: center;">Your Favorite Brew  ${productName} (${displayWeight}), Now at a Special Price! 🌟</h1>
+          <p>Hi ${user.first_name},</p>
+          <p>We’re excited to share some great news—our beloved <strong>${productName}</strong> coffee blend is now <strong>${discountValue}% off</strong> for a limited time! 🛍️</p>
+          <p>Savor the rich, nutty flavors with every sip and make your coffee moments even more delightful. 😍</p>
+          <p>⏳ <strong>Don’t miss out on this exclusive deal</strong>—stop by and grab your discounted bag of <strong>${productName} (${displayWeight})</strong> before it’s gone!</p>
+          <p>Warm brews,</p>
+          <p><strong>Compresso</strong><br>Your Coffee, Your Way</p>
+        `,
+      };
+
+      await transporter.sendMail(mailOptions);
+      console.log(`Discount notification sent to ${user.email}`);
+    }
+  } catch (err) {
+    console.error('Error sending discount notifications:', err);
+    throw err;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+};

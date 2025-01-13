@@ -156,8 +156,16 @@ const RefundList = () => {
   return (
     <div>
 
-      <div className="orders-page__back-btn" onClick={() => navigate('/admin/sales_management')}>
-        <img src={backIcon} alt="Back" className="orders-page__back-icon" />
+      <div
+        className="orders-page__back-btn"
+        onClick={() => navigate("/admin/sales_management")}
+      >
+        <img
+          src={backIcon}
+          alt="Back"
+          className="orders-page__back-icon"
+        />
+        <span>Go Back</span>
       </div>
       <RefundChart/>
       
